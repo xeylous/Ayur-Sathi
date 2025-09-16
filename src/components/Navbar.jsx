@@ -59,7 +59,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-3 text-lg">
           <NavItem to="/" label="Home" />
           <NavItem to="/explore" label="Explore" />
-          <NavItem to="/dashboard" label="Dashboard" />
+          <NavItem to="/contactus" label="ContactUs" />
           <NavItem to="/apis" label="APIs" />
           <NavItem to="/docs" label="Docs" />
         </div>
@@ -72,6 +72,13 @@ export default function Navbar() {
             px-5 py-1.5 text-center"
           >
             Login
+          </Link>
+          <Link
+            href="/register"
+            className="hidden md:inline-block text-lg font-medium text-white bg-[#90A955] hover:bg-[#4F772D] focus:ring-4  rounded-lg 
+            px-5 py-1.5 text-center"
+          >
+            Register
           </Link>
           <button
             className="md:hidden p-2 rounded-md text-brand-700 hover:bg-[#ECF39E] hover:text-brand-900"
@@ -92,8 +99,8 @@ export default function Navbar() {
             closeMenu={() => setOpen(false)}
           />
           <NavItem
-            to="/dashboard"
-            label="Dashboard"
+            to="/contactus"
+           label="ContactUs"
             closeMenu={() => setOpen(false)}
           />
           <NavItem to="/apis" label="APIs" closeMenu={() => setOpen(false)} />
@@ -104,6 +111,13 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
           >
             Login
+          </Link>
+          <Link
+            href="/register"
+            className="mt-2 text-lg font-medium text-black bg-[#ECF39E] rounded-lg px-5 py-2.5 text-center"
+            onClick={() => setOpen(false)}
+          >
+            Register
           </Link>
         </nav>
       )}
