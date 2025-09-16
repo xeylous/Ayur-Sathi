@@ -65,7 +65,7 @@ export default function Index() {
   );
 
   return (
-    <div className="bg-background">
+    <div className="bg-[#ECF39E]/30">
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10 opacity-30" aria-hidden>
