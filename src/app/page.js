@@ -16,14 +16,9 @@ export default function Home() {
   
   {/* <Navbar /> */}
   <Navbar />
-
-
   <Index />
-
   <Home_1/>
   <Home_2/>
-
-
 
   <Footer/>
   
