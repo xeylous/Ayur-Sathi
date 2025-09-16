@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -9,16 +9,15 @@ import {
   Factory,
   FlaskConical,
   ShieldCheck,
-  Workflow,
-  LineChart,
-  Box,
+  FlaskConical as Flask,
 } from "lucide-react";
 
-export default function Index() {
-  const [exampleFromServer, setExampleFromServer] = useState("");
+// Component that actually uses useSearchParams
+function IndexContent() {
   const searchParams = useSearchParams();
   const [batch, setBatch] = useState(searchParams.get("batch") || "ASHW-2025-0001");
   const router = useRouter();
+  const [exampleFromServer, setExampleFromServer] = useState("");
 
   useEffect(() => {
     fetchDemo();
@@ -51,7 +50,7 @@ export default function Index() {
         desc: "Drying, grinding, storage conditions",
       },
       {
-        icon: FlaskConical,
+        icon: Flask,
         title: "Lab QA",
         desc: "Moisture, pesticides, DNA barcode",
       },
@@ -106,7 +105,7 @@ export default function Index() {
                 </div>
 
                 <button
-                  
+                  onClick={handleScan}
                   className="flex items-center justify-center gap-2 h-11 px-4 rounded-md bg-gray-100 border text-black hover:bg-brand-700"
                 >
                   <QrCode className="w-4 h-4" />
@@ -114,7 +113,7 @@ export default function Index() {
                 </button>
 
                 <Link
-                  href="#"
+                  href={`/provenance?batch=${encodeURIComponent(batch)}`}
                   className="h-11 px-4 flex items-center justify-center rounded-md border bg-gray-100 hover:bg-gray-200"
                 >
                   View Details
@@ -139,42 +138,18 @@ export default function Index() {
                 ))}
               </div>
             </div>
-
-                      
           </div>
         </div>
       </section>
-
-      {/* PROBLEM & SOLUTION */}
-      <section className="py-12 md:p-16" id="background">
-        <div className="container grid gap-8 md:grid-cols-2">
-          <div className="rounded-xl border bg-card p-6">
-            <div className="text-brand-900 font-semibold">Background</div>
-            <h2 className="text-2xl font-bold mt-2">
-              Fragmented, opaque herbal supply chains
-            </h2>
-            <ul className="mt-4 space-y-2 text-sm text-muted-foreground list-disc pl-5">
-              <li>
-                Smallholders and intermediaries create inconsistent records
-              </li>
-              <li>Risks: mislabeling, adulteration, and over-harvesting</li>
-              <li>Opaque geographic provenance undermines compliance</li>
-            </ul>
-          </div>
-          <div className="rounded-xl border bg-card p-6">
-            <div className="text-brand-900 font-semibold">Solution</div>
-            <h2 className="text-2xl font-bold mt-2">
-              Blockchain traceability with geo-tagging
-            </h2>
-            <ul className="mt-4 space-y-2 text-sm text-muted-foreground list-disc pl-5">
-              <li>Immutable ledger records every event with GPS and time</li>
-              <li>Smart contracts enforce NMPB harvesting & seasonal rules</li>
-              <li>FHIR-style metadata bundles enable interoperability</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
     </div>
+  );
+}
+
+// ✅ Wrap with Suspense
+export default function Index() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <IndexContent />
+    </Suspense>
   );
 }
