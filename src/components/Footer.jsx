@@ -1,5 +1,12 @@
 import React from "react";
-import { Mail, Phone, Instagram, Twitter, Facebook, Github } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  Instagram,
+  Twitter,
+  Facebook,
+  Github,
+} from "lucide-react";
 
 // Footer component for Ayur Saathi app. Filename: fooer.jsx
 // Tailwind CSS utility classes used. Export default a React component.
@@ -28,8 +35,9 @@ export default function Fooer() {
           <div className="space-y-4">
             <h3 className="text-2xl font-extrabold">Ayur Saathi</h3>
             <p className="text-sm leading-relaxed max-w-xs text-[#ECF39E]">
-              Holistic, evidence-informed Ayurvedic guidance for everyday wellness — herbs,
-              routines, and trusted practitioners in one place.
+              Holistic, evidence-informed Ayurvedic guidance for everyday
+              wellness — herbs, routines, and trusted practitioners in one
+              place.
             </p>
             <div className="flex items-center space-x-3 mt-2">
               <a
@@ -65,7 +73,9 @@ export default function Fooer() {
 
           {/* Quick links */}
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wide">Quick Links</h4>
+            <h4 className="text-sm font-semibold uppercase tracking-wide">
+              Quick Links
+            </h4>
             <ul className="mt-4 space-y-2 text-sm">
               {quickLinks.map((l) => (
                 <li key={l.href}>
@@ -82,7 +92,9 @@ export default function Fooer() {
 
           {/* Contact / Support */}
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wide">Contact</h4>
+            <h4 className="text-sm font-semibold uppercase tracking-wide">
+              Contact
+            </h4>
             <div className="mt-4 text-sm space-y-3">
               <div className="flex items-center gap-2">
                 <Phone size={16} />
@@ -92,22 +104,29 @@ export default function Fooer() {
               </div>
               <div className="flex items-center gap-2">
                 <Mail size={16} />
-                <a href="mailto:hello@ayursaathi.app" className="hover:underline">
+                <a
+                  href="mailto:hello@ayursaathi.app"
+                  className="hover:underline"
+                >
                   hello@ayursaathi.app
                 </a>
               </div>
 
               <p className="text-xs text-[#ECF39E]">
-                For urgent consultations, please contact support. We commit to responding within 48
-                hours.
+                For urgent consultations, please contact support. We commit to
+                responding within 48 hours.
               </p>
             </div>
           </div>
 
           {/* Newsletter */}
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wide">Stay in the loop</h4>
-            <p className="mt-3 text-sm max-w-sm text-[#ECF39E]">Get herbal tips, seasonal routines, and updates.</p>
+            <h4 className="text-sm font-semibold uppercase tracking-wide">
+              Stay in the loop
+            </h4>
+            <p className="mt-3 text-sm max-w-sm text-[#ECF39E]">
+              Get herbal tips, seasonal routines, and updates.
+            </p>
 
             <form
               onSubmit={(e) => {
@@ -122,7 +141,7 @@ export default function Fooer() {
               <label htmlFor="email" className="sr-only">
                 Email address
               </label>
-              <div className="flex gap-2">
+              <div className="flex flex-col lg:flex-row gap-2">
                 <input
                   id="email"
                   name="email"
@@ -133,7 +152,7 @@ export default function Fooer() {
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-md bg-[#90A955] text-white font-medium hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-[#90A955]"
+                  className="w-full lg:w-auto px-4 py-2 rounded-md bg-[#90A955] text-white font-medium hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-[#90A955] flex items-center justify-center"
                 >
                   Subscribe
                 </button>
@@ -160,7 +179,9 @@ export default function Fooer() {
               </ul>
             </nav>
 
-            <div className="text-sm text-[#ECF39E]">Made with ❤️ for wellbeing</div>
+            <div className="text-sm text-[#ECF39E]">
+              Made with ❤️ for wellbeing
+            </div>
           </div>
         </div>
       </div>
