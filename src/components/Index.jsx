@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import ImageSlider from "./ImageSlider";
 
-function IndexContent() {
+function Index() {
   const searchParams = useSearchParams();
   const [batch, setBatch] = useState(
     searchParams.get("batch") || "ASHW-2025-0001"
