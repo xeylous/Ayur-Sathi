@@ -11,6 +11,7 @@ import Image from "next/image";
 import { use } from "react";
 
 import Landingpage from "@/components/Landingpage";
+import ChatbotAssistant from "@/components/ChatbotAssistant";
 
 // import Navbar from "../components/Navbar";
 export default function Home() {
@@ -22,6 +23,7 @@ export default function Home() {
 
   
   <Landingpage/>
+  <ChatbotAssistant />
 
 
   
