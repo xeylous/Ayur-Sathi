@@ -3,9 +3,9 @@ import { QrCode } from "lucide-react";
 
 export default function Home_2() {
   return (
-    <section className="bg-[#ECF39E]/20 py-16">
+    <section className="bg-[#ECF39E]/30 py-2">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-[#90A955]/40 bg-gradient-to-br from-[#ECF39E] to-white shadow-sm p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div className="rounded-2xl border border-[#90A955]/30 bg-[#ECF39E]/30 shadow-sm p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           {/* Text Section */}
           <div>
             <h2 className="text-2xl font-bold text-[#31572C]">

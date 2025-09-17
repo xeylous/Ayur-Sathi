@@ -141,7 +141,7 @@ export default function Fooer() {
               <label htmlFor="email" className="sr-only">
                 Email address
               </label>
-              <div className="flex flex-col lg:flex-row gap-2">
+              <div className="flex flex-col  gap-2">
                 <input
                   id="email"
                   name="email"

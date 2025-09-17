@@ -12,16 +12,14 @@ import {
 } from "lucide-react";
 import ImageSlider from "./ImageSlider";
 
-function Index() {
+function IndexContent() {
   const searchParams = useSearchParams();
   const [batch, setBatch] = useState(
     searchParams.get("batch") || "ASHW-2025-0001"
   );
   const router = useRouter();
 
-  const handleScan = () => {
-    router.push(`/provenance?batch=${encodeURIComponent(batch)}`);
-  };
+ 
 
   const highlights = useMemo(
     () => [
@@ -49,7 +47,7 @@ function Index() {
             
             {/* Left: Text content */}
             <div className="mx-auto lg:mx-0 text-center lg:text-left">
-              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-900">
+              <span className="inline-block px-3 py-1 rounded-full text-xs bg-[#90A955] font-semibold bg-brand-100 text-brand-900">
                 Blockchain • Geo-Tagging • FHIR-style
               </span>
 
@@ -78,14 +76,14 @@ function Index() {
 
                 <Link
                   href={`/provenance?batch=${encodeURIComponent(batch)}`}
-                  className="h-11 px-4 flex items-center justify-center rounded-md border bg-[#90A955] hover:bg-gray-200"
+                  className="h-11 px-4 flex items-center justify-center rounded-md border bg-[#90A955] hover:bg-[#4F772D]  hover:text-white"
                 >
                   View Details
                 </Link>
 
                 <button
-                  onClick={handleScan}
-                  className="flex items-center justify-center gap-2 h-11 px-4 rounded-md bg-[#90A955] border text-black hover:bg-brand-700"
+                  
+                  className="flex items-center justify-center gap-2 h-11 px-4 rounded-md bg-[#90A955] hover:bg-[#4F772D] hover:text-white border text-black hover:bg-brand-700"
                 >
                   <QrCode className="w-4 h-4" />
                   Scan QR
