@@ -68,15 +68,15 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <Link
             href="/login"
-            className="hidden md:inline-block text-lg font-medium text-white bg-[#90A955] hover:bg-[#4F772D] focus:ring-4  rounded-lg 
-            px-5 py-1.5 text-center"
+            className="hidden md:inline-block text-lg font-medium text-white bg-[#90A955] hover:bg-[#4F772D] focus:ring-4  rounded-2xl 
+            px-9 py-1 text-center"
           >
             Login
           </Link>
           <Link
             href="/register"
-            className="hidden md:inline-block text-lg font-medium text-white bg-[#90A955] hover:bg-[#4F772D] focus:ring-4  rounded-lg 
-            px-5 py-1.5 text-center"
+            className="hidden md:inline-block text-lg font-medium text-white bg-[#90A955] hover:bg-[#4F772D] focus:ring-4  rounded-2xl 
+            px-9 py-1 text-center mr-6"
           >
             Register
           </Link>
