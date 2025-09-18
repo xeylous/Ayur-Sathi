@@ -26,8 +26,8 @@ const sections = [
 ];
 
 export default function SidebarLayout() {
-  const [active, setActive] = useState(null);
-  const [open, setOpen] = useState(null);
+  const [active, setActive] = useState("citizens");
+  const [open, setOpen] = useState("why");
 
   const renderButton = (section) => (
     <button
@@ -63,12 +63,12 @@ export default function SidebarLayout() {
 
             {/* Nested children (only for Why AyurSaathi) */}
             {section.children && (
-              <div className={`ml-4 mt-2 ${open === section.id ? "block" : "hidden"}`}>
+              <div className={`ml-4 mt-3 gap-2 ${open === section.id ? "block" : "hidden"}`}>
                 {section.children.map((child) => (
                   <button
                     key={child.id}
                     onClick={() => setActive(child.id)}
-                    className={`w-full text-left px-3 py-2 rounded-lg block transition ${
+                    className={`w-full text-left px-3 py-3 gap-2 rounded-lg block transition ${
                       active === child.id
                         ? "bg-[#4F772D] text-white"
                         : "bg-white text-gray-700 hover:bg-[#90A955]/20"
