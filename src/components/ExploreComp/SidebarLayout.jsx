@@ -1,11 +1,9 @@
 "use client";
+
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import WhyAyurSathiCitizens from "./WhyAyurSathiCitizens";
 
-// Import your actual components
-
-// Define structure with nesting
 const sections = [
   {
     id: "why",
@@ -33,7 +31,6 @@ export default function SidebarLayout() {
     <button
       onClick={() => {
         if (section.children) {
-          // toggle parent accordion
           setOpen(open === section.id ? null : section.id);
         } else {
           setActive(section.id);
@@ -45,58 +42,54 @@ export default function SidebarLayout() {
       }`}
     >
       {section.title}
-      <ChevronDown
-        className={`w-4 h-4 transition-transform ${
-          open === section.id ? "rotate-180" : "rotate-0"
-        }`}
-      />
+      {section.children && (
+        <ChevronDown
+          className={`w-4 h-4 transition-transform ${
+            open === section.id ? "rotate-180" : "rotate-0"
+          }`}
+        />
+      )}
     </button>
   );
 
   return (
-    <div className="min-h-screen bg-[#ECF39E]/30 flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-[#ECF39E]/30 flex relative">
       {/* Sidebar */}
-      <aside className="w-full lg:w-1/4 border-r border-green-700 p-5">
-        {sections.map((section) => (
-          <div key={section.id} className="mb-2">
-            {renderButton(section)}
+      <aside className="hidden lg:block lg:w-1/4 pr-6">
+        <div className="sticky top-20 self-start max-h-[80vh] overflow-y-auto">
+          {/* top-20 = below navbar (adjust based on Navbar height) */}
+          {sections.map((section) => (
+            <div key={section.id} className="mb-2">
+              {renderButton(section)}
 
-            {/* Nested children (only for Why AyurSaathi) */}
-            {section.children && (
-              <div className={`ml-4 mt-3 gap-2 ${open === section.id ? "block" : "hidden"}`}>
-                {section.children.map((child) => (
-                  <button
-                    key={child.id}
-                    onClick={() => setActive(child.id)}
-                    className={`w-full text-left px-3 py-3 gap-2 rounded-lg block transition ${
-                      active === child.id
-                        ? "bg-[#4F772D] text-white"
-                        : "bg-white text-gray-700 hover:bg-[#90A955]/20"
-                    }`}
-                  >
-                    {child.title}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Small screen content */}
-            <div
-              className={`md:hidden mt-2 px-3 py-2 bg-white rounded ${
-                open === section.id ? "block" : "hidden"
-              }`}
-            >
-              {section.children
-                ? section.children.find((c) => c.id === active)?.component
-                : active === section.id && section.component}
+              {section.children && (
+                <div
+                  className={`ml-4 mt-3 gap-2 ${
+                    open === section.id ? "block" : "hidden"
+                  }`}
+                >
+                  {section.children.map((child) => (
+                    <button
+                      key={child.id}
+                      onClick={() => setActive(child.id)}
+                      className={`w-full text-left px-3 py-3 gap-2 rounded-lg block transition ${
+                        active === child.id
+                          ? "bg-[#4F772D] text-white"
+                          : "bg-white text-gray-700 hover:bg-[#90A955]/20"
+                      }`}
+                    >
+                      {child.title}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </aside>
 
-      {/* Large screen content */}
-      <main className="hidden lg:block flex-1 p-6">
-        {/* If active is child inside Why AyurSaathi */}
+      {/* Right side content */}
+      <main className="flex-1 p-6 overflow-y-auto">
         {sections
           .flatMap((s) => (s.children ? s.children : s))
           .find((s) => s.id === active)?.component}

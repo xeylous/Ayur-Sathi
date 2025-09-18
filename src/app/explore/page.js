@@ -1,28 +1,31 @@
 'use client';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Image from "next/image";
 import ThemeBanner from "@/components/ExploreComp/ThemeBanner";
 import SidebarLayout from "@/components/ExploreComp/SidebarLayout";
 import { Suspense } from "react";
 import LandingSkeleton from "@/components/LandingSkeleton";
 
-
 export default function Home() {
   return (
     <>
-    
-    <Navbar />
-    <Suspense fallback={<LandingSkeleton />}>
-          <div>
-            <ThemeBanner />
+      {/* Navbar is fixed at top */}
+      <Navbar />
+
+      {/* Page content */}
+      <div>
+        {/* ThemeBanner directly under navbar */}
+        <ThemeBanner />
+
+        {/* Sidebar + Content, with top padding to avoid navbar overlap */}
+        <div > 
+          <Suspense fallback={<LandingSkeleton />}>
             <SidebarLayout />
-          </div>
-        </Suspense>
-    
-    
-    {/* <Explore /> */}
-    <Footer />
+          </Suspense>
+        </div>
+      </div>
+
+      <Footer />
     </>
   );
 }
