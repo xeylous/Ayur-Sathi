@@ -75,7 +75,8 @@ function IndexContent() {
                 </div>
 
                 <Link
-                  href={`/provenance?batch=${encodeURIComponent(batch)}`}
+                  // href={`/provenance?batch=${encodeURIComponent(batch)}`}
+                  href={`#`}
                   className="h-11 px-4 flex items-center justify-center rounded-md border bg-[#90A955] hover:bg-[#4F772D]  hover:text-white"
                 >
                   View Details
