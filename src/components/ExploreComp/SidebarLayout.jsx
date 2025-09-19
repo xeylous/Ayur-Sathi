@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import WhyAyurSathiCitizens from "./WhyAyurSathiCitizens";
+import WhyAyurSathiOrganizations from "./WhyAyurSathiOrganizations";
 
 const sections = [
   {
@@ -10,7 +11,7 @@ const sections = [
     title: "Why Ayur Saathi?",
     children: [
       { id: "citizens", title: "For Citizens", component: <WhyAyurSathiCitizens /> },
-      { id: "organizations", title: "For Organizations", component: <WhyAyurSathiCitizens /> },
+      { id: "organizations", title: "For Organizations", component: <WhyAyurSathiOrganizations /> },
     ],
   },
   { id: "case-study", title: "Case Study", component: <WhyAyurSathiCitizens /> },
