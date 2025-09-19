@@ -6,6 +6,7 @@ import WhyAyurSathiCitizens from "./WhyAyurSathiCitizens";
 import WhyAyurSathiOrganizations from "./WhyAyurSathiOrganizations";
 import AyurHerbTraceCaseStudy from "./AyurHerbTraceCaseStudy";
 import AyurSaathiEcosystem from "./AyurSaathiTechnology";
+import AyurSaathiOrganizationalModel from "./AyurSaathiOrganizationalModel";
 
 const sections = [
   {
@@ -18,7 +19,7 @@ const sections = [
   },
   { id: "case-study", title: "Case Study", component: < AyurHerbTraceCaseStudy /> },
   { id: "tech", title: "Technology Overview", component: <AyurSaathiEcosystem /> },
-  { id: "org-model", title: "Organizational Model", component: <WhyAyurSathiCitizens /> },
+  { id: "org-model", title: "Organizational Model", component: <AyurSaathiOrganizationalModel  /> },
   { id: "impl-model", title: "Implementation Model", component: <WhyAyurSathiCitizens /> },
   { id: "arch", title: "Architecture", component: <WhyAyurSathiCitizens /> },
   { id: "security", title: "DigiLocker Security Architecture", component: <WhyAyurSathiCitizens /> },
