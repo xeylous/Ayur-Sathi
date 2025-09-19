@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import WhyAyurSathiCitizens from "./WhyAyurSathiCitizens";
 import WhyAyurSathiOrganizations from "./WhyAyurSathiOrganizations";
+import AyurHerbTraceCaseStudy from "./AyurHerbTraceCaseStudy";
 
 const sections = [
   {
@@ -14,7 +15,7 @@ const sections = [
       { id: "organizations", title: "For Organizations", component: <WhyAyurSathiOrganizations /> },
     ],
   },
-  { id: "case-study", title: "Case Study", component: <WhyAyurSathiCitizens /> },
+  { id: "case-study", title: "Case Study", component: < AyurHerbTraceCaseStudy /> },
   { id: "tech", title: "Technology Overview", component: <WhyAyurSathiCitizens /> },
   { id: "org-model", title: "Organizational Model", component: <WhyAyurSathiCitizens /> },
   { id: "impl-model", title: "Implementation Model", component: <WhyAyurSathiCitizens /> },
