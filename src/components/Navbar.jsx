@@ -61,7 +61,6 @@ export default function Navbar() {
           <NavItem to="/explore" label="Explore" />
           <NavItem to="/contactus" label="ContactUs" />
           <NavItem to="/apis" label="APIs" />
-          <NavItem to="/docs" label="Docs" />
         </div>
 
         {/* RIGHT: Login + Mobile Toggle */}

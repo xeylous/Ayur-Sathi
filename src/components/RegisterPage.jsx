@@ -39,24 +39,22 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#ECF39E]/30 px-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg border p-8 my-4">
+    <div className=" flex justify-center bg-[#f5f8cc]/50 px-4 py-6 md:mb-0">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg border p-8 h-[750px] overflow-y-auto ">
         {/* Logo + Title */}
         <div className="flex flex-col items-center mb-6">
-        <Image
+          <Image
             src="/logo.jpg"
             alt="AyurSaathi Logo"
             width={50}
             height={50}
-            className="h-12 w-12 rounded-lg  grid place-items-center text-white text-xl font-bold"
+            className="h-12 w-12 rounded-lg"
           />
-          <h1 className="mt-3 text-2xl font-bold text-[#4F772D] ">
+          <h1 className="mt-3 text-2xl font-bold text-[#4F772D]">
             Create Account
           </h1>
           <p className="text-sm text-gray-500">
-            {mode === "user"
-              ? "Register as a User"
-              : "Register as a Farmer"}
+            {mode === "user" ? "Register as a User" : "Register as a Farmer"}
           </p>
         </div>
 
@@ -64,8 +62,7 @@ export default function RegisterPage() {
         <div className="flex gap-2 mb-6">
           <button
             onClick={() => setMode("user")}
-            className={`flex-1 py-2 rounded-md text-sm font-medium transition cursor-pointer
- ${
+            className={`flex-1 py-2 rounded-md text-sm font-medium transition cursor-pointer ${
               mode === "user"
                 ? "bg-[#90a955] text-white"
                 : "bg-gray-100 text-gray-700"
@@ -75,8 +72,7 @@ export default function RegisterPage() {
           </button>
           <button
             onClick={() => setMode("farmer")}
-            className={`flex-1 py-2 rounded-md text-sm font-medium transition cursor-pointer
-${
+            className={`flex-1 py-2 rounded-md text-sm font-medium transition cursor-pointer ${
               mode === "farmer"
                 ? "bg-[#90a955] text-white"
                 : "bg-gray-100 text-gray-700"
@@ -86,7 +82,7 @@ ${
           </button>
         </div>
 
-        {/* Form with Smooth Animation */}
+        {/* Form */}
         <AnimatePresence mode="wait">
           <motion.form
             key={mode}
@@ -190,30 +186,29 @@ ${
 
             <button
               type="submit"
-              className="w-full py-2.5 rounded-md text-white text-lg font-medium bg-[#90a955] hover:bg-[#4F772D] focus:ring-4 focus:outline-none focus:ring-green-300 shadow-lg cursor-pointer
-"
+              className="w-full py-2.5 rounded-md text-white text-lg font-medium bg-[#90a955] hover:bg-[#4F772D] focus:ring-4 focus:outline-none focus:ring-green-300 shadow-lg cursor-pointer"
             >
               {mode === "user" ? "Register as User" : "Register as Farmer"}
             </button>
           </motion.form>
         </AnimatePresence>
 
-        {/* OR Divider */}
+        {/* Divider */}
         <div className="flex items-center my-6">
           <div className="flex-grow border-t border-gray-300"></div>
           <span className="mx-2 text-gray-500 text-sm">OR</span>
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
 
-        {/* Google Auth Button */}
+        {/* Google Auth */}
         <button
           onClick={() => console.log("Google Auth")}
-          className="w-full py-2.5  cursor-pointer rounded-md border flex items-center justify-center gap-2 text-gray-700 bg-white hover:bg-gray-50 shadow-sm"
+          className="w-full py-2.5 cursor-pointer rounded-md border flex items-center justify-center gap-2 text-gray-700 bg-white hover:bg-gray-50 shadow-sm"
         >
           <img
             src="https://www.svgrepo.com/show/355037/google.svg"
             alt="Google"
-            className="w-5 h-5 "
+            className="w-5 h-5"
           />
           Continue with Google
         </button>
