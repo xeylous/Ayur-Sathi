@@ -31,7 +31,7 @@ export default function WhyAyurSathiCitizens() {
           alt="AyurSaathi Citizens"
           width={200}
           height={300}
-          className="rounded-lg shadow-lg w-full h-auto object-cover"
+          className="rounded-lg shadow-lg w-1/2 h-auto object-cover"
         />
       </div>
 
