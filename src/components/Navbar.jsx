@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Leaf, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
-
+import { motion, AnimatePresence } from "framer-motion";
 
 const NavItem = ({ to, label, closeMenu, className }) => {
   const pathname = usePathname();
@@ -32,6 +32,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
+  // close menu when route changes
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
@@ -39,14 +40,14 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b bg-white/80 backdrop-blur">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-8">
-        {/* LEFT: Logo */}
+        {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-brand-700 to-brand-600 grid place-items-center text-black">
             <Image
-              src="/logo.jpg" // path to your image inside "public" folder
+              src="/logo.jpg"
               alt="Logo"
-              width={200} // required
-              height={200} // required
+              width={200}
+              height={200}
               className="rounded-lg"
             />
           </div>
@@ -55,72 +56,104 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* MIDDLE: Desktop Nav */}
+        {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-3 text-lg">
           <NavItem to="/" label="Home" />
           <NavItem to="/explore" label="Explore" />
-          {/* <NavItem to="/apis" label="APIs" /> */}
           <NavItem to="/marketplace" label="Marketplace" />
-          
         </div>
 
-        {/* RIGHT: Login + Mobile Toggle */}
+        {/* Right Buttons */}
         <div className="flex items-center gap-2">
           <Link
             href="/login"
-            className="hidden md:inline-block text-lg font-medium text-black  hover:text-white bg-[#90A955] hover:bg-[#4F772D] focus:ring-4  rounded-2xl 
-            px-9 py-1 text-center"
+            className="hidden md:inline-block text-lg font-medium text-black hover:text-white bg-[#90A955] hover:bg-[#4F772D] focus:ring-4 rounded-2xl px-9 py-1 text-center"
           >
             Login
           </Link>
           <Link
             href="/register"
-            className="hidden md:inline-block text-lg font-medium text-black  hover:text-white bg-[#90A955] hover:bg-[#4F772D] focus:ring-4  rounded-2xl 
-            px-9 py-1 text-center mr-6"
+            className="hidden md:inline-block text-lg font-medium text-black hover:text-white bg-[#90A955] hover:bg-[#4F772D] focus:ring-4 rounded-2xl px-9 py-1 text-center mr-6"
           >
             Register
           </Link>
           <button
             className="md:hidden p-2 rounded-md text-brand-700 hover:bg-[#ECF39E] hover:text-brand-900"
-            onClick={() => setOpen(!open)}
+            onClick={() => setOpen(true)}
           >
-            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            <Menu className="h-6 w-6" />
           </button>
         </div>
       </div>
 
-      {/* Mobile Nav */}
-      {open && (
-        <nav className="md:hidden flex flex-col gap-1 p-2 border-t bg-white">
-          <NavItem to="/" label="Home" closeMenu={() => setOpen(false)} />
-          <NavItem
-            to="/explore"
-            label="Explore"
-            closeMenu={() => setOpen(false)}
-          />
-          <NavItem
-            to="/marketplace"
-            label="Marketplace"
-            closeMenu={() => setOpen(false)}
-          />
-          {/* <NavItem to="/apis" label="APIs" closeMenu={() => setOpen(false)} /> */}
-          {/* <NavItem to="/docs" label="Docs" closeMenu={() => setOpen(false)} /> */}
-          <Link
-            href="/login"
-            className="mt-2 text-lg font-medium text-black bg-[#ECF39E] rounded-lg px-5 py-2.5 text-center"
-            onClick={() => setOpen(false)}
-          >
-            Login
-          </Link>
-          <Link
-            href="/register"
-            className="mt-2 text-lg font-medium text-black bg-[#ECF39E] rounded-lg px-5 py-2.5 text-center"
-            onClick={() => setOpen(false)}
-          >
-            Register
-          </Link>
-        </nav>
-      )}
+      {/* Mobile Nav Drawer */}
+      <AnimatePresence>
+        {open && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-black z-40"
+              onClick={() => setOpen(false)}
+            />
+
+            {/* Drawer */}
+            <motion.nav
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "tween", duration: 0.3 }}
+              className="fixed inset-y-0 right-0 w-72 bg-white shadow-lg z-50 flex flex-col"
+            >
+              {/* Header with Close Button */}
+              <div className="flex items-center justify-between p-4 border-b bg-white">
+                <span className="text-lg font-semibold text-brand-900">
+                  Menu
+                </span>
+                <button
+                  className="p-2 rounded-md hover:bg-[#ECF39E] text-brand-700"
+                  onClick={() => setOpen(false)}
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+
+              {/* Nav Links */}
+              <div className="flex flex-col p-4 gap-3 bg-white">
+                <NavItem to="/" label="Home" closeMenu={() => setOpen(false)} />
+                <NavItem
+                  to="/explore"
+                  label="Explore"
+                  closeMenu={() => setOpen(false)}
+                />
+                <NavItem
+                  to="/marketplace"
+                  label="Marketplace"
+                  closeMenu={() => setOpen(false)}
+                />
+
+                <Link
+                  href="/login"
+                  className="mt-4 text-lg font-medium text-black bg-[#ECF39E] rounded-lg px-5 py-2.5 text-center"
+                  onClick={() => setOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/register"
+                  className="mt-2 text-lg font-medium text-black bg-[#ECF39E] rounded-lg px-5 py-2.5 text-center"
+                  onClick={() => setOpen(false)}
+                >
+                  Register
+                </Link>
+              </div>
+            </motion.nav>
+          </>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
