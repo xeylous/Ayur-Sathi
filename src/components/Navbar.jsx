@@ -59,7 +59,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-3 text-lg">
           <NavItem to="/" label="Home" />
           <NavItem to="/explore" label="Explore" />
-          <NavItem to="/apis" label="APIs" />
+          {/* <NavItem to="/apis" label="APIs" /> */}
           <NavItem to="/marketplace" label="Marketplace" />
           
         </div>
@@ -99,12 +99,12 @@ export default function Navbar() {
             closeMenu={() => setOpen(false)}
           />
           <NavItem
-            to="/contactus"
-           label="ContactUs"
+            to="/marketplace"
+            label="Marketplace"
             closeMenu={() => setOpen(false)}
           />
-          <NavItem to="/apis" label="APIs" closeMenu={() => setOpen(false)} />
-          <NavItem to="/docs" label="Docs" closeMenu={() => setOpen(false)} />
+          {/* <NavItem to="/apis" label="APIs" closeMenu={() => setOpen(false)} /> */}
+          {/* <NavItem to="/docs" label="Docs" closeMenu={() => setOpen(false)} /> */}
           <Link
             href="/login"
             className="mt-2 text-lg font-medium text-black bg-[#ECF39E] rounded-lg px-5 py-2.5 text-center"
