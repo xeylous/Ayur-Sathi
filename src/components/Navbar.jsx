@@ -59,8 +59,9 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-3 text-lg">
           <NavItem to="/" label="Home" />
           <NavItem to="/explore" label="Explore" />
-          <NavItem to="/contactus" label="ContactUs" />
           <NavItem to="/apis" label="APIs" />
+          <NavItem to="/marketplace" label="Marketplace" />
+          
         </div>
 
         {/* RIGHT: Login + Mobile Toggle */}

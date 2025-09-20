@@ -12,7 +12,6 @@ const images = [
   { src: "/Image_6.jpeg", alt: "image" },
   { src: "/Image_7.jpeg", alt: "image" },
   // { src: "/Image_8.jpeg", alt: "image" },
-  
 ];
 
 export default function ImageSlider() {
@@ -42,6 +41,9 @@ export default function ImageSlider() {
             src={img.src}
             alt={img.alt}
             fill
+            sizes="(max-width: 768px) 100vw, 
+         (max-width: 1200px) 50vw, 
+         33vw"
             className="object-cover rounded-xl"
             priority={index === 0}
           />

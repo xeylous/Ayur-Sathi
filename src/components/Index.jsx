@@ -14,19 +14,36 @@ import ImageSlider from "./ImageSlider";
 
 function IndexContent() {
   const searchParams = useSearchParams();
-  const [batch, setBatch] = useState(
-    searchParams.get("batch") || "ASHW-2025-0001"
-  );
-  const router = useRouter();
+  const [batch, setBatch] = useState("ASHW-2025-0001");
 
- 
+  useEffect(() => {
+    const param = searchParams.get("batch");
+    if (param) setBatch(param);
+  }, [searchParams]);
+  const router = useRouter();
 
   const highlights = useMemo(
     () => [
-      { icon: MapPin, title: "Geo-tagged Harvests", desc: "GPS, timestamp, species & moisture" },
-      { icon: Factory, title: "Processing Steps", desc: "Drying, grinding, storage conditions" },
-      { icon: FlaskConical, title: "Lab QA", desc: "Moisture, pesticides, DNA barcode" },
-      { icon: ShieldCheck, title: "Smart Compliance", desc: "Geo-fencing, seasons, limits" },
+      {
+        icon: MapPin,
+        title: "Geo-tagged Harvests",
+        desc: "GPS, timestamp, species & moisture",
+      },
+      {
+        icon: Factory,
+        title: "Processing Steps",
+        desc: "Drying, grinding, storage conditions",
+      },
+      {
+        icon: FlaskConical,
+        title: "Lab QA",
+        desc: "Moisture, pesticides, DNA barcode",
+      },
+      {
+        icon: ShieldCheck,
+        title: "Smart Compliance",
+        desc: "Geo-fencing, seasons, limits",
+      },
     ],
     []
   );
@@ -44,7 +61,6 @@ function IndexContent() {
         <div className="max-w-7xl mx-auto px-3 py-12 md:py-16">
           {/* grid for text + image */}
           <div className="grid gap-10 md:gap-16 lg:gap-24 xl:gap-32 2xl:gap-40 lg:grid-cols-2 lg:items-center">
-            
             {/* Left: Text content */}
             <div className="mx-auto lg:mx-0 text-center lg:text-left">
               <span className="inline-block px-3 py-1 rounded-full text-xs bg-[#90A955] font-semibold bg-brand-100 text-brand-900">
@@ -57,14 +73,19 @@ function IndexContent() {
 
               <p className="mt-4 text-base sm:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0">
                 Permissioned blockchain with smart contracts, geo-fenced harvest
-                rules and QR-powered consumer provenance — built for ethical sourcing
-                and rapid audits.
+                rules and QR-powered consumer provenance — built for ethical
+                sourcing and rapid audits.
               </p>
 
               {/* Input + Buttons */}
-              <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start" id="try">
+              <div
+                className="mt-6 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start"
+                id="try"
+              >
                 <div className="flex-1 min-w-0">
-                  <label htmlFor="batch" className="sr-only">Batch</label>
+                  <label htmlFor="batch" className="sr-only">
+                    Batch
+                  </label>
                   <input
                     id="batch"
                     value={batch}
@@ -82,10 +103,7 @@ function IndexContent() {
                   View Details
                 </Link>
 
-                <button
-                  
-                  className="flex items-center justify-center gap-2 h-11 px-4 rounded-md bg-[#90A955] hover:bg-[#4F772D] hover:text-white border text-black hover:bg-brand-700"
-                >
+                <button className="flex items-center justify-center gap-2 h-11 px-4 rounded-md bg-[#90A955] hover:bg-[#4F772D] hover:text-white border text-black hover:bg-brand-700">
                   <QrCode className="w-4 h-4" />
                   Scan QR
                 </button>
@@ -94,13 +112,18 @@ function IndexContent() {
               {/* Highlights */}
               <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 text-sm px-3 sm:px-0 justify-items-center lg:justify-items-start">
                 {highlights.map(({ icon: Icon, title, desc }) => (
-                  <div key={title} className="flex items-center gap-3 rounded-lg border bg-card p-3 w-full max-w-xs">
+                  <div
+                    key={title}
+                    className="flex items-center gap-3 rounded-lg border bg-card p-3 w-full max-w-xs"
+                  >
                     <div className="h-9 w-9 rounded-md bg-brand-600 text-white grid place-items-center flex-shrink-0">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
                       <div className="font-medium">{title}</div>
-                      <div className="text-muted-foreground text-xs">{desc}</div>
+                      <div className="text-muted-foreground text-xs">
+                        {desc}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -118,7 +141,6 @@ function IndexContent() {
       {/* PROBLEM & SOLUTION */}
       <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-3 grid gap-8 md:gap-12 lg:gap-16 xl:gap-24 2xl:gap-32 md:grid-cols-2">
-          
           {/* Background Card */}
           <div className="rounded-xl border bg-card p-6 text-center md:text-left">
             <div className="text-brand-900 font-semibold">Background</div>
@@ -126,7 +148,9 @@ function IndexContent() {
               Fragmented, opaque herbal supply chains
             </h2>
             <ul className="mt-4 space-y-2 text-sm text-muted-foreground list-disc pl-5">
-              <li>Smallholders and intermediaries create inconsistent records</li>
+              <li>
+                Smallholders and intermediaries create inconsistent records
+              </li>
               <li>Risks: mislabeling, adulteration, and over-harvesting</li>
               <li>Opaque geographic provenance undermines compliance</li>
             </ul>
@@ -144,7 +168,6 @@ function IndexContent() {
               <li>FHIR-style metadata bundles enable interoperability</li>
             </ul>
           </div>
-
         </div>
       </section>
     </div>
