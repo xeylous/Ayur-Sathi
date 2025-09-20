@@ -4,8 +4,11 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
+import { useRouter } from "next/navigation";
+
 
 export default function LoginPage() {
+  const router = useRouter();
   const [mode, setMode] = useState("user"); // "user" | "farmer"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,11 +21,35 @@ export default function LoginPage() {
     setShowPassword(false);
   }, [mode]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(`Login attempt (${mode}):`, { email, password });
-    // Add your login API call here
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, type: mode }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.error || "Login failed");
+      return;
+    }
+
+    console.log("Login success:", data); 
+        router.push("/");
+        
+
+    // Example output:
+    // {name: 'xeylous', email: 'Apurvsinha2003@gmail.com', password: '1234', type: 'user'}
+
+    // Redirect or set session here
+  } catch (error) {
+    console.error("Login error:", error);
+  }
+};
+
 
   return (
     <div className="flex justify-center bg-[#f5f8cc]/50 px-4 py-10 md:py-8 ">
