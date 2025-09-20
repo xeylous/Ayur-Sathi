@@ -3,10 +3,12 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 
 export default function RegisterPage() {
   const [mode, setMode] = useState("user"); // "user" | "farmer"
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,6 +17,7 @@ export default function RegisterPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [error, setError] = useState(""); // for error message
 
   // Reset form whenever mode changes
   useEffect(() => {
@@ -26,6 +29,7 @@ export default function RegisterPage() {
     });
     setShowPassword(false);
     setShowConfirm(false);
+    setError("");
   }, [mode]);
 
   const handleChange = (e) => {
@@ -34,13 +38,38 @@ export default function RegisterPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(`Register attempt (${mode}):`, formData);
-    // Add API call here
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match!");
+      return;
+    }
+
+    setError(""); // clear error if valid
+
+    const { confirmPassword, ...safeData } = formData; // exclude confirmPassword
+
+    const payload = {
+      ...safeData,
+      type: mode, // Add user/farmer type
+    };
+
+    console.log("Register attempt:", payload);
+    // TODO: Replace with API call
+
+    setFormData({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
+
+    // Redirect
+    router.push("/login");
   };
 
   return (
-    <div className=" flex justify-center bg-[#f5f8cc]/50 px-4 py-6 md:mb-0">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg border p-8 h-[750px] overflow-y-auto ">
+    <div className="flex justify-center bg-[#f5f8cc]/50 px-4 py-6 md:mb-0">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg border p-8 h-[830px] overflow-y-auto">
         {/* Logo + Title */}
         <div className="flex flex-col items-center mb-6">
           <Image
@@ -93,25 +122,24 @@ export default function RegisterPage() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {mode === "farmer" && (
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 w-full px-3 py-2 rounded-md border focus:outline-none focus:ring-2 focus:ring-green-600"
-                  placeholder="John Doe"
-                />
-              </div>
-            )}
+            {/* Name for both User & Farmer */}
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Full Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="mt-1 w-full px-3 py-2 rounded-md border focus:outline-none focus:ring-2 focus:ring-green-600"
+                placeholder="John Doe"
+              />
+            </div>
 
             {/* Email */}
             <div>
@@ -183,6 +211,11 @@ export default function RegisterPage() {
                 {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
+
+            {/* Error Message */}
+            {error && (
+              <p className="text-red-600 text-sm font-medium">{error}</p>
+            )}
 
             <button
               type="submit"
