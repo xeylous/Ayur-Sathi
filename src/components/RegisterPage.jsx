@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
+import { signIn } from "next-auth/react";
 
 export default function RegisterPage() {
   const [mode, setMode] = useState("user"); // "user" | "farmer"
@@ -18,6 +19,7 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState(""); // for error message
+  const [loading, setLoading] = useState(false);
 
   // Reset form whenever mode changes
   useEffect(() => {
@@ -36,35 +38,78 @@ export default function RegisterPage() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // client-side validation
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
+    if (!formData.name || !formData.email || !formData.password) {
+      setError("Please fill all required fields.");
+      return;
+    }
 
-    setError(""); // clear error if valid
+    setError("");
+    setLoading(true);
 
     const { confirmPassword, ...safeData } = formData; // exclude confirmPassword
-
     const payload = {
       ...safeData,
-      type: mode, // Add user/farmer type
+      type: mode, // "user" or "farmer"
     };
 
-    console.log("Register attempt:", payload);
-    // TODO: Replace with API call
+    try {
+      // Call your register API route
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    setFormData({
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
+      const data = await res.json();
 
-    // Redirect
-    router.push("/login");
+      if (!res.ok) {
+        // backend should return meaningful error message in JSON { error: '...' }
+        setError(data?.error || data?.message || "Registration failed");
+        setLoading(false);
+        return;
+      }
+
+      // Option A — auto login using NextAuth credentials provider (recommended)
+      // Make sure you have Credentials provider configured in [...nextauth]
+      const signInResult = await signIn("credentials", {
+        redirect: false,
+        email: payload.email,
+        password: payload.password,
+      });
+
+      // signIn returns an object when redirect: false
+      if (signInResult?.error) {
+        // signed up but sign in failed; you can redirect to login page or show message
+        setError("Registered but auto-login failed. Please login manually.");
+        // optionally redirect to login
+        router.push("/login");
+        setLoading(false);
+        return;
+      }
+
+      // Success — redirect to home or dashboard
+      router.push("/login"); // or "/dashboard" etc.
+    } catch (err) {
+      console.error("Register error:", err);
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+      // optional: clear form
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+    }
   };
 
   return (
@@ -213,15 +258,14 @@ export default function RegisterPage() {
             </div>
 
             {/* Error Message */}
-            {error && (
-              <p className="text-red-600 text-sm font-medium">{error}</p>
-            )}
+            {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
 
             <button
               type="submit"
-              className="w-full py-2.5 rounded-md text-white text-lg font-medium bg-[#90a955] hover:bg-[#4F772D] focus:ring-4 focus:outline-none focus:ring-green-300 shadow-lg cursor-pointer"
+              disabled={loading}
+              className="w-full py-2.5 rounded-md text-white text-lg font-medium bg-[#90a955] hover:bg-[#4F772D] focus:ring-4 focus:outline-none focus:ring-green-300 shadow-lg cursor-pointer disabled:opacity-60"
             >
-              {mode === "user" ? "Register as User" : "Register as Farmer"}
+              {loading ? "Please wait..." : mode === "user" ? "Register as User" : "Register as Farmer"}
             </button>
           </motion.form>
         </AnimatePresence>
@@ -235,7 +279,7 @@ export default function RegisterPage() {
 
         {/* Google Auth */}
         <button
-          onClick={() => console.log("Google Auth")}
+          onClick={() => signIn("google")}
           className="w-full py-2.5 cursor-pointer rounded-md border flex items-center justify-center gap-2 text-gray-700 bg-white hover:bg-gray-50 shadow-sm"
         >
           <img
