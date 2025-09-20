@@ -2,7 +2,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import LoginPage from "@/components/Login";
-import Marketplace from "@/components/ExploreComp/marketplace/Marketplace";
+import Marketplace from "@/components/marketplace/Marketplace";
 
 export default function Page() {
   return (
