@@ -16,7 +16,7 @@ export default function Marketplace() {
         </div>
 
         <h2 className="mt-6 text-3xl sm:text-4xl md:text-5xl font-extrabold text-brand-900">
-          AyurHerbTrace Marketplace
+          Ayurसाथी Marketplace
         </h2>
         <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
           Soon you'll be able to explore ethically sourced Ayurvedic herbs with 
