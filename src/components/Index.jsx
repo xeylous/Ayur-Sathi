@@ -11,6 +11,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import ImageSlider from "./ImageSlider";
+import LandingSkeleton from "./LandingSkeleton";
 
 function IndexContent() {
   const searchParams = useSearchParams();
@@ -177,7 +178,7 @@ function IndexContent() {
 // Wrap with Suspense for useSearchParams
 export default function Index() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<LandingSkeleton />}>
       <IndexContent />
     </Suspense>
   );
