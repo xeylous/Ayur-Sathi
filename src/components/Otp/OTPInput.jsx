@@ -1,20 +1,63 @@
+
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { useParams, useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import Image from "next/image";
 
-export default function OTPPage({ length = 6, onComplete, disabled = false }) {
-  const [otp, setOtp] = useState(Array(length).fill(""));
-  const inputsRef = useRef([]);
+export default function OTPPage({ length = 6 }) {
+  const { uniqueId } = useParams();
   const router = useRouter();
+  const [otp, setOtp] = useState(Array(length).fill(""));
+  const [attemptsLeft, setAttemptsLeft] = useState(3);
+  const [message, setMessage] = useState("");
+  const [disabled, setDisabled] = useState(false);
+  const inputsRef = useRef([]);
 
+  // 🔹 Send OTP on mount
   useEffect(() => {
-    if (disabled) return;
-  }, [disabled]);
+    fetch(`/api/send-otp/${uniqueId}`, { method: "POST" })
+      .then((res) => res.json())
+      .then((data) => setMessage(data.message))
+      .catch(() => setMessage("Failed to send OTP"));
+  }, [uniqueId]);
 
+  // 🔹 Handle OTP verification
+  const handleVerify = async () => {
+    if (disabled) return;
+    setDisabled(true);
+
+    const res = await fetch(`/api/verify-otp/${uniqueId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ otp: otp.join("") }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      setMessage("✅ OTP verified successfully! Redirecting...");
+      setTimeout(() => router.push("/login"), 1500);
+    } else {
+      const remaining = attemptsLeft - 1;
+      setAttemptsLeft(remaining);
+      setDisabled(false);
+
+      if (remaining > 0) {
+        setMessage(`❌ Incorrect OTP. You have ${remaining} attempt(s) left.`);
+      } else {
+        setMessage("❌ Registration failed. Redirecting...");
+        setTimeout(() => router.push("/register"), 2000);
+      }
+    }
+  };
+
+  // 🔹 OTP Input Handlers
   const handleChange = (e, index) => {
     if (disabled) return;
+
     const value = e.target.value;
 
     if (/^[0-9]$/.test(value)) {
@@ -22,11 +65,8 @@ export default function OTPPage({ length = 6, onComplete, disabled = false }) {
       newOtp[index] = value;
       setOtp(newOtp);
 
-      if (index < length - 1) inputsRef.current[index + 1].focus();
+      if (index < length - 1) inputsRef.current[index + 1]?.focus();
 
-      if (newOtp.every((digit) => digit !== "")) {
-        onComplete?.(newOtp.join(""));
-      }
     } else if (value === "") {
       const newOtp = [...otp];
       newOtp[index] = "";
@@ -36,8 +76,11 @@ export default function OTPPage({ length = 6, onComplete, disabled = false }) {
 
   const handleKeyDown = (e, index) => {
     if (disabled) return;
+
+
     if (e.key === "Backspace" && otp[index] === "" && index > 0) {
-      inputsRef.current[index - 1].focus();
+      inputsRef.current[index - 1]?.focus();
+
     }
   };
 
@@ -52,44 +95,50 @@ export default function OTPPage({ length = 6, onComplete, disabled = false }) {
         .slice(0, length);
 
       setOtp(newOtp);
+
       const lastIndex = newOtp.findIndex((d) => d === "");
-      if (lastIndex === -1) inputsRef.current[length - 1].focus();
-      else inputsRef.current[lastIndex].focus();
-
-      if (newOtp.every((d) => d !== "")) onComplete?.(newOtp.join(""));
+      if (lastIndex === -1) inputsRef.current[length - 1]?.focus();
+      else inputsRef.current[lastIndex]?.focus();
     }
-  };
-
-  const handleVerify = () => {
-    if (otp.some((digit) => digit === "")) {
-      toast.error("Please enter the complete code");
-      return;
-    }
-    toast.success("OTP Verified!");
-    setTimeout(() => router.push("/"), 1000);
   };
 
   return (
-    <div className="flex justify-center bg-[#f5f8cc]/50 px-4 py-10 md:py-8">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg border p-8 min-h-[500px] flex flex-col items-center">
-        
-        {/* Icon */}
-        <div className="w-14 h-14 flex items-center justify-center rounded-full bg-[#90a955]/10 mb-4">
-          <span className="text-[#4F772D] text-2xl font-bold">🔑</span>
+    <div className="flex justify-center bg-[#f5f8cc]/50 px-4 py-10 md:py-8 min-h-screen">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg border p-8 flex flex-col">
+        {/* Logo + Title */}
+        <div className="flex flex-col items-center mb-6">
+          <Image
+            src="/logo.jpg"
+            alt="Logo"
+            width={50}
+            height={50}
+            className="h-12 w-12 rounded-lg"
+          />
+          <h1 className="mt-3 text-2xl font-bold text-[#4F772D]">
+            Verify Your Account
+          </h1>
+          <p className="text-sm text-gray-500">
+            Enter the {length}-digit code we sent to your email/phone
+          </p>
         </div>
 
-        {/* Title */}
-        <h1 className="text-2xl font-bold text-[#4F772D] mb-2">
-          Verify Your Account
-        </h1>
-        <p className="text-sm text-gray-500 text-center mb-6">
-          Enter the 6-digit verification code sent to your registered number.
-        </p>
+        {/* Status Message */}
+        {message && (
+          <p className="mb-4 text-center text-sm font-medium text-gray-700">
+            {message}
+          </p>
+        )}
 
-        {/* OTP Inputs */}
-        <div className="flex justify-center gap-2 sm:gap-3 flex-wrap mb-6">
+        {/* OTP Input Boxes */}
+        <motion.div
+          className="flex justify-center gap-2 sm:gap-3 mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           {otp.map((digit, index) => (
-            <input
+            <motion.input
+
               key={index}
               type="text"
               inputMode="numeric"
@@ -100,42 +149,52 @@ export default function OTPPage({ length = 6, onComplete, disabled = false }) {
               onPaste={handlePaste}
               ref={(el) => (inputsRef.current[index] = el)}
               disabled={disabled}
-              className={`w-10 h-12 sm:w-12 sm:h-14 text-center text-lg sm:text-xl font-medium rounded-md border transition-all shadow-sm
+
+              whileFocus={{ scale: 1.1 }}
+              className={`w-10 h-12 sm:w-12 sm:h-14 text-center text-lg sm:text-xl font-semibold rounded-lg border shadow-sm outline-none transition-all
                 ${
                   disabled
-                    ? "border-gray-300 bg-gray-100 cursor-not-allowed"
-                    : "border-gray-300 text-[#31572C] focus:border-[#90a955] focus:ring-2 focus:ring-[#90a955]/50"
+                    ? "border-gray-300 bg-gray-100 cursor-not-allowed text-gray-400"
+                    : "border-gray-300 bg-white focus:border-green-600 focus:ring-2 focus:ring-green-600"
                 }`}
             />
           ))}
-        </div>
+        </motion.div>
 
-        {/* Resend Option */}
-        <p className="text-sm text-gray-600 mb-6">
-          Didn’t get the code?{" "}
+        {/* Submit Button */}
+        <button
+          onClick={handleVerify}
+          disabled={otp.some((d) => d === "") || disabled}
+          className={`w-full py-2.5 rounded-md text-white text-lg font-medium shadow-lg transition
+            ${
+              otp.some((d) => d === "") || disabled
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-[#90a955] hover:bg-[#4F772D] focus:ring-4 focus:outline-none focus:ring-green-300"
+
+            }`}
+        >
+          Verify
+        </button>
+
+
+        {/* Footer */}
+        <p className="mt-6 text-center text-sm text-gray-600">
+          Didn’t receive the code?{" "}
           <button
             type="button"
-            className="text-[#90a955] font-medium hover:underline"
-            onClick={() => toast.info("OTP resent!")}
+            onClick={() =>
+              fetch(`/api/send-otp/${uniqueId}`, { method: "POST" })
+                .then((res) => res.json())
+                .then((data) => setMessage(data.message))
+                .catch(() => setMessage("Failed to resend OTP"))
+            }
+            disabled={disabled}
+            className="text-green-600 hover:underline font-medium cursor-pointer disabled:cursor-not-allowed disabled:text-gray-400"
           >
             Resend
           </button>
         </p>
 
-        {/* Verify Button */}
-        <button
-          type="button"
-          onClick={handleVerify}
-          disabled={otp.some((digit) => digit === "")}
-          className={`w-full py-2.5 rounded-md text-white text-lg font-medium shadow-md transition
-            ${
-              otp.every((digit) => digit !== "")
-                ? "bg-[#90a955] hover:bg-[#4F772D] focus:ring-4 focus:outline-none focus:ring-green-300"
-                : "bg-gray-300 cursor-not-allowed"
-            }`}
-        >
-          Verify
-        </button>
       </div>
     </div>
   );
