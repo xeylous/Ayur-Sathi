@@ -33,11 +33,11 @@ export default function LoginPage() {
 
       const data = await res.json();
       if (!res.ok) {
-        toast.error(data.error || "Login failed ❌");
+        toast.error(data.error || "Login failed");
         return;
       }
 
-      toast.success("Login successful 🎉");
+      toast.success("Login successful");
 
       // Delay navigation slightly so toast is visible
       setTimeout(() => {
@@ -45,7 +45,7 @@ export default function LoginPage() {
       }, 1000);
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Something went wrong. Please try again ⚠️");
+      toast.error("Something went wrong. Please try again");
     }
   };
 
@@ -169,7 +169,7 @@ export default function LoginPage() {
 
         {/* Google Auth Button */}
         <button
-          onClick={() => toast.info("Google Auth coming soon 🚀")}
+          onClick={() => toast.info("Google Auth coming soon!!")}
           className="w-full py-2.5 rounded-md border flex items-center justify-center gap-2 text-gray-700 bg-white hover:bg-gray-50 shadow-sm cursor-pointer"
         >
           <img

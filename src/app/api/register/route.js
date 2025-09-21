@@ -1,35 +1,3 @@
-// 'use server';
-// import { NextResponse } from "next/server";
-// import { connectDB } from "@/lib/db";
-// import User from "@/models/User";
-// import bcrypt from "bcryptjs";
-
-// export async function POST(req) {
-//   await connectDB();
-//   const { name, email, password, type } = await req.json();
-
-//   // Check if user already exists
-//   const existingUser = await User.findOne({ email, type });
-//   if (existingUser) {
-//     return NextResponse.json({ error: "User already exists" }, { status: 400 });
-//   }
-
-//   // Hash password
-//   const hashedPassword = await bcrypt.hash(password, 10);
-
-//   // Create user
-//   const user = await User.create({
-//     name,
-//     email,
-//     password: hashedPassword,
-//     type,
-//   });
-
-//   return NextResponse.json({
-//     message: "User registered successfully",
-//     user: { id: user._id, name: user.name, email: user.email, type: user.type },
-//   });
-// }
 'use server';
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
@@ -40,8 +8,12 @@ import bcrypt from "bcryptjs";
 export async function POST(req) {
   await connectDB();
   const { name, email, password, type } = await req.json();
+console.log(name, email, password, type);
 
   try {
+    // 🔽 Convert email to lowercase
+    const normalizedEmail = email.toLowerCase();
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     let model;
@@ -54,7 +26,7 @@ export async function POST(req) {
     }
 
     // Check if already exists
-    const existing = await model.findOne({ email });
+    const existing = await model.findOne({ email: normalizedEmail });
     if (existing) {
       return NextResponse.json(
         { error: `A account already exists with this email as ${type}` },
@@ -64,8 +36,9 @@ export async function POST(req) {
 
     const account = await model.create({
       name,
-      email,
+      email: normalizedEmail, // 🔽 save lowercase
       password: hashedPassword,
+       type, 
     });
 
     return NextResponse.json({

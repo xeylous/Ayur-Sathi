@@ -7,11 +7,15 @@ import bcrypt from "bcryptjs";
 export async function POST(req) {
   try {
     await connectDB();
-    const { email, password, type } = await req.json();
+    let { email, password, type } = await req.json();
 
     if (!email || !password || !type) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
+
+    // ✅ Convert to lowercase for consistency
+    email = email.toLowerCase().trim();
+    type = type.toLowerCase().trim();
 
     let model;
     if (type === "user") {
@@ -26,6 +30,15 @@ export async function POST(req) {
     const account = await model.findOne({ email });
     if (!account) {
       return NextResponse.json({ error: `${type} not found` }, { status: 404 });
+    }
+
+    // 🔒 Extra check: prevent same email across collections
+    const otherModel = type === "user" ? Farmer : User;
+    const conflict = await otherModel.findOne({ email });
+    if (conflict) {
+      return NextResponse.json({
+        error: "This email is already registered as a different account type",
+      }, { status: 403 });
     }
 
     // Compare password
