@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
+import Farmer from "@/models/Farmer";
 import bcrypt from "bcryptjs";
 
 export async function POST(req) {
@@ -12,23 +13,36 @@ export async function POST(req) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
-    // Find user by email + type
-    const user = await User.findOne({ email, type });
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    let model;
+    if (type === "user") {
+      model = User;
+    } else if (type === "farmer") {
+      model = Farmer;
+    } else {
+      return NextResponse.json({ error: "Invalid account type" }, { status: 400 });
     }
 
-    // Compare password with bcrypt
-    const isMatch = await bcrypt.compare(password, user.password);
+    // Find by email
+    const account = await model.findOne({ email });
+    if (!account) {
+      return NextResponse.json({ error: `${type} not found` }, { status: 404 });
+    }
+
+    // Compare password
+    const isMatch = await bcrypt.compare(password, account.password);
     if (!isMatch) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    // Success (⚠️ don’t send password in real apps)
+    // Success ✅ (don’t send password back!)
     return NextResponse.json({
-      name: user.name,
-      email: user.email,
-      type: user.type,
+      message: "Login successful",
+      account: {
+        id: account._id,
+        name: account.name,
+        email: account.email,
+        type,
+      },
     });
   } catch (error) {
     console.error("Login error:", error);

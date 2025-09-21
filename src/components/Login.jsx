@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
-
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,39 +21,37 @@ export default function LoginPage() {
     setShowPassword(false);
   }, [mode]);
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, type: mode }),
-    });
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, type: mode }),
+      });
 
-    const data = await res.json();
-    if (!res.ok) {
-      alert(data.error || "Login failed");
-      return;
-    }
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error || "Login failed ❌");
+        return;
+      }
 
-    console.log("Login success:", data); 
+      toast.success("Login successful 🎉");
+
+      // Delay navigation slightly so toast is visible
+      setTimeout(() => {
         router.push("/");
-        
-
-    // Example output:
-    // {name: 'xeylous', email: 'Apurvsinha2003@gmail.com', password: '1234', type: 'user'}
-
-    // Redirect or set session here
-  } catch (error) {
-    console.error("Login error:", error);
-  }
-};
-
+      }, 1000);
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Something went wrong. Please try again ⚠️");
+    }
+  };
 
   return (
-    <div className="flex justify-center bg-[#f5f8cc]/50 px-4 py-10 md:py-8 ">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg border p-8 min-h-[650px] ">
+    <div className="flex justify-center bg-[#f5f8cc]/50 px-4 py-10 md:py-8">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg border p-8 min-h-[650px]">
         {/* Logo + Title */}
         <div className="flex flex-col items-center mb-6">
           <Image
@@ -61,7 +59,7 @@ const handleSubmit = async (e) => {
             alt="AyurSaathi Logo"
             width={50}
             height={50}
-            className="h-12 w-12 rounded-lg grid place-items-center text-white text-xl font-bold"
+            className="h-12 w-12 rounded-lg"
           />
           <h1 className="mt-3 text-2xl font-bold text-[#4F772D]">
             Welcome Back
@@ -127,7 +125,7 @@ const handleSubmit = async (e) => {
               />
             </div>
 
-            {/* Password with show/hide */}
+            {/* Password */}
             <div className="relative">
               <label
                 htmlFor="password"
@@ -171,7 +169,7 @@ const handleSubmit = async (e) => {
 
         {/* Google Auth Button */}
         <button
-          onClick={() => console.log("Google Auth")}
+          onClick={() => toast.info("Google Auth coming soon 🚀")}
           className="w-full py-2.5 rounded-md border flex items-center justify-center gap-2 text-gray-700 bg-white hover:bg-gray-50 shadow-sm cursor-pointer"
         >
           <img
@@ -184,7 +182,7 @@ const handleSubmit = async (e) => {
 
         {/* Footer */}
         <p className="mt-6 text-center text-sm text-gray-600">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <Link
             href="/register"
             className="text-green-600 hover:underline font-medium cursor-pointer"
