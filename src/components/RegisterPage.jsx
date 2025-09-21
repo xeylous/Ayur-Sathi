@@ -6,9 +6,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { signIn } from "next-auth/react";
+import { toast } from 'react-toastify';
 
 export default function RegisterPage() {
-  const [mode, setMode] = useState("user"); // "user" | "farmer"
+  const [mode, setMode] = useState("user");
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
@@ -18,7 +19,7 @@ export default function RegisterPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [error, setError] = useState(""); // for error message
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   // Reset form whenever mode changes
@@ -41,7 +42,6 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // client-side validation
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match!");
       return;
@@ -54,55 +54,46 @@ export default function RegisterPage() {
     setError("");
     setLoading(true);
 
-    const { confirmPassword, ...safeData } = formData; // exclude confirmPassword
-    const payload = {
-      ...safeData,
-      type: mode, // "user" or "farmer"
-    };
+    const { confirmPassword, ...safeData } = formData;
+    const payload = { ...safeData, type: mode };
 
     try {
-      // Call your register API route
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-
       const data = await res.json();
 
       if (!res.ok) {
-        // backend should return meaningful error message in JSON { error: '...' }
         setError(data?.error || data?.message || "Registration failed");
         setLoading(false);
         return;
       }
 
-      // Option A — auto login using NextAuth credentials provider (recommended)
-      // Make sure you have Credentials provider configured in [...nextauth]
+      // Try auto login
       const signInResult = await signIn("credentials", {
         redirect: false,
         email: payload.email,
         password: payload.password,
       });
 
-      // signIn returns an object when redirect: false
       if (signInResult?.error) {
-        // signed up but sign in failed; you can redirect to login page or show message
+        toast.success("Registration successful");
         setError("Registered but auto-login failed. Please login manually.");
-        // optionally redirect to login
         router.push("/login");
         setLoading(false);
         return;
       }
 
-      // Success — redirect to home or dashboard
-      router.push("/login"); // or "/dashboard" etc.
+      // Success
+      toast.success("Registration successful");
+      router.push("/login");
     } catch (err) {
       console.error("Register error:", err);
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
-      // optional: clear form
       setFormData({
         name: "",
         email: "",
@@ -114,7 +105,7 @@ export default function RegisterPage() {
 
   return (
     <div className="flex justify-center bg-[#f5f8cc]/50 px-4 py-6 md:mb-0">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg border p-8 h-[830px] overflow-y-auto">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg border p-8 h-[850px] overflow-y-auto">
         {/* Logo + Title */}
         <div className="flex flex-col items-center mb-6">
           <Image
@@ -167,7 +158,7 @@ export default function RegisterPage() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Name for both User & Farmer */}
+            {/* Name */}
             <div>
               <label
                 htmlFor="name"
@@ -257,15 +248,19 @@ export default function RegisterPage() {
               </button>
             </div>
 
-            {/* Error Message */}
-            {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
+            {/* Error */}
+            {error && <p className="text-red-600 text-sm font-medium place-content-center">{error}</p>}
 
             <button
               type="submit"
               disabled={loading}
               className="w-full py-2.5 rounded-md text-white text-lg font-medium bg-[#90a955] hover:bg-[#4F772D] focus:ring-4 focus:outline-none focus:ring-green-300 shadow-lg cursor-pointer disabled:opacity-60"
             >
-              {loading ? "Please wait..." : mode === "user" ? "Register as User" : "Register as Farmer"}
+              {loading
+                ? "Please wait..."
+                : mode === "user"
+                ? "Register as User"
+                : "Register as Farmer"}
             </button>
           </motion.form>
         </AnimatePresence>
