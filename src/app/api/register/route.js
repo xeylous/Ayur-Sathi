@@ -1,18 +1,24 @@
-'use server';
+"use server";
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 import Farmer from "@/models/Farmer";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
+import redis from "@/lib/redis";
 
 export async function POST(req) {
   await connectDB();
   const { name, email, password, type } = await req.json();
-console.log(name, email, password, type);
+  console.log(name, email, password, type);
 
   try {
     // 🔽 Convert email to lowercase
     const normalizedEmail = email.toLowerCase();
+
+    // ✅ Generate unique 6-character ID (hex-based)
+    const uniqueId = crypto.randomBytes(3).toString("hex"); // 3 bytes -> 6 hex chars
+    console.log("Generated uniqueId:", uniqueId);
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -33,20 +39,34 @@ console.log(name, email, password, type);
         { status: 400 }
       );
     }
-
-    const account = await model.create({
+    const userData = {
       name,
-      email: normalizedEmail, // 🔽 save lowercase
+      email: normalizedEmail,
       password: hashedPassword,
-       type, 
-    });
+      type,
+      uniqueId,
+    };
 
+    // Save in Redis as string
+    await redis.set(
+      `pending_user:${uniqueId}`,
+      JSON.stringify(userData),
+      "EX",
+      600
+    );
+
+    // const account = await model.create({
+    //   name,
+    //   email: normalizedEmail, // save lowercase
+    //   password: hashedPassword,
+    //   type,
+    //   uniqueId, // ✅ Save generated ID
+    // });
+    // console.log("generated account details:", account);
     return NextResponse.json({
-      message: `${type} registered successfully`,
-      account: {
-        id: account._id,
-        name: account.name,
-        email: account.email,
+      message: `OTP sent to ${email}. Please verify to complete registration.`,
+      userData: {
+        uniqueId: userData.uniqueId,
       },
     });
   } catch (err) {
@@ -58,6 +78,9 @@ console.log(name, email, password, type);
     }
 
     console.error("Error registering:", err);
-    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Something went wrong" },
+      { status: 500 }
+    );
   }
 }

@@ -1,12 +1,14 @@
-'use server';
+"use server";
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    email: { type: String, required: true, unique: true }, // unique within farmers only
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
- type: { type: String, required: true }, 
+    type: { type: String, required: true },
+    uniqueId: { type: String, required: true, unique: true },
+    verified: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

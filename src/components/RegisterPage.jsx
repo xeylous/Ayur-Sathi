@@ -39,69 +39,119 @@ export default function RegisterPage() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   if (formData.password !== formData.confirmPassword) {
+  //     setError("Passwords do not match!");
+  //     return;
+  //   }
+  //   if (!formData.name || !formData.email || !formData.password) {
+  //     setError("Please fill all required fields.");
+  //     return;
+  //   }
+
+  //   setError("");
+  //   setLoading(true);
+
+  //   const { confirmPassword, ...safeData } = formData;
+  //   const payload = { ...safeData, type: mode };
+
+  //   try {
+  //     const res = await fetch("/api/register", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(payload),
+  //     });
+  //     const data = await res.json();
+
+  //     if (!res.ok) {
+  //       setError(data?.error || data?.message || "Registration failed");
+  //       setLoading(false);
+  //       return;
+  //     }
+
+  //     // Try auto login
+  //     const signInResult = await signIn("credentials", {
+  //       redirect: false,
+  //       email: payload.email,
+  //       password: payload.password,
+  //     });
+
+  //     if (signInResult?.error) {
+  //       toast.success("Registration successful");
+  //       router.push("/login");
+  //       setLoading(false);
+  //       return;
+  //     }
+
+  //     // Success
+  //     toast.success("Registration successful");
+  //     router.push("/login");
+  //   } catch (err) {
+  //     console.error("Register error:", err);
+  //     setError("Something went wrong. Please try again.");
+  //   } finally {
+  //     setLoading(false);
+  //     setFormData({
+  //       name: "",
+  //       email: "",
+  //       password: "",
+  //       confirmPassword: "",
+  //     });
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match!");
-      return;
-    }
-    if (!formData.name || !formData.email || !formData.password) {
-      setError("Please fill all required fields.");
-      return;
-    }
+  if (formData.password !== formData.confirmPassword) {
+    setError("Passwords do not match!");
+    return;
+  }
+  if (!formData.name || !formData.email || !formData.password) {
+    setError("Please fill all required fields.");
+    return;
+  }
 
-    setError("");
-    setLoading(true);
+  setError("");
+  setLoading(true);
 
-    const { confirmPassword, ...safeData } = formData;
-    const payload = { ...safeData, type: mode };
+  const { confirmPassword, ...safeData } = formData;
+  const payload = { ...safeData, type: mode };
 
-    try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
+  try {
+    const res = await fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    console.log("Registration response data:", data);
 
-      if (!res.ok) {
-        setError(data?.error || data?.message || "Registration failed");
-        setLoading(false);
-        return;
-      }
-
-      // Try auto login
-      const signInResult = await signIn("credentials", {
-        redirect: false,
-        email: payload.email,
-        password: payload.password,
-      });
-
-      if (signInResult?.error) {
-        toast.success("Registration successful");
-        setError("Registered but auto-login failed. Please login manually.");
-        router.push("/login");
-        setLoading(false);
-        return;
-      }
-
-      // Success
-      toast.success("Registration successful");
-      router.push("/login");
-    } catch (err) {
-      console.error("Register error:", err);
-      setError("Something went wrong. Please try again.");
-    } finally {
+    if (!res.ok) {
+      setError(data?.error || data?.message || "Registration failed");
       setLoading(false);
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      });
+      return;
     }
-  };
+
+    // ✅ Redirect to OTP page instead of auto-login
+    const uniqueId = data.userData.uniqueId;  // make sure your backend returns this
+    console.log("Received uniqueId after registration:", uniqueId);
+    router.push(`/otp/${uniqueId}`);
+  } catch (err) {
+    console.error("Register error:", err);
+    setError("Something went wrong. Please try again.");
+  } finally {
+    setLoading(false);
+    setFormData({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
+  }
+};
 
   return (
     <div className="flex justify-center bg-[#f5f8cc]/50 px-4 py-6 md:mb-0">
