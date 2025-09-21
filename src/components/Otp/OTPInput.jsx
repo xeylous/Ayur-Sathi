@@ -1,143 +1,5 @@
-// "use client";
 
-// import { useState, useEffect, useRef } from "react";
-// import { useParams, useRouter } from "next/navigation";
-// import { motion } from "framer-motion";
 
-// export default function OTPPage() {
-//   const { uniqueId } = useParams();
-//   const router = useRouter();
-//   const [attemptsLeft, setAttemptsLeft] = useState(3);
-//   const [message, setMessage] = useState("");
-//   const [disabled, setDisabled] = useState(false);
-
-//   // 🔹 Send OTP on mount
-//   useEffect(() => {
-//     fetch(`/api/send-otp/${uniqueId}`, { method: "POST" })
-//       .then((res) => res.json())
-//       .then((data) => setMessage(data.message))
-//       .catch(() => setMessage("Failed to send OTP"));
-//   }, [uniqueId]);
-
-//   const handleOTPComplete = async (otp) => {
-//     if (disabled) return;
-//     setDisabled(true);
-
-//     const res = await fetch(`/api/verify-otp/${uniqueId}`, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ otp }),
-//     });
-
-//     const data = await res.json();
-
-//     if (res.ok) {
-//       setMessage("OTP verified successfully! Registration complete.");
-//       setTimeout(() => router.push("/login"), 1500);
-//     } else {
-//       const remaining = attemptsLeft - 1;
-//       setAttemptsLeft(remaining);
-//       setDisabled(false);
-
-//       if (remaining > 0) {
-//         setMessage(`Incorrect OTP. You have ${remaining} attempt(s) left.`);
-//       } else {
-//         setMessage("Registration failed. Please try again.");
-//         setTimeout(() => router.push("/register"), 2000);
-//       }
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
-//       <h1 className="text-2xl font-semibold mb-4">Enter OTP</h1>
-//       <p className="mb-4 text-gray-600">{message}</p>
-//       <OTPInput length={6} onComplete={handleOTPComplete} disabled={disabled} />
-//     </div>
-//   );
-// }
-
-// /* 🔹 OTP Input Component (merged inside same file) */
-// function OTPInput({ length = 6, onComplete, disabled = false }) {
-//   const [otp, setOtp] = useState(Array(length).fill(""));
-//   const inputsRef = useRef([]);
-
-//   const handleChange = (e, index) => {
-//     if (disabled) return;
-//     const value = e.target.value;
-
-//     if (/^[0-9]$/.test(value)) {
-//       const newOtp = [...otp];
-//       newOtp[index] = value;
-//       setOtp(newOtp);
-
-//       if (index < length - 1) inputsRef.current[index + 1]?.focus();
-
-//       if (newOtp.every((digit) => digit !== "")) {
-//         onComplete?.(newOtp.join(""));
-//       }
-//     } else if (value === "") {
-//       const newOtp = [...otp];
-//       newOtp[index] = "";
-//       setOtp(newOtp);
-//     }
-//   };
-
-//   const handleKeyDown = (e, index) => {
-//     if (disabled) return;
-
-//     if (e.key === "Backspace" && otp[index] === "" && index > 0) {
-//       inputsRef.current[index - 1]?.focus();
-//     }
-//   };
-
-//   const handlePaste = (e) => {
-//     if (disabled) return;
-//     e.preventDefault();
-//     const pasteData = e.clipboardData.getData("text").trim().slice(0, length);
-//     if (/^\d+$/.test(pasteData)) {
-//       const newOtp = pasteData
-//         .split("")
-//         .concat(Array(length).fill(""))
-//         .slice(0, length);
-//       setOtp(newOtp);
-
-//       const lastIndex = newOtp.findIndex((d) => d === "");
-//       if (lastIndex === -1) inputsRef.current[length - 1]?.focus();
-//       else inputsRef.current[lastIndex]?.focus();
-
-//       if (newOtp.every((d) => d !== "")) onComplete?.(newOtp.join(""));
-//     }
-//   };
-
-//   return (
-//     <div className="flex justify-center gap-2 sm:gap-3 mt-6">
-//       {otp.map((digit, index) => (
-//         <motion.input
-//           key={index}
-//           type="text"
-//           inputMode="numeric"
-//           maxLength={1}
-//           value={digit}
-//           onChange={(e) => handleChange(e, index)}
-//           onKeyDown={(e) => handleKeyDown(e, index)}
-//           onPaste={handlePaste}
-//           ref={(el) => (inputsRef.current[index] = el)}
-//           disabled={disabled}
-//           initial={{ scale: 0.9, opacity: 0 }}
-//           animate={{ scale: 1, opacity: 1 }}
-//           transition={{ duration: 0.2, delay: index * 0.05 }}
-//           className={`w-10 h-12 sm:w-12 sm:h-14 text-center text-lg sm:text-xl font-semibold rounded-lg border shadow-sm outline-none transition-all
-//             ${
-//               disabled
-//                 ? "border-gray-300 bg-gray-100 cursor-not-allowed text-gray-400"
-//                 : "border-gray-300 bg-white focus:border-green-600 focus:ring-2 focus:ring-green-600"
-//             }`}
-//         />
-//       ))}
-//     </div>
-//   );
-// }
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -197,12 +59,14 @@ export default function OTPPage({ length = 6 }) {
     if (disabled) return;
 
     const value = e.target.value;
+
     if (/^[0-9]$/.test(value)) {
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
 
       if (index < length - 1) inputsRef.current[index + 1]?.focus();
+
     } else if (value === "") {
       const newOtp = [...otp];
       newOtp[index] = "";
@@ -213,8 +77,10 @@ export default function OTPPage({ length = 6 }) {
   const handleKeyDown = (e, index) => {
     if (disabled) return;
 
+
     if (e.key === "Backspace" && otp[index] === "" && index > 0) {
       inputsRef.current[index - 1]?.focus();
+
     }
   };
 
@@ -227,6 +93,7 @@ export default function OTPPage({ length = 6 }) {
         .split("")
         .concat(Array(length).fill(""))
         .slice(0, length);
+
       setOtp(newOtp);
 
       const lastIndex = newOtp.findIndex((d) => d === "");
@@ -271,6 +138,7 @@ export default function OTPPage({ length = 6 }) {
         >
           {otp.map((digit, index) => (
             <motion.input
+
               key={index}
               type="text"
               inputMode="numeric"
@@ -281,6 +149,7 @@ export default function OTPPage({ length = 6 }) {
               onPaste={handlePaste}
               ref={(el) => (inputsRef.current[index] = el)}
               disabled={disabled}
+
               whileFocus={{ scale: 1.1 }}
               className={`w-10 h-12 sm:w-12 sm:h-14 text-center text-lg sm:text-xl font-semibold rounded-lg border shadow-sm outline-none transition-all
                 ${
@@ -301,10 +170,12 @@ export default function OTPPage({ length = 6 }) {
               otp.some((d) => d === "") || disabled
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-[#90a955] hover:bg-[#4F772D] focus:ring-4 focus:outline-none focus:ring-green-300"
+
             }`}
         >
           Verify
         </button>
+
 
         {/* Footer */}
         <p className="mt-6 text-center text-sm text-gray-600">
@@ -323,6 +194,7 @@ export default function OTPPage({ length = 6 }) {
             Resend
           </button>
         </p>
+
       </div>
     </div>
   );

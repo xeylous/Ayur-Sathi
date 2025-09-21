@@ -28,7 +28,9 @@ const NavItem = ({ to, label, closeMenu, className }) => {
   );
 };
 
+
 export default function Navbar() {
+
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -65,7 +67,14 @@ export default function Navbar() {
 
         {/* Right Buttons */}
         <div className="flex items-center gap-2">
-         
+
+       
+          <button
+            className="md:hidden p-2 rounded-md text-brand-700 hover:bg-[#ECF39E] hover:text-brand-900"
+            onClick={() => setOpen(true)}
+          >
+            <Menu className="h-6 w-6" />
+          </button>
         </div>
       </div>
 
@@ -118,7 +127,6 @@ export default function Navbar() {
                   closeMenu={() => setOpen(false)}
                 />
 
-                
               </div>
             </motion.nav>
           </>
