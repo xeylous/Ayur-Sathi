@@ -77,10 +77,10 @@ export default function SidebarLayout() {
           setOpen(section.id);
         }
       }}
-      className={`w-full flex justify-between items-center px-3 py-2 rounded-xl transition ${
+      className={`w-full flex justify-between items-center px-3 py-2 rounded-xl transition cursor-pointer ${
         active === section.id
           ? "bg-[#90A955] text-white"
-          : "bg-white text-gray-800"
+          : "bg-white text-gray-800 hover:bg-[#90A955]/20"
       }`}
     >
       {section.title}
@@ -118,7 +118,7 @@ export default function SidebarLayout() {
                       <button
                         key={child.id}
                         onClick={() => setActive(child.id)}
-                        className={`w-full text-left px-3 py-3 gap-2 rounded-lg block transition ${
+                        className={`w-full text-left px-3 py-3 gap-2 rounded-lg block transition cursor-pointer ${
                           active === child.id
                             ? "bg-[#4F772D] text-white"
                             : "bg-white text-gray-700 hover:bg-[#90A955]/20"
@@ -153,11 +153,11 @@ export default function SidebarLayout() {
                     setOpen(section.id);
                   }
                 }}
-                className={`w-full flex justify-between items-center px-4 py-3 text-sm md:text-base font-medium transition
+                className={`w-full flex justify-between items-center px-4 py-3 text-sm md:text-base font-medium transition cursor-pointer
                   ${
                     active === section.id
                       ? "bg-[#90A955] text-white"
-                      : "bg-white text-gray-800"
+                      : "bg-white text-gray-800 hover:bg-[#90A955]/20"
                   }`}
               >
                 {section.title}
@@ -177,7 +177,7 @@ export default function SidebarLayout() {
                     <button
                       key={child.id}
                       onClick={() => setActive(child.id)}
-                      className={`block w-full text-left px-6 py-3 text-sm transition
+                      className={`block w-full text-left px-6 py-3 text-sm transition cursor-pointer
                         ${
                           active === child.id
                             ? "bg-[#4F772D] text-white"
