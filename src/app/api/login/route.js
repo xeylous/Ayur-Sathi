@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 import Farmer from "@/models/Farmer";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export async function POST(req) {
   try {
@@ -47,16 +48,40 @@ export async function POST(req) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    // Success ✅ (don’t send password back!)
-    return NextResponse.json({
-      message: "Login successful",
-      account: {
+    // ✅ Create JWT token
+    const token = jwt.sign(
+      {
         id: account._id,
-        name: account.name,
         email: account.email,
         type,
+        uniqueId: account.uniqueId , // fallback if uniqueId not set
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" } // token valid for 1 hour
+    );
+
+    // ✅ Set cookie (HttpOnly, Secure in production)
+    const response = NextResponse.json({
+      message: "Login successful",
+      redirectUrl: `/id/${account.uniqueId || account._id}`,
+      account: {
+        name: account.name,
+        email: account.email,
+        uniqueId: account.uniqueId || account._id,
       },
     });
+console.log("token:", token);
+
+    response.cookies.set("auth_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/", // available across whole site
+      maxAge: 60 * 60, // 1 hour
+    });
+    console.log("Login successful for:", email);
+    return response;
+    
   } catch (error) {
     console.error("Login error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

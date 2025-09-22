@@ -22,32 +22,35 @@ export default function LoginPage() {
   }, [mode]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, type: mode }),
-      });
+  try {
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, type: mode }),
+    });
 
-      const data = await res.json();
-      if (!res.ok) {
-        toast.error(data.error || "Login failed");
-        return;
-      }
+    const data = await res.json();
 
-      toast.success("Login successful");
-
-      // Delay navigation slightly so toast is visible
-      setTimeout(() => {
-        router.push("/");
-      }, 1000);
-    } catch (error) {
-      console.error("Login error:", error);
-      toast.error("Something went wrong. Please try again");
+    if (!res.ok) {
+      toast.error(data.error || "Login failed");
+      return;
     }
-  };
+
+    toast.success("Login successful");
+
+    // ✅ Redirect to the dynamic route returned by backend
+    setTimeout(() => {
+      router.push(data.redirectUrl); // <-- use redirectUrl from backend
+    }, 1000);
+
+  } catch (error) {
+    console.error("Login error:", error);
+    toast.error("Something went wrong. Please try again");
+  }
+};
+
 
   return (
     <div className="flex justify-center bg-[#f5f8cc]/50 px-4 py-10 md:py-8">

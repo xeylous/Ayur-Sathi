@@ -12,6 +12,7 @@
     "ethers": "^6.15.0",
     "framer-motion": "^12.23.15",
     "ioredis": "^5.7.0",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.544.0",
     "mjml": "^4.16.1",
     "mongoose": "^8.18.1",
