@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 import Farmer from "@/models/Farmer";
 import redis from "@/lib/redis";
+import { sendRegistrationEmail } from "@/lib/mailer";
 
 export async function POST(req, context) {
   const { uniqueId } = await context.params;
@@ -23,7 +24,10 @@ export async function POST(req, context) {
     const attemptsLeft = attemptsLeftRaw ? parseInt(attemptsLeftRaw) : 0;
 
     if (!storedOtp) {
-      return NextResponse.json({ error: "OTP expired or not sent" }, { status: 400 });
+      return NextResponse.json(
+        { error: "OTP expired or not sent" },
+        { status: 400 }
+      );
     }
 
     if (storedOtp === otp) {
@@ -39,7 +43,13 @@ export async function POST(req, context) {
         );
       }
 
-      const { name, email, password, type, uniqueId: uid } = JSON.parse(userDataRaw);
+      const {
+        name,
+        email,
+        password,
+        type,
+        uniqueId: uid,
+      } = JSON.parse(userDataRaw);
 
       // ✅ Select correct model
       let model;
@@ -63,6 +73,16 @@ export async function POST(req, context) {
 
       // ✅ Remove temp data from Redis
       await redis.del(`pending_user:${uniqueId}`);
+      console.log("first");
+      
+      await sendRegistrationEmail({
+        name: account.name,
+        email: account.email,
+        logo: "https://ayur-sathi.vercel.app/_next/image?url=%2Flogo.jpg&w=640&q=75",
+        loginUrl: "https://ayur-sathi.vercel.app/login",
+        supportUrl: "https://ayur-sathi.vercel.app/explore",
+      });
+      console.log("second");
 
       return NextResponse.json({
         message: "OTP verified successfully. Account created.",
@@ -82,7 +102,10 @@ export async function POST(req, context) {
           redis.del(attemptsKey),
           redis.del(`pending_user:${uniqueId}`), // cleanup registration too
         ]);
-        return NextResponse.json({ error: "Registration failed" }, { status: 400 });
+        return NextResponse.json(
+          { error: "Registration failed" },
+          { status: 400 }
+        );
       } else {
         await redis.set(attemptsKey, remainingAttempts, "EX", 300);
         return NextResponse.json(
@@ -93,6 +116,9 @@ export async function POST(req, context) {
     }
   } catch (err) {
     console.error("Error verifying OTP:", err);
-    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Something went wrong" },
+      { status: 500 }
+    );
   }
 }
