@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,7 +7,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { signIn } from "next-auth/react";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
+import OTPPage from "@/components/Otp/OTPInput";
 
 export default function RegisterPage() {
   const [mode, setMode] = useState("user");
@@ -21,6 +23,8 @@ export default function RegisterPage() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [otpModalOpen, setOtpModalOpen] = useState(false);
+  const [uniqueId, setUniqueId] = useState(null);
 
   // Reset form whenever mode changes
   useEffect(() => {
@@ -39,123 +43,62 @@ export default function RegisterPage() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   if (formData.password !== formData.confirmPassword) {
-  //     setError("Passwords do not match!");
-  //     return;
-  //   }
-  //   if (!formData.name || !formData.email || !formData.password) {
-  //     setError("Please fill all required fields.");
-  //     return;
-  //   }
-
-  //   setError("");
-  //   setLoading(true);
-
-  //   const { confirmPassword, ...safeData } = formData;
-  //   const payload = { ...safeData, type: mode };
-
-  //   try {
-  //     const res = await fetch("/api/register", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(payload),
-  //     });
-  //     const data = await res.json();
-
-  //     if (!res.ok) {
-  //       setError(data?.error || data?.message || "Registration failed");
-  //       setLoading(false);
-  //       return;
-  //     }
-
-  //     // Try auto login
-  //     const signInResult = await signIn("credentials", {
-  //       redirect: false,
-  //       email: payload.email,
-  //       password: payload.password,
-  //     });
-
-  //     if (signInResult?.error) {
-  //       toast.success("Registration successful");
-  //       router.push("/login");
-  //       setLoading(false);
-  //       return;
-  //     }
-
-  //     // Success
-  //     toast.success("Registration successful");
-  //     router.push("/login");
-  //   } catch (err) {
-  //     console.error("Register error:", err);
-  //     setError("Something went wrong. Please try again.");
-  //   } finally {
-  //     setLoading(false);
-  //     setFormData({
-  //       name: "",
-  //       email: "",
-  //       password: "",
-  //       confirmPassword: "",
-  //     });
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (formData.password !== formData.confirmPassword) {
-    setError("Passwords do not match!");
-    return;
-  }
-  if (!formData.name || !formData.email || !formData.password) {
-    setError("Please fill all required fields.");
-    return;
-  }
-
-  setError("");
-  setLoading(true);
-
-  const { confirmPassword, ...safeData } = formData;
-  const payload = { ...safeData, type: mode };
-
-  try {
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const data = await res.json();
-    console.log("Registration response data:", data);
-
-    if (!res.ok) {
-      setError(data?.error || data?.message || "Registration failed");
-      setLoading(false);
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match!");
+      return;
+    }
+    if (!formData.name || !formData.email || !formData.password) {
+      setError("Please fill all required fields.");
       return;
     }
 
-    // ✅ Redirect to OTP page instead of auto-login
-    const uniqueId = data.userData.uniqueId;  // make sure your backend returns this
-    console.log("Received uniqueId after registration:", uniqueId);
-    router.push(`/otp/${uniqueId}`);
-  } catch (err) {
-    console.error("Register error:", err);
-    setError("Something went wrong. Please try again.");
-  } finally {
-    setLoading(false);
-    setFormData({
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
-  }
-};
+    setError("");
+    setLoading(true);
+
+    const { confirmPassword, ...safeData } = formData;
+    const payload = { ...safeData, type: mode };
+
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      console.log("Registration response data:", data);
+
+      if (!res.ok) {
+        setError(data?.error || data?.message || "Registration failed");
+        setLoading(false);
+        return;
+      }
+
+      // ✅ Instead of router.push, open OTP overlay
+      const id = data.userData.uniqueId;
+      setUniqueId(id);
+      setOtpModalOpen(true);
+
+    } catch (err) {
+      console.error("Register error:", err);
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+    }
+  };
 
   return (
-    <div className="flex justify-center bg-[#f5f8cc]/50 px-4 py-6 md:mb-0">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg border p-8 h-[850px] overflow-y-auto">
+    <div className="relative flex justify-center bg-[#f5f8cc]/50 px-4 py-6 md:mb-0">
+      {/* Register Form */}
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg border p-8 h-[850px] overflow-y-auto relative z-10">
         {/* Logo + Title */}
         <div className="flex flex-col items-center mb-6">
           <Image
@@ -299,7 +242,11 @@ export default function RegisterPage() {
             </div>
 
             {/* Error */}
-            {error && <p className="text-red-600 text-sm font-medium place-content-center">{error}</p>}
+            {error && (
+              <p className="text-red-600 text-sm font-medium text-center">
+                {error}
+              </p>
+            )}
 
             <button
               type="submit"
@@ -346,6 +293,28 @@ export default function RegisterPage() {
           </Link>
         </p>
       </div>
+
+      {/* OTP Overlay */}
+      <AnimatePresence>
+        {otpModalOpen && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="w-full max-w-md"
+            >
+              <OTPPage uniqueId={uniqueId} onClose={() => setOtpModalOpen(false)} />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
