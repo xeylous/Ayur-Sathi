@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ChatbotAssistant from "@/components/ChatbotAssistant";
 import { ToastContainer } from "react-toastify";
+import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <AuthProvider >
         {children}
         <ChatbotAssistant />
         <ToastContainer
@@ -35,6 +37,7 @@ export default function RootLayout({ children }) {
           marginTop="100px"
           autoClose={3000}
         />
+        </AuthProvider>
       </body>
     </html>
   );

@@ -6,8 +6,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { useAuth } from "@/context/AuthContext";
+
 
 export default function LoginPage() {
+  const { setUser } = useAuth();
   const router = useRouter();
   const [mode, setMode] = useState("user"); // "user" | "farmer"
   const [email, setEmail] = useState("");
@@ -21,7 +24,7 @@ export default function LoginPage() {
     setShowPassword(false);
   }, [mode]);
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
@@ -29,6 +32,7 @@ export default function LoginPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password, type: mode }),
+      credentials: "include",
     });
 
     const data = await res.json();
@@ -38,18 +42,26 @@ export default function LoginPage() {
       return;
     }
 
+    // ✅ Update AuthContext immediately
+     setUser({
+      name: data.account.name,
+      email: data.account.email,
+      uniqueId: data.account.uniqueId,
+    });
+
     toast.success("Login successful");
 
-    // ✅ Redirect to the dynamic route returned by backend
+    // Redirect
     setTimeout(() => {
-      router.push(data.redirectUrl); // <-- use redirectUrl from backend
-    }, 1000);
+      router.push(data.redirectUrl);
+    }, 500);
 
   } catch (error) {
     console.error("Login error:", error);
     toast.error("Something went wrong. Please try again");
   }
 };
+
 
 
   return (
