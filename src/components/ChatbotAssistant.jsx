@@ -10,7 +10,7 @@ export default function ChatbotAssistant() {
       {/* Floating Chatbot Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-5 right-5 bg-green-600 hover:bg-green-700 text-white p-3 rounded-full shadow-lg transition flex items-center justify-center"
+        className="fixed bottom-5 right-5 bg-green-600 z-1000 hover:bg-green-700 text-white p-3 rounded-full shadow-lg transition flex items-center justify-center"
         aria-label="Chatbot assistant"
       >
         <MessageCircle size={28} />
