@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
           pauseOnHover={true}
           draggable={false}
           marginTop="100px"
-          autoClose={3000}
+          autoClose={2000}
         />
         </AuthProvider>
       </body>

@@ -16,16 +16,21 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false); // ⬅️ New state
+
 
   // Reset inputs when switching between User/Farmer
   useEffect(() => {
     setEmail("");
     setPassword("");
     setShowPassword(false);
+    setIsSubmitting(false);
   }, [mode]);
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+if (isSubmitting) return; // ⬅️ Prevent double click
+    setIsSubmitting(true);
 
   try {
     const res = await fetch("/api/login", {
@@ -90,6 +95,8 @@ const handleSubmit = async (e) => {
         <div className="flex gap-2 mb-6">
           <button
             onClick={() => setMode("user")}
+             
+            disabled={isSubmitting}
             className={`flex-1 py-2 rounded-md text-sm font-medium transition cursor-pointer ${
               mode === "user"
                 ? "bg-[#90a955] text-white"
@@ -100,6 +107,7 @@ const handleSubmit = async (e) => {
           </button>
           <button
             onClick={() => setMode("farmer")}
+            disabled={isSubmitting}
             className={`flex-1 py-2 rounded-md text-sm font-medium transition cursor-pointer ${
               mode === "farmer"
                 ? "bg-[#90a955] text-white"
@@ -168,9 +176,18 @@ const handleSubmit = async (e) => {
 
             <button
               type="submit"
-              className="w-full py-2.5 rounded-md text-white text-lg font-medium bg-[#90a955] hover:bg-[#4F772D] focus:ring-4 focus:outline-none focus:ring-green-300 shadow-lg cursor-pointer"
+              disabled={isSubmitting}
+              className={`w-full py-2.5 rounded-md text-white text-lg font-medium shadow-lg cursor-pointer ${
+                isSubmitting
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#90a955] hover:bg-[#4F772D] focus:ring-4 focus:outline-none focus:ring-green-300"
+              }`}
             >
-              {mode === "user" ? "Login as User" : "Login as Farmer"}
+              {isSubmitting
+                ? "Logging in..."
+                : mode === "user"
+                ? "Login as User"
+                : "Login as Farmer"}
             </button>
           </motion.form>
         </AnimatePresence>
