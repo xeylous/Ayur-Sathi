@@ -63,23 +63,23 @@ export async function POST(req) {
     // ✅ Set cookie (HttpOnly, Secure in production)
     const response = NextResponse.json({
       message: "Login successful",
-      redirectUrl: `/id/${account.uniqueId || account._id}`,
+      redirectUrl: `/`,
       account: {
         name: account.name,
         email: account.email,
         uniqueId: account.uniqueId || account._id,
       },
     });
-console.log("token:", token);
+// console.log("token:", token);
 
     response.cookies.set("auth_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax",
       path: "/", // available across whole site
       maxAge: 60 * 60, // 1 hour
     });
-    console.log("Login successful for:", email);
+    // console.log("Login successful for:", email);
     return response;
     
   } catch (error) {

@@ -13,9 +13,6 @@ export async function middleware(req) {
     // Verify JWT
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Attach user info to request (optional)
-    req.user = decoded;
-
     // Allow request
     return NextResponse.next();
   } catch (err) {
