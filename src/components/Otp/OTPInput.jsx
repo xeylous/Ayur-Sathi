@@ -14,10 +14,20 @@ export default function OTPPage({ length = 6, uniqueId, onClose }) {
   const [timer, setTimer] = useState(30);
   const inputsRef = useRef([]);
 
+const sendOtp = async () => {
+    try {
+      const res = await fetch(`/api/send-otp/${uniqueId}`, { method: "POST" });
+      const data = await res.json();
+      setMessage(data.message || "✅ OTP sent successfully!");
+    } catch (err) {
+      setMessage("⚠️ Failed to send OTP. Please try again.");
+    }
+  };
+
   // Send OTP on mount
-  // useEffect(() => {
-  //   if (uniqueId) sendOtp();
-  // }, [uniqueId]);
+  useEffect(() => {
+    if (uniqueId) sendOtp();
+  }, [uniqueId])
 
   // Resend cooldown timer
   useEffect(() => {
