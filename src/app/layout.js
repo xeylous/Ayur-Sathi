@@ -3,6 +3,7 @@ import "./globals.css";
 import ChatbotAssistant from "@/components/ChatbotAssistant";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider } from "@/context/AuthContext";
+import { Analytics } from '@vercel/analytics/next';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,7 @@ export default function RootLayout({ children }) {
           marginTop="100px"
           autoClose={2000}
         />
+        <Analytics />
         </AuthProvider>
       </body>
     </html>
