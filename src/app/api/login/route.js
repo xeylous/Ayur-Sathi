@@ -63,11 +63,12 @@ export async function POST(req) {
     // ✅ Set cookie (HttpOnly, Secure in production)
     const response = NextResponse.json({
       message: "Login successful",
-      redirectUrl: `/`,
+      redirectUrl: `/id/${account.uniqueId || account._id}`, 
       account: {
         name: account.name,
         email: account.email,
         uniqueId: account.uniqueId || account._id,
+        type,
       },
     });
 // console.log("token:", token);

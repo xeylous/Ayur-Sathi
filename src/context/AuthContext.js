@@ -14,7 +14,9 @@ export const AuthProvider = ({ children }) => {
       try {
         const res = await fetch("/api/verify-token", { credentials: "include" });
         if (res.ok) {
+          console.log("hello");
           const data = await res.json();
+          console.log(data);
           setUser(data.user);
         } else {
           setUser(null);
@@ -29,6 +31,13 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const value = useMemo(() => ({ user, setUser, loading }), [user, loading]);
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-lg font-medium text-gray-600">Verifying session...</p>
+      </div>
+    );
+  }
   return (
     
     <AuthContext.Provider value={{ user, setUser, loading }}>

@@ -58,6 +58,7 @@ export default function LoginPage() {
         name: data.account.name,
         email: data.account.email,
         uniqueId: data.account.uniqueId,
+        type: data.account.type,
       });
 
       toast.success("Login successful", { autoClose: 1500 });
