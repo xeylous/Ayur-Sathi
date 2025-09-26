@@ -14,22 +14,7 @@ export default function OTPPage({ length = 6, uniqueId, onClose }) {
   const [timer, setTimer] = useState(30);
   const inputsRef = useRef([]);
 
-// const sendOtp = async () => {
-//     try {
-//       const res = await fetch(`/api/send-otp/${uniqueId}`, { method: "POST" });
-//       const data = await res.json();
-//       setMessage(data.message || "✅ OTP sent successfully!");
-//     } catch (err) {
-//       setMessage("⚠️ Failed to send OTP. Please try again.");
-//     }
-//   };
-
-  // Send OTP on mount
-  // useEffect(() => {
-  //   if (uniqueId) sendOtp();
-  // }, [uniqueId])
-
-  // Resend cooldown timer
+  // 🔹 Timer countdown
   useEffect(() => {
     let interval;
     if (resendDisabled && timer > 0) {
@@ -41,11 +26,16 @@ export default function OTPPage({ length = 6, uniqueId, onClose }) {
     return () => clearInterval(interval);
   }, [resendDisabled, timer]);
 
-
+  // 🔹 Send OTP on first load
   useEffect(() => {
     fetch(`/api/send-otp/${uniqueId}`, { method: "POST" })
       .then((res) => res.json())
-      .then((data) => setMessage(data.message))
+      .then((data) => {
+        setMessage(data.message);
+        // ✅ Start cooldown immediately after sending first OTP
+        setResendDisabled(true);
+        setTimer(30);
+      })
       .catch(() => setMessage("Failed to send OTP"));
   }, [uniqueId]);
 
@@ -56,10 +46,10 @@ export default function OTPPage({ length = 6, uniqueId, onClose }) {
 
     try {
       const res = await fetch(`/api/verify-otp/${uniqueId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ otp: otp.join("") }),
-    });
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ otp: otp.join("") }),
+      });
 
       const data = await res.json();
 
@@ -72,21 +62,19 @@ export default function OTPPage({ length = 6, uniqueId, onClose }) {
         setDisabled(false);
 
         if (remaining > 0) {
-          setMessage(
-            `❌ Incorrect OTP. You have ${remaining} attempt(s) left.`
-          );
+          setMessage(`❌ Incorrect OTP. You have ${remaining} attempt(s) left.`);
         } else {
-          setMessage("❌ Registration failed. Redirecting...");
+          setMessage("⚠️ Registration failed. Redirecting...");
           setTimeout(() => router.push("/register"), 2000);
         }
       }
     } catch (err) {
-      setMessage("⚠️ Server error. Please try again.");
+      setMessage("❌ Server error. Please try again.");
       setDisabled(false);
     }
   };
 
-  // 🔹 OTP box handlers
+  // 🔹 OTP input handlers
   const handleChange = (val, index) => {
     if (/^\d?$/.test(val)) {
       const newOtp = [...otp];
@@ -105,12 +93,26 @@ export default function OTPPage({ length = 6, uniqueId, onClose }) {
   };
 
   // 🔹 Resend OTP
-  const handleResend = () => {
-    sendOtp();
-    setResendDisabled(true);
-    setTimer(30);
-    // setMessage("🔄 OTP resent. Please check your email/phone.");
-    setMessage("🔄 Feature coming soon");
+  const handleResend = async () => {
+    try {
+      const res = await fetch(`/api/resend-otp/${uniqueId}`, {
+        method: "POST",
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessage(data.error || "❌ Failed to resend OTP. Please try again.");
+        return;
+      }
+
+      // ✅ Restart cooldown after resend
+      setResendDisabled(true);
+      setTimer(30);
+      setMessage(data.message || "✅ OTP resent. Please check your email.");
+    } catch (error) {
+      console.error("Resend OTP failed:", error);
+      setMessage("❌ Failed to resend OTP. Please try again.");
+    }
   };
 
   return (
