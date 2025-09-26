@@ -95,7 +95,11 @@ export default function Navbar() {
           {user ? (
             <div className="hidden sm:flex items-center gap-4">
               <Link
-                href={`/id/${user.uniqueId}/profile`}
+                href={
+                  user.type === "farmer"
+                    ? `/id/${user.uniqueId}/farmer-profile`
+                    : `/id/${user.uniqueId}/user-profile`
+                }
                 className="flex items-center gap-2 text-sm font-medium text-brand-700 hover:text-brand-900"
               >
                 <Image
@@ -107,9 +111,10 @@ export default function Navbar() {
                 />
                 <span className="hidden text-xl sm:inline">{user.name}</span>
               </Link>
+
               <button
                 onClick={handleLogout}
-                 className="text-base font-medium text-black hover:text-white bg-[#90A955] hover:bg-[#4F772D] rounded-2xl px-6 py-1 text-center"
+                className="text-base font-medium text-black hover:text-white bg-[#90A955] hover:bg-[#4F772D] rounded-2xl px-6 py-1 text-center"
               >
                 Logout
               </button>
