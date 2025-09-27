@@ -97,8 +97,8 @@ export default function Navbar() {
               <Link
                 href={
                   user.type === "farmer"
-                    ? `/id/${user.uniqueId}/farmer-profile`
-                    : `/id/${user.uniqueId}/user-profile`
+                    ? `/id/${user.uniqueId}`
+                    : `/id/${user.uniqueId}`
                 }
                 className="flex items-center gap-2 text-sm font-medium text-brand-700 hover:text-brand-900"
               >

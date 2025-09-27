@@ -23,7 +23,7 @@ export async function GET(req) {
         uniqueId: decoded.uniqueId,
       },
     });
-
+    
   } catch (err) {
     console.error("Token verification error:", err);
     return NextResponse.json({ error: "Invalid or expired token" }, { status: 401 });

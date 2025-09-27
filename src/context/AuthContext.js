@@ -1,4 +1,5 @@
 "use client";
+import LandingSkeleton from "@/components/LandingSkeleton";
 import { createContext, useContext, useState, useEffect } from "react";
 import { useMemo } from "react";
 
@@ -14,7 +15,9 @@ export const AuthProvider = ({ children }) => {
       try {
         const res = await fetch("/api/verify-token", { credentials: "include" });
         if (res.ok) {
+         
           const data = await res.json();
+          console.log(data);
           setUser(data.user);
         } else {
           setUser(null);
@@ -29,6 +32,13 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const value = useMemo(() => ({ user, setUser, loading }), [user, loading]);
+  if (loading) {
+    return (
+      <div >
+       <LandingSkeleton />
+      </div>
+    );
+  }
   return (
     
     <AuthContext.Provider value={{ user, setUser, loading }}>
