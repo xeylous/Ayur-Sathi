@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { useAuth } from "@/context/AuthContext";
 import FarmerDashboard from "@/components/FarmerDashboard/FarmerDashboard";
 import UserDashboard from "@/components/UserDashboard/UserDashboard";
+import LandingSkeleton from "@/components/LandingSkeleton";
 
 export default function Page() {
   const { user, loading } = useAuth();
@@ -23,10 +24,10 @@ export default function Page() {
   // 🚨 Block rendering until verify-token finishes
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-[#f5f8cc]/50">
-        <p className="text-lg font-medium text-gray-600">
-          Verifying session...
-        </p>
+      <div >
+        
+         <LandingSkeleton />
+        
       </div>
     );
   }
@@ -36,12 +37,12 @@ export default function Page() {
   console.log("user in [uniqueId]:", user);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f5f8cc]/50">
+    <div className="flex flex-col min-h-screen bg-[#ECF39E]/70">
       {/* Navbar */}
       <Navbar />
 
       {/* Main content */}
-      <main className="flex-grow items-start bg-[#f5f8cc]/50 py-6">
+      <main className="flex-grow items-start  ">
         {user.type === "farmer" ? (
           <FarmerDashboard />
         ) : (
