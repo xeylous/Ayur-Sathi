@@ -37,7 +37,7 @@ export default function Page() {
   console.log("user in [uniqueId]:", user);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#ECF39E]/70">
+    <div className="flex flex-col min-h-screen bg-[#ECF39E]  ">
       {/* Navbar */}
       <Navbar />
 

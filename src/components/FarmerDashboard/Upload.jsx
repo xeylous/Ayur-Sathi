@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -14,11 +15,13 @@ export default function UploadCrop() {
 
   const [crops, setCrops] = useState([]);
 
+  // Load saved crops from localStorage on mount
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("farmerCrops")) || [];
     setCrops(saved);
   }, []);
 
+  // Handle input change
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (files) {
@@ -28,6 +31,7 @@ export default function UploadCrop() {
     }
   };
 
+  // Get location
   const handleLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -54,8 +58,10 @@ export default function UploadCrop() {
     }
   };
 
+  // Submit crop details
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (!formData.cropName || !formData.quantity || !formData.image) {
       toast.error("⚠️ Please fill in all fields before submitting.", {
         position: "top-right",
@@ -68,14 +74,17 @@ export default function UploadCrop() {
       cropName: formData.cropName,
       quantity: formData.quantity,
       location: formData.location,
-      image: formData.image ? formData.image.name : null,
+      image: formData.image ? formData.image.name : null, // only save name
       date: new Date().toLocaleDateString(),
     };
 
     const updatedCrops = [...crops, newCrop];
+
+    // Save in state + localStorage
     setCrops(updatedCrops);
     localStorage.setItem("farmerCrops", JSON.stringify(updatedCrops));
 
+    // Reset form
     setFormData({
       cropName: "",
       quantity: "",
@@ -90,17 +99,14 @@ export default function UploadCrop() {
   };
 
   return (
-    <div className="h-screen w-full flex items-start justify-center p-4 overflow-hidden">
-      <div className="w-full max-w-4xl bg-white shadow-xl rounded-2xl p-6 sm:p-10 overflow-hidden">
+    <div className="max-h-screen flex items-start justify-center bg-[#ECF39E]/10 py-5 px-4 ">
+      <div className="w-full max-w-4xl bg-white shadow-xl rounded-2xl p-6 sm:p-10">
         <h1 className="text-3xl font-bold text-center mb-8 text-green-700">
           🌾 Upload Crop Details
         </h1>
 
         {/* Upload Form */}
-        <form
-          onSubmit={handleSubmit}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-6"
-        >
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {/* Crop Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -133,7 +139,7 @@ export default function UploadCrop() {
             />
           </div>
 
-          {/* Image Upload */}
+          {/* Image Upload (full width always) */}
           <div className="sm:col-span-2">
             <label className="block text-sm font-medium text-gray-700">
               Upload Image
@@ -153,7 +159,7 @@ export default function UploadCrop() {
             />
           </div>
 
-          {/* Location */}
+          {/* Location (full width always) */}
           <div className="sm:col-span-2 flex items-center gap-4">
             <button
               type="button"
@@ -167,7 +173,7 @@ export default function UploadCrop() {
             </span>
           </div>
 
-          {/* Buttons */}
+          {/* Buttons (side by side on large, stacked on small) */}
           <div className="sm:col-span-2 flex flex-col sm:flex-row gap-4">
             <button
               type="submit"
@@ -175,6 +181,7 @@ export default function UploadCrop() {
             >
               Upload Crop
             </button>
+
             <button
               type="button"
               onClick={() => {
@@ -194,11 +201,11 @@ export default function UploadCrop() {
 
         {/* Crop History */}
         {crops.length > 0 && (
-          <div className="mt-10 overflow-hidden">
+          <div className="mt-10">
             <h2 className="text-lg font-semibold text-green-700 mb-4">
               📜 Uploaded Crops History
             </h2>
-            <ul className="space-y-3 text-sm overflow-hidden">
+            <ul className="space-y-3 text-sm">
               {crops.map((crop, index) => (
                 <li
                   key={index}
@@ -221,8 +228,9 @@ export default function UploadCrop() {
         )}
       </div>
 
-      {/* Toast */}
+      {/* Toast Container */}
       <ToastContainer />
     </div>
   );
 }
+

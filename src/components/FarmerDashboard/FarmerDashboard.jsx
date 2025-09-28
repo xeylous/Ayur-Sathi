@@ -54,7 +54,7 @@ export default function FarmerDashboard() {
   return (
     <div className="flex flex-col md:flex-row max-h-screen bg-[#ECF39E] overflow-auto hide-scrollbar">
       {/* Sidebar */}
-      <aside className="md:w-64 w-full border-r shadow-md flex flex-col bg-[#ECF39E]/30">
+      <aside className="md:w-64 w-full border-r shadow-md flex flex-col bg-[#90A955]">
         <div className="p-4 text-lg font-bold text-green-700">🌿 Farmer Dashboard</div>
 
         {/* Scrollable nav + content */}
