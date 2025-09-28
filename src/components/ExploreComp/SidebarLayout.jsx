@@ -7,6 +7,7 @@ import WhyAyurSathiOrganizations from "./WhyAyurSathiOrganizations";
 import AyurHerbTraceCaseStudy from "./AyurHerbTraceCaseStudy";
 import AyurSaathiEcosystem from "./AyurSaathiTechnology";
 import AyurSaathiOrganizationalModel from "./AyurSaathiOrganizationalModel";
+import ApplyForLabs from "./ApplyForLabs";
 
 const sections = [
   {
@@ -53,13 +54,13 @@ const sections = [
   },
   {
     id: "roadmap",
-    title: "DigiLocker Development Roadmap",
+    title: "Apply for Partnership",
     component: <WhyAyurSathiCitizens />,
   },
   {
     id: "exchange",
-    title: "Data Exchange",
-    component: <WhyAyurSathiCitizens />,
+    title: "Lab Partnership",
+    component: <ApplyForLabs />,
   },
 ];
 
