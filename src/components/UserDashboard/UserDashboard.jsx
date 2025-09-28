@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { User, ShoppingCart, History, Bell } from "lucide-react";
 import Profile from "./Profile";
-import UserOrder from "./User_order";
+import UserOrder from "./User_Order";
 import AddToCart from "./AddToCart";
 
 const menuItems = [
