@@ -8,6 +8,7 @@ import AyurHerbTraceCaseStudy from "./AyurHerbTraceCaseStudy";
 import AyurSaathiEcosystem from "./AyurSaathiTechnology";
 import AyurSaathiOrganizationalModel from "./AyurSaathiOrganizationalModel";
 import ApplyForLabs from "./ApplyForLabs";
+import PartnershipForm from "./PartnershipForm";
 
 const sections = [
   {
@@ -55,7 +56,7 @@ const sections = [
   {
     id: "roadmap",
     title: "Apply for Partnership",
-    component: <WhyAyurSathiCitizens />,
+    component: <PartnershipForm />,
   },
   {
     id: "exchange",
