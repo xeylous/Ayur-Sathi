@@ -6,7 +6,13 @@ export async function middleware(req) {
 
   // ✅ Special handling for /admin
   if (pathname.startsWith("/admin")) {
-    const token = req.cookies.get("auth_token")?.value;
+    // Token generation logic (for reference, not used in middleware)
+    // Typically done during login after verifying user credentials:
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     if (!token) {
       return NextResponse.redirect(new URL("/admin-login", req.url));
