@@ -1,11 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import Sidebar from "@/components/admin/Sidebar";
-import StatusDisplay from "@/components/admin/StatusDisplay";
-import Dashboard from "@/components/admin/Dashboard";
-import UserManagement from "@/components/admin/UserManagement";
-import FarmerPaymentControl from "@/components/admin/FarmerPaymentControl";
-import LabMarketplaceControl from "@/components/admin/LabMarketplaceControl";
+import Sidebar from "@/components/Admin/Sidebar";
+import StatusDisplay from "@/components/Admin/StatusDisplay";
+import Dashboard from "@/components/Admin/Dashboard";
+import UserManagement from "@/components/Admin/UserManagement";
+import FarmerPaymentControl from "@/components/Admin/FarmerPaymentControl";
+import LabMarketplaceControl from "@/components/Admin/LabMarketplaceControl";
 import { mockBatches, mockUsers } from "@/lib/mockData";
 import AdminLabApplications from "@/components/Admin/AdminLabApplications";
 
