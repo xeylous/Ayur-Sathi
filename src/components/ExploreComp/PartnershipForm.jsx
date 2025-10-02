@@ -13,14 +13,31 @@ export default function PartnershipForm() {
     proposal: "",
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
     console.log("📩 Partnership Form Submitted:", form);
     // TODO: send data to backend API
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // simulate API delay
+
+    // reset form after submission
+    setForm({
+      organizationName: "",
+      contactPerson: "",
+      email: "",
+      phone: "",
+      partnershipType: "",
+      proposal: "",
+    });
+
+    setIsSubmitting(false);
   };
 
   return (
@@ -137,9 +154,15 @@ export default function PartnershipForm() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-all duration-200 shadow-md"
+            disabled={isSubmitting}
+            className={`w-full py-3 rounded-xl font-semibold transition-all duration-200 shadow-md 
+              ${
+                isSubmitting
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-indigo-600 text-white hover:bg-indigo-700"
+              }`}
           >
-            Submit Partnership Request
+            {isSubmitting ? "Submitting..." : "Submit Partnership Request"}
           </button>
         </form>
       </div>
