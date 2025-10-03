@@ -1,36 +1,60 @@
 import { X } from "lucide-react";
 
 const LabDetailsModal = ({ lab, onClose, onApprove, onReject }) => {
+  // helper to build popup inline URL
+  const openInPopup = (url) => {
+    const inlineUrl = url.replace("/upload/", "/upload/fl_inline/");
+    window.open(
+      inlineUrl,
+      "_blank",
+      "width=1200,height=800,scrollbars=yes,resizable=yes"
+    );
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-xl shadow-lg w-2/3 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-indigo-800">Lab Application</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-red-500">
+          <h2 className="text-2xl font-bold text-indigo-800">
+            Lab Application
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-red-500"
+          >
             <X size={24} />
           </button>
         </div>
 
-        <p><b>Lab Name:</b> {lab.labName}</p>
-        <p><b>Owner:</b> {lab.ownerName}</p>
-        <p><b>Email:</b> {lab.ownerEmail}</p>
-        <p><b>Address:</b> {lab.address}</p>
+        <p>
+          <b>Lab Name:</b> {lab.labName}
+        </p>
+        <p>
+          <b>Owner:</b> {lab.ownerName}
+        </p>
+        <p>
+          <b>Email:</b> {lab.ownerEmail}
+        </p>
+        <p>
+          <b>Address:</b> {lab.address}
+        </p>
 
         <div className="mt-4">
           <b>Documents:</b>
-          <ul className="list-disc ml-6">
-            {Object.entries(lab.documents || {}).map(([key, url]) => (
-              <li key={key}>
-                <a
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  {key}
-                </a>
-              </li>
-            ))}
+          <ul className="list-disc ml-6 space-y-3">
+            {Object.entries(lab.documents || {}).map(([key, url]) => {
+              const isPdf = url.toLowerCase().endsWith(".pdf");
+              return (
+                <li key={key}>
+                  <button
+                    onClick={() => openInPopup(url)}
+                    className="text-blue-600 hover:underline"
+                  >
+                    View {isPdf ? "PDF" : "File"}: {key}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </div>
 

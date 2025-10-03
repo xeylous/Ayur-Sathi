@@ -11,19 +11,32 @@ import LabApplication from "@/models/LabApplication";
  * @param {string} folder
  * @returns {Promise<string>} secure_url
  */
-const uploadToCloudinary = (fileBuffer, fileName, folder = "lab_applications") => {
+// Update your uploadToCloudinary function in app/api/partnership/route.js
+
+const uploadToCloudinary = (
+  fileBuffer,
+  fileName,
+  folder = "lab_applications"
+) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
       {
-        resource_type: "auto",
+        resource_type: "raw",
         folder,
-        public_id: fileName.replace(/\.[^/.]+$/, ""),
+        use_filename: false,
+        unique_filename: true,
+        // ✅ Use regular upload (publicly accessible via signed URL)
+        type: "upload",
+        format: "pdf",
+        // ✅ Optional: Add password protection or other security
+        // context: "restricted=true"
       },
       (error, result) => {
         if (error) reject(error);
-        else resolve(result.secure_url);
+        else resolve(result.public_id);
       }
     );
+
     stream.end(fileBuffer);
   });
 };
@@ -48,11 +61,17 @@ export async function POST(req) {
     const signedAgreement = formData.get("signedAgreement");
 
     if (!labName || !address || !ownerName || !ownerEmail || !panCard) {
-      return NextResponse.json({ success: false, error: "Missing required text fields" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Missing required text fields" },
+        { status: 400 }
+      );
     }
 
     if (!ownerIdProof || !panCardDoc || !ownershipDocs || !signedAgreement) {
-      return NextResponse.json({ success: false, error: "All files are required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "All files are required" },
+        { status: 400 }
+      );
     }
 
     // Upload files
@@ -80,7 +99,10 @@ export async function POST(req) {
     return NextResponse.json({ success: true, data: labApp }, { status: 201 });
   } catch (error) {
     console.error("Partnership API POST Error:", error);
-    return NextResponse.json({ success: false, error: "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Server error" },
+      { status: 500 }
+    );
   }
 }
 
@@ -92,7 +114,10 @@ export async function GET() {
     return NextResponse.json({ success: true, data: labs }, { status: 200 });
   } catch (error) {
     console.error("Partnership API GET Error:", error);
-    return NextResponse.json({ success: false, error: "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Server error" },
+      { status: 500 }
+    );
   }
 }
 
@@ -104,12 +129,18 @@ export async function PATCH(req) {
 
     const { id, action, adminNote } = body;
     if (!id || !action) {
-      return NextResponse.json({ success: false, error: "Missing id or action" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Missing id or action" },
+        { status: 400 }
+      );
     }
 
     const allowed = ["approve", "reject"];
     if (!allowed.includes(action)) {
-      return NextResponse.json({ success: false, error: "Invalid action" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Invalid action" },
+        { status: 400 }
+      );
     }
 
     const update = {
@@ -118,14 +149,22 @@ export async function PATCH(req) {
       decisionAt: new Date(),
     };
 
-    const updated = await LabApplication.findByIdAndUpdate(id, update, { new: true });
+    const updated = await LabApplication.findByIdAndUpdate(id, update, {
+      new: true,
+    });
     if (!updated) {
-      return NextResponse.json({ success: false, error: "Application not found" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, error: "Application not found" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json({ success: true, data: updated }, { status: 200 });
   } catch (error) {
     console.error("Partnership API PATCH Error:", error);
-    return NextResponse.json({ success: false, error: "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Server error" },
+      { status: 500 }
+    );
   }
 }
