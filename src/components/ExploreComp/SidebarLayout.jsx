@@ -101,11 +101,11 @@ export default function SidebarLayout() {
     .find((s) => s.id === active)?.component;
 
   return (
-    <div className="min-h-screen bg-[#ECF39E]/30 flex relative ">
+    <div className="min-h-screen bg-[#ECF39E]/30 flex relativer  ">
       {/* -------- Desktop View -------- */}
-      <div className="hidden lg:flex min-h-screen bg-[#ECF39E]/30 relative w-full">
+      <div className="hidden lg:flex min-h-screen bg-[#ECF39E]/30 relative w-full ">
         {/* Sidebar */}
-        <aside className="lg:w-1/4 py-2 px-6">
+        <aside className="lg:w-1/4 py-2 px-6 border-black   border-r">
           <div className="sticky top-20 self-start max-h-[80vh] overflow-y-auto">
             {sections.map((section) => (
               <div key={section.id} className="mb-2">
