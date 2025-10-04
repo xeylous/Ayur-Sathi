@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import cloudinary from "@/lib/cloudinary";
 import { connectDB } from "@/lib/db";
 import LabApplication from "@/models/LabApplication";
+import crypto from "crypto";
+import { log } from "console";
 
 /**
  * Helper to upload file buffer to Cloudinary
@@ -84,8 +86,13 @@ export async function POST(req) {
       uploadedUrls[key] = await uploadToCloudinary(buffer, file.name);
     }
 
+    const labId = `AyurLab${crypto.randomBytes(4).toString("hex")}`;
+    // const labId = 'haej2d';
+    console.log("Generated Lab ID:", labId);
+
     // Save to DB
     const labApp = await LabApplication.create({
+      labId,
       labName,
       address,
       ownerName,
@@ -95,6 +102,7 @@ export async function POST(req) {
       status: "Pending Approval",
       submittedAt: new Date(),
     });
+    console.log("Lab application created:", labApp);
 
     return NextResponse.json({ success: true, data: labApp }, { status: 201 });
   } catch (error) {

@@ -2,6 +2,7 @@
 import mongoose from "mongoose";
 
 const LabApplicationSchema = new mongoose.Schema({
+  labId: { type: String, required: true, unique: true },
   labName: { type: String, required: true },
   address: { type: String, required: true },
   ownerName: { type: String, required: true },
@@ -18,6 +19,8 @@ const LabApplicationSchema = new mongoose.Schema({
   decisionAt: { type: Date },
   submittedAt: { type: Date, default: Date.now },
 });
+
+
 
 export default mongoose.models.LabApplication ||
   mongoose.model("LabApplication", LabApplicationSchema);

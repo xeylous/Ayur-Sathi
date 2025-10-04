@@ -20,6 +20,7 @@ export default function LabApplication() {
     signedAgreement: null,
   });
 
+
   const [errors, setErrors] = useState({
     ownerIdProof: "",
     panCardDoc: "",
@@ -28,6 +29,9 @@ export default function LabApplication() {
   });
 
   const [submitting, setSubmitting] = useState(false);
+=======
+  const [submitting, setSubmitting] = useState(false); // ✅ Track submission state
+
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -62,6 +66,7 @@ export default function LabApplication() {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -119,8 +124,61 @@ export default function LabApplication() {
       toast.error("Submission failed. Please try again.", { autoClose: 3000 });
     } finally {
       setSubmitting(false);
+
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSubmitting(true);
+
+  // ✅ Allow React to update the UI before the request starts
+  await new Promise((r) => setTimeout(r, 50));
+
+  const formData = new FormData();
+  Object.entries(form).forEach(([key, value]) => formData.append(key, value));
+  Object.entries(files).forEach(([key, value]) => value && formData.append(key, value));
+
+  try {
+    const res = await fetch("/api/partnership", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+    if (res.ok && data.success) {
+      alert("Application submitted successfully!");
+
+      // ✅ Reset all form data & file inputs
+      setForm({
+        labName: "",
+        address: "",
+        ownerName: "",
+        ownerEmail: "",
+        panCard: "",
+      });
+      setFiles({
+        ownerIdProof: null,
+        panCardDoc: null,
+        ownershipDocs: null,
+        signedAgreement: null,
+      });
+
+      // ✅ Reset file inputs
+      document.querySelectorAll('input[type="file"]').forEach((input) => {
+        input.value = "";
+      });
+    } else {
+      alert("Submission failed: " + (data.error || "unknown error"));
+
     }
-  };
+
+    console.log("Server Response:", data);
+  } catch (error) {
+    console.error("Error submitting form:", error);
+    alert("Submission failed. Please try again.");
+  } finally {
+    setSubmitting(false); // ✅ Re-enable button
+  }
+};
+
 
   const handleDownloadTemplate = () => {
     const link = document.createElement("a");
@@ -243,6 +301,7 @@ export default function LabApplication() {
             ))}
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={submitting || Object.values(errors).some((err) => err !== "")}
@@ -253,6 +312,16 @@ export default function LabApplication() {
             }`}
           >
             {submitting ? "Submitting..." : "Submit Application"}
+
+            disabled={submitting} // ✅ Disable while submitting
+            className={`w-full py-3 rounded-xl font-semibold text-white shadow-md transition-all duration-200 ${
+              submitting
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-[#90A955] hover:bg-[#90A955]/80"
+            }`}
+          >
+            {submitting ? "Submitting your form..." : "Submit Application"}
+
           </button>
         </form>
       </div>
