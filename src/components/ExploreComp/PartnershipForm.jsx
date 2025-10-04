@@ -31,7 +31,7 @@ export default function PartnershipForm() {
       // TODO: send data to backend API
       await new Promise((resolve) => setTimeout(resolve, 1000)); // simulate API delay
 
-      toast.success("✅ Partnership request submitted successfully!", {
+      toast.success("Partnership request submitted successfully!", {
         position: "top-right",
         autoClose: 3000,
       });
@@ -46,7 +46,7 @@ export default function PartnershipForm() {
         proposal: "",
       });
     } catch (error) {
-      toast.error("❌ Failed to submit. Please try again.", {
+      toast.error("Failed to submit. Please try again.", {
         position: "top-right",
         autoClose: 3000,
       });
