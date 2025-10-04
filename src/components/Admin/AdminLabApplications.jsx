@@ -30,55 +30,92 @@ export default function AdminLabApplications() {
     }
   }
 
-  // ✅ Fetch signed URL
-// Replace your openInPopup function with this:
+  // ✅ Fetch signed URL and open PDF
+  async function openInPopup(publicId) {
+    try {
+      const res = await fetch(`/api/signed-url?id=${encodeURIComponent(publicId)}`);
+      const json = await res.json();
 
-async function openInPopup(publicId) {
-  try {
-    const res = await fetch(
-      `/api/signed-url?id=${encodeURIComponent(publicId)}`
-    );
-    const json = await res.json();
-
-    if (res.ok && json.success) {
-      // Simple direct open
-      window.open(json.url, "_blank", "width=1200,height=800");
-    } else {
-      alert("Failed to generate signed link: " + (json.error || "Unknown error"));
+      if (res.ok && json.success) {
+        window.open(json.url, "_blank", "width=1200,height=800");
+      } else {
+        alert("Failed to generate signed link: " + (json.error || "Unknown error"));
+      }
+    } catch (err) {
+      console.error("Error opening signed URL:", err);
+      alert("Could not open document.");
     }
-  } catch (err) {
-    console.error("Error opening signed URL:", err);
-    alert("Could not open document.");
   }
-}
-
 
   function viewApp(app) {
     setSelected(app);
     setReason(app.adminNote || "");
   }
 
-  async function handleAction(action) {
-    if (!selected) return;
+  // ✅ Confirm and Approve using /api/approve
+  async function handleApprove(app) {
+    const confirmApprove = confirm(
+      `Are you sure you want to APPROVE "${app.labName}" owned by ${app.ownerName}?`
+    );
+    if (!confirmApprove) return;
+
+    setActionLoading(true);
+    try {
+      const res = await fetch("/api/approve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ labId: app.labId })
+      });
+
+      const json = await res.json();
+
+      if (res.ok && json.success) {
+        alert(`${app.labName} approved successfully.`);
+        // Update UI state
+        setApps((prev) =>
+          prev.map((a) => (a._id === app._id ? { ...a, status: "Approved" } : a))
+        );
+        setSelected((prev) =>
+          prev && prev._id === app._id ? { ...prev, status: "Approved" } : prev
+        );
+      } else {
+        alert("❌ Approval failed: " + (json.error || "Unknown error"));
+      }
+    } catch (err) {
+      console.error("Error approving:", err);
+      alert("Approval failed. Check console for details.");
+    } finally {
+      setActionLoading(false);
+    }
+  }
+
+  // ✅ Reject still uses PATCH on /api/partnership
+  async function handleReject(app) {
+    const confirmReject = confirm(
+      `Are you sure you want to REJECT "${app.labName}"?\nYou can add a reason below.`
+    );
+    if (!confirmReject) return;
+
     setActionLoading(true);
     try {
       const res = await fetch("/api/partnership", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: selected._id, action, adminNote: reason }),
+        body: JSON.stringify({ id: app._id, action: "reject", adminNote: reason }),
       });
       const json = await res.json();
       if (res.ok && json.success) {
+        alert(`❌ ${app.labName} rejected.`);
         setApps((prev) =>
           prev.map((a) => (a._id === json.data._id ? json.data : a))
         );
         setSelected(json.data);
       } else {
-        alert("Action failed: " + (json.error || "unknown"));
+        alert("Rejection failed: " + (json.error || "unknown"));
       }
     } catch (err) {
       console.error(err);
-      alert("Action failed. See console.");
+      alert("Rejection failed. See console.");
     } finally {
       setActionLoading(false);
     }
@@ -122,9 +159,7 @@ async function openInPopup(publicId) {
                     </td>
                     <td className="px-4 py-3">
                       <div>{app.ownerName}</div>
-                      <div className="text-sm text-gray-500">
-                        {app.ownerEmail}
-                      </div>
+                      <div className="text-sm text-gray-500">{app.ownerEmail}</div>
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-500">
                       {new Date(app.submittedAt).toLocaleString()}
@@ -152,21 +187,13 @@ async function openInPopup(publicId) {
                           View
                         </button>
                         <button
-                          onClick={() => {
-                            setSelected(app);
-                            setReason("");
-                            handleAction("approve");
-                          }}
+                          onClick={() => handleApprove(app)}
                           className="px-3 py-1 rounded-md border text-sm bg-green-50 hover:bg-green-100"
                         >
                           Approve
                         </button>
                         <button
-                          onClick={() => {
-                            setSelected(app);
-                            setReason("");
-                            handleAction("reject");
-                          }}
+                          onClick={() => handleReject(app)}
                           className="px-3 py-1 rounded-md border text-sm bg-red-50 hover:bg-red-100"
                         >
                           Reject
@@ -192,9 +219,7 @@ async function openInPopup(publicId) {
                 <div className="text-sm text-gray-600 mt-1">
                   PAN: {selected.panCard}
                 </div>
-                <div className="text-sm text-gray-500 mt-2">
-                  {selected.address}
-                </div>
+                <div className="text-sm text-gray-500 mt-2">{selected.address}</div>
               </div>
               <div className="text-sm text-gray-500">
                 Submitted: {new Date(selected.submittedAt).toLocaleString()}
@@ -234,14 +259,14 @@ async function openInPopup(publicId) {
 
             <div className="mt-4 flex gap-2">
               <button
-                onClick={() => handleAction("approve")}
+                onClick={() => handleApprove(selected)}
                 className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
                 disabled={actionLoading}
               >
                 {actionLoading ? "Working..." : "Approve"}
               </button>
               <button
-                onClick={() => handleAction("reject")}
+                onClick={() => handleReject(selected)}
                 className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
                 disabled={actionLoading}
               >
