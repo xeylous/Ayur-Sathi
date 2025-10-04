@@ -11,15 +11,17 @@ import { useAuth } from "@/context/AuthContext";
 export default function LoginPage() {
   const { setUser } = useAuth();
   const router = useRouter();
-  const [mode, setMode] = useState("user"); // "user" | "farmer"
-  const [email, setEmail] = useState("");
+  const [mode, setMode] = useState("user"); // "user" | "farmer" | "lab"
+  const [email, setEmail] = useState(""); // For user/farmer
+  const [userId, setUserId] = useState(""); // For lab
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Reset inputs when switching between User/Farmer
+  // Reset inputs when switching between modes
   useEffect(() => {
     setEmail("");
+    setUserId("");
     setPassword("");
     setShowPassword(false);
     setIsSubmitting(false);
@@ -27,54 +29,44 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isSubmitting) return; // prevent multiple clicks
+    if (isSubmitting) return;
     setIsSubmitting(true);
+
+    const payload =
+      mode === "lab"
+        ? { userId, password, type: mode }
+        : { email, password, type: mode };
 
     try {
       const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, type: mode }),
+        body: JSON.stringify(payload),
         credentials: "include",
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "Wrong email or password", {
-          autoClose: 1500,
-        });
-
-        // 🔄 Re-enable after 1.5s
-        setTimeout(() => {
-          setIsSubmitting(false);
-        }, 1500);
-
+        toast.error(data.error || "Wrong credentials", { autoClose: 1500 });
+        setTimeout(() => setIsSubmitting(false), 1500);
         return;
       }
 
-      // ✅ Success
       setUser({
         name: data.account.name,
-        email: data.account.email,
+        email: data.account.email || null,
+        userId: data.account.userId || null,
         uniqueId: data.account.uniqueId,
         type: data.account.type,
       });
 
       toast.success("Login successful", { autoClose: 1500 });
-
-      setTimeout(() => {
-        router.push(data.redirectUrl);
-      }, 500);
+      setTimeout(() => router.push(data.redirectUrl), 500);
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Something went wrong. Please try again", {
-        autoClose: 1500,
-      });
-
-      setTimeout(() => {
-        setIsSubmitting(false);
-      }, 1500);
+      toast.error("Something went wrong. Please try again", { autoClose: 1500 });
+      setTimeout(() => setIsSubmitting(false), 1500);
     }
   };
 
@@ -90,43 +82,33 @@ export default function LoginPage() {
             height={50}
             className="h-12 w-12 rounded-lg"
           />
-          <h1 className="mt-3 text-2xl font-bold text-[#4F772D]">
-            Welcome Back
-          </h1>
+          <h1 className="mt-3 text-2xl font-bold text-[#4F772D]">Welcome Back</h1>
           <p className="text-sm text-gray-500">
             {mode === "user"
               ? "Login to your User account"
-              : "Login to your Farmer account"}
+              : mode === "farmer"
+              ? "Login to your Farmer account"
+              : "Login to your Lab account"}
           </p>
         </div>
 
         {/* Toggle Buttons */}
         <div className="flex gap-2 mb-6">
-          <button
-            onClick={() => setMode("user")}
-            disabled={isSubmitting}
-            className={`flex-1 py-2 rounded-md text-sm font-medium transition cursor-pointer ${
-              mode === "user"
-                ? "bg-[#90a955] text-white"
-                : "bg-gray-100 text-gray-700"
-            }`}
-          >
-            User Login
-          </button>
-          <button
-            onClick={() => setMode("farmer")}
-            disabled={isSubmitting}
-            className={`flex-1 py-2 rounded-md text-sm font-medium transition cursor-pointer ${
-              mode === "farmer"
-                ? "bg-[#90a955] text-white"
-                : "bg-gray-100 text-gray-700"
-            }`}
-          >
-            Farmer Login
-          </button>
+          {["user", "farmer", "lab"].map((m) => (
+            <button
+              key={m}
+              onClick={() => setMode(m)}
+              disabled={isSubmitting}
+              className={`flex-1 py-2 rounded-md text-sm font-medium transition cursor-pointer ${
+                mode === m ? "bg-[#90a955] text-white" : "bg-gray-100 text-gray-700"
+              }`}
+            >
+              {m.charAt(0).toUpperCase() + m.slice(1)} Login
+            </button>
+          ))}
         </div>
 
-        {/* Form with Smooth Animation */}
+        {/* Form */}
         <AnimatePresence mode="wait">
           <motion.form
             key={mode}
@@ -137,31 +119,42 @@ export default function LoginPage() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Email */}
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="mt-1 w-full px-3 py-2 rounded-md border bg-white focus:outline-none focus:ring-2 focus:ring-green-600"
-                placeholder="you@example.com"
-              />
-            </div>
+            {/* Email or User ID */}
+            {mode === "lab" ? (
+              <div>
+                <label htmlFor="userId" className="block text-sm font-medium text-gray-700">
+                  User ID
+                </label>
+                <input
+                  type="text"
+                  id="userId"
+                  value={userId}
+                  onChange={(e) => setUserId(e.target.value)}
+                  required
+                  className="mt-1 w-full px-3 py-2 rounded-md border bg-white focus:outline-none focus:ring-2 focus:ring-green-600"
+                  placeholder="Enter your User ID"
+                />
+              </div>
+            ) : (
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="mt-1 w-full px-3 py-2 rounded-md border bg-white focus:outline-none focus:ring-2 focus:ring-green-600"
+                  placeholder="you@example.com"
+                />
+              </div>
+            )}
 
             {/* Password */}
             <div className="relative">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
               </label>
               <input
@@ -193,9 +186,7 @@ export default function LoginPage() {
             >
               {isSubmitting
                 ? "Logging in..."
-                : mode === "user"
-                ? "Login as User"
-                : "Login as Farmer"}
+                : `Login as ${mode.charAt(0).toUpperCase() + mode.slice(1)}`}
             </button>
           </motion.form>
         </AnimatePresence>
