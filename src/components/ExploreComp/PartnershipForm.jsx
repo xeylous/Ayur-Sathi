@@ -2,6 +2,8 @@
 "use client";
 
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function PartnershipForm() {
   const [form, setForm] = useState({
@@ -23,25 +25,38 @@ export default function PartnershipForm() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    console.log("📩 Partnership Form Submitted:", form);
-    // TODO: send data to backend API
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // simulate API delay
+    try {
+      console.log("📩 Partnership Form Submitted:", form);
 
-    // reset form after submission
-    setForm({
-      organizationName: "",
-      contactPerson: "",
-      email: "",
-      phone: "",
-      partnershipType: "",
-      proposal: "",
-    });
+      // TODO: send data to backend API
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // simulate API delay
 
-    setIsSubmitting(false);
+      toast.success("✅ Partnership request submitted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+      // reset form after submission
+      setForm({
+        organizationName: "",
+        contactPerson: "",
+        email: "",
+        phone: "",
+        partnershipType: "",
+        proposal: "",
+      });
+    } catch (error) {
+      toast.error("❌ Failed to submit. Please try again.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-2xl bg-white shadow-xl rounded-2xl p-8">
         {/* Heading */}
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
@@ -166,6 +181,9 @@ export default function PartnershipForm() {
           </button>
         </form>
       </div>
+
+      {/* Toastify container */}
+      <ToastContainer />
     </div>
   );
 }
