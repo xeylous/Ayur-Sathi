@@ -29,7 +29,7 @@ export default function LabApplication() {
   });
 
   const [submitting, setSubmitting] = useState(false);
-=======
+
   const [submitting, setSubmitting] = useState(false); // ✅ Track submission state
 
 
