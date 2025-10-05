@@ -34,9 +34,10 @@ export default function LoginPage() {
 
     const payload =
       mode === "lab"
-        ? { userId, password, type: mode }
+        ? { email, password, type: mode }
         : { email, password, type: mode };
-
+    // console.log(payload);
+    
     try {
       const res = await fetch("/api/login", {
         method: "POST",
@@ -123,16 +124,16 @@ export default function LoginPage() {
             {mode === "lab" ? (
               <div>
                 <label htmlFor="userId" className="block text-sm font-medium text-gray-700">
-                  User ID
+                  Email ID
                 </label>
                 <input
                   type="text"
-                  id="userId"
-                  value={userId}
-                  onChange={(e) => setUserId(e.target.value)}
+                  id="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                   className="mt-1 w-full px-3 py-2 rounded-md border bg-white focus:outline-none focus:ring-2 focus:ring-green-600"
-                  placeholder="Enter your User ID"
+                  placeholder="Enter your Email ID"
                 />
               </div>
             ) : (
