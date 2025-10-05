@@ -47,6 +47,8 @@ export default function LoginPage() {
       });
 
       const data = await res.json();
+      // console.log("login response",data);
+      
 
       if (!res.ok) {
         toast.error(data.error || "Wrong credentials", { autoClose: 1500 });
@@ -56,9 +58,10 @@ export default function LoginPage() {
 
       setUser({
         name: data.account.name,
+        labId: data.account.labId || null,
         email: data.account.email || null,
         userId: data.account.userId || null,
-        uniqueId: data.account.uniqueId,
+        uniqueId: data.account.uniqueId || null,
         type: data.account.type,
       });
 

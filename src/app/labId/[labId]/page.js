@@ -1,7 +1,7 @@
 "use client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import LabDashboard from "@/components/labDashboard/FarmerDashboard";
+import LabDashboard from "@/components/labDashboard/LabDashboard";
 
 export default function Page() {
   return (

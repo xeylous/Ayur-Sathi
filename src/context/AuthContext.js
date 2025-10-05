@@ -66,6 +66,7 @@ export const AuthProvider = ({ children }) => {
         const res = await fetch("/api/verify-token", { credentials: "include" });
         if (res.ok) {
           const data = await res.json();
+          // console.log("auth context",data.user);
           setUser(data.user);
         } else {
           setUser(null);
