@@ -145,7 +145,6 @@ export default function Navbar() {
           </button>
         </div>
       </div>
-
       {/* Mobile Nav Drawer */}
       <AnimatePresence>
         {open && (

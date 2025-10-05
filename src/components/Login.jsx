@@ -28,47 +28,58 @@ export default function LoginPage() {
   }, [mode]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (isSubmitting) return;
-    setIsSubmitting(true);
+  e.preventDefault();
+  if (isSubmitting) return;
+  setIsSubmitting(true);
 
-    const payload =
-      mode === "lab"
-        ? { userId, password, type: mode }
-        : { email, password, type: mode };
+  const payload =
+    mode === "lab"
+      ? { userId, password, type: mode }
+      : { email, password, type: mode };
 
-    try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        credentials: "include",
-      });
+  try {
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      credentials: "include",
+    });
 
-      const data = await res.json();
+    const data = await res.json();
 
-      if (!res.ok) {
-        toast.error(data.error || "Wrong credentials", { autoClose: 1500 });
-        setTimeout(() => setIsSubmitting(false), 1500);
-        return;
-      }
-
-      setUser({
-        name: data.account.name,
-        email: data.account.email || null,
-        userId: data.account.userId || null,
-        uniqueId: data.account.uniqueId,
-        type: data.account.type,
-      });
-
-      toast.success("Login successful", { autoClose: 1500 });
-      setTimeout(() => router.push(data.redirectUrl), 500);
-    } catch (error) {
-      console.error("Login error:", error);
-      toast.error("Something went wrong. Please try again", { autoClose: 1500 });
+    if (!res.ok) {
+      toast.error(data.error || "Wrong credentials", { autoClose: 1500 });
       setTimeout(() => setIsSubmitting(false), 1500);
+      return;
     }
-  };
+
+    // ✅ Save user context
+    setUser({
+      name: data.account.name,
+      email: data.account.email || null,
+      userId: data.account.userId || null,
+      labId: data.account.labId || null,
+      uniqueId: data.account.uniqueId,
+      type: data.account.type,
+    });
+
+    toast.success("Login successful", { autoClose: 1500 });
+
+    // ✅ Redirect logic based on type
+    setTimeout(() => {
+      if (mode === "lab" && data.account.labId) {
+        router.push(`/labId/${data.account.labId}`);
+      } else {
+        router.push(data.redirectUrl);
+      }
+    }, 500);
+  } catch (error) {
+    console.error("Login error:", error);
+    toast.error("Something went wrong. Please try again", { autoClose: 1500 });
+    setTimeout(() => setIsSubmitting(false), 1500);
+  }
+};
+
 
   return (
     <div className="flex justify-center bg-[#f5f8cc]/50 px-4 py-10 md:py-8">
