@@ -169,6 +169,7 @@ export async function POST(req) {
 
     // find account in the selected collection
     const account = await model.findOne({ email });
+    // console.log("account",account);
     if (!account) {
       return NextResponse.json({ error: `${type} not found` }, { status: 404 });
     }
@@ -238,20 +239,41 @@ export async function POST(req) {
 
     // determine redirect
     const redirectUrl = type === "lab" ? `/labId/${account.labId}` : `/id/${account.uniqueId || account._id}`;
-
-    const response = NextResponse.json(
-      {
-        message: "Login successful",
-        redirectUrl,
-        account: {
-          name: account.name,
-          email: account.email,
-          uniqueId: account.uniqueId || account._id,
-          type,
+let response;
+// console.log("type",type);
+    if (type === "lab") {
+      response = NextResponse.json(
+        {
+          message: "Login successful",
+          redirectUrl,
+          account: {
+            labId: account.labId,
+            name: account.name,
+            email: account.email,
+            type,
+          },
         },
-      },
-      { status: 200 }
-    );
+        { status: 200 }
+
+      );
+    // console.log("token",response.account);
+
+    } else {
+      response = NextResponse.json(
+        {
+          message: "Login successful",
+          redirectUrl,
+          account: {
+            name: account.name,
+            email: account.email,
+            uniqueId: account.uniqueId || account._id,
+            type,
+          },
+        },
+        { status: 200 }
+      );
+    }
+    // console.log("token", response.account);
 
     // set cookie
     response.cookies.set("auth_token", token, {

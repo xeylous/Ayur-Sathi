@@ -53,7 +53,7 @@ export default function Navbar() {
       console.error(err);
     }
   };
-
+  // console.log("user nav",user);
   if (loading) {
     return (
       <header className="sticky top-0 z-40 border-b bg-white/80 backdrop-blur">
@@ -96,8 +96,8 @@ export default function Navbar() {
             <div className="hidden sm:flex items-center gap-4">
               <Link
                 href={
-                  user.type === "farmer"
-                    ? `/id/${user.uniqueId}`
+                  user.type === "lab"
+                    ?`/labId/${user.labId}` 
                     : `/id/${user.uniqueId}`
                 }
                 className="flex items-center gap-2 text-sm font-medium text-brand-700 hover:text-brand-900"
@@ -109,7 +109,9 @@ export default function Navbar() {
                   height={32}
                   className="rounded-full border object-cover"
                 />
-                <span className="hidden text-xl sm:inline">{user.name}</span>
+                <span className="hidden sm:inline">
+                  {user.type === "lab" ? user.labId : user.name}
+                </span>
               </Link>
 
               <button
@@ -198,7 +200,7 @@ export default function Navbar() {
                       className="mt-4 text-lg font-medium text-black bg-[#ECF39E] rounded-lg px-5 py-2.5 text-center"
                       onClick={() => setOpen(false)}
                     >
-                      {user.name} (Profile)
+                      {user.type === "lab" ? user.labId : user.name} (Profile)
                     </Link>
                     <button
                       onClick={handleLogout}
