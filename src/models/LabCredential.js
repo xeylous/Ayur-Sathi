@@ -15,6 +15,11 @@ const LabCredentialSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  type:{
+    type: String,
+    default: "lab",
+    enum: ["lab"],
+  },
   createdAt: {
     type: Date,
     default: Date.now,
