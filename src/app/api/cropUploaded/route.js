@@ -64,7 +64,7 @@ export async function POST(req) {
       `${batchId}.png`,
       "batchBarCodes"
     );
-    console.log("Uploaded barcode to Cloudinary:", { publicId, url });
+   
 
     // ✅ Save crop data to MongoDB
     const newCrop = new CropUpload({
@@ -76,7 +76,6 @@ export async function POST(req) {
       quantity,
       batchBarCode: { publicId, url },
     });
-console.log("Saving new crop data:", newCrop);
     await newCrop.save();
 
     // ✅ Return the full saved document (for frontend)
@@ -84,7 +83,6 @@ console.log("Saving new crop data:", newCrop);
       JSON.stringify({
         success: true,
         message: "Crop data uploaded successfully",
-        data: newCrop,
       }),
       { status: 201 }
     );
