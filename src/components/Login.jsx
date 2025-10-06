@@ -7,18 +7,21 @@ import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthContext";
+import { ChevronDown } from "lucide-react";
 
 export default function LoginPage() {
   const { setUser } = useAuth();
   const router = useRouter();
-  const [mode, setMode] = useState("user"); // "user" | "farmer" | "lab"
-  const [email, setEmail] = useState(""); // For user/farmer
-  const [userId, setUserId] = useState(""); // For lab
+  const [mode, setMode] = useState("user"); // "user" | "farmer" | "lab" | "admin" | "manufacturer"
+  const [email, setEmail] = useState("");
+  const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
-  // Reset inputs when switching between modes
+
+  // Reset fields when switching mode
   useEffect(() => {
     setEmail("");
     setUserId("");
@@ -32,12 +35,21 @@ export default function LoginPage() {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    const payload =
-      mode === "lab"
-        ? { email, password, type: mode }
-        : { email, password, type: mode };
-    // console.log(payload);
-    
+    // 🧩 Admin Login (local validation)
+    if (mode === "admin") {
+      if (email === "risuraj162@gmail.com" && password === "1234") {
+        toast.success("Admin login successful", { autoClose: 1500 });
+        setTimeout(() => router.push("http://localhost:3000/admin"), 800);
+      } else {
+        toast.error("Invalid admin credentials", { autoClose: 1500 });
+        setTimeout(() => setIsSubmitting(false), 1500);
+      }
+      return;
+    }
+
+    // 🧩 Other login types (API call)
+    const payload = { email, password, type: mode };
+
     try {
       const res = await fetch("/api/login", {
         method: "POST",
@@ -47,8 +59,6 @@ export default function LoginPage() {
       });
 
       const data = await res.json();
-      // console.log("login response",data);
-      
 
       if (!res.ok) {
         toast.error(data.error || "Wrong credentials", { autoClose: 1500 });
@@ -91,28 +101,66 @@ export default function LoginPage() {
             {mode === "user"
               ? "Login to your User account"
               : mode === "farmer"
-              ? "Login to your Farmer account"
-              : "Login to your Lab account"}
+                ? "Login to your Farmer account"
+                : mode === "lab"
+                  ? "Login to your Lab account"
+                  : mode === "manufacturer"
+                    ? "Login to your Manufacturer account"
+                    : "Admin access panel"}
           </p>
         </div>
 
-        {/* Toggle Buttons */}
-        <div className="flex gap-2 mb-6">
-          {["user", "farmer", "lab"].map((m) => (
-            <button
-              key={m}
-              onClick={() => setMode(m)}
-              disabled={isSubmitting}
-              className={`flex-1 py-2 rounded-md text-sm font-medium transition cursor-pointer ${
-                mode === m ? "bg-[#90a955] text-white" : "bg-gray-100 text-gray-700"
-              }`}
-            >
-              {m.charAt(0).toUpperCase() + m.slice(1)} Login
-            </button>
-          ))}
+        {/* 🔽 Dropdown for Login Type */}
+        {/* <div className="mb-6">
+          <label
+            htmlFor="mode"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Select Login Type
+          </label>
+          <select
+            id="mode"
+            value={mode}
+            onChange={(e) => setMode(e.target.value)}
+            disabled={isSubmitting}
+            className="w-full px-3 py-2 rounded-md border bg-white focus:outline-none focus:ring-2 focus:ring-green-600 cursor-pointer"
+          >
+            <option value="user" >User Login</option>
+            <option value="farmer">Farmer Login</option>
+            <option value="lab">Lab Login</option>
+            <option value="manufacturer">Manufacturer Login</option>
+            <option value="admin">Admin Login</option>
+          </select>
+        </div> */}
+        <div className="mb-6 relative">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Select Login Type
+          </label>
+          <button
+            type="button"
+            onClick={() => setShowDropdown(!showDropdown)}
+            className="w-full px-3 py-2 rounded-md border bg-white text-left focus:outline-none focus:ring-2 focus:ring-[#90a955] flex justify-between items-center"
+          >
+            <span>{mode.charAt(0).toUpperCase() + mode.slice(1)} Login</span>
+            <ChevronDown size={20} className="text-gray-500" />
+          </button>
+          {showDropdown && (
+            <div className="absolute z-10 mt-1 w-full bg-white border rounded-md shadow-lg">
+              {["user", "farmer", "lab", "manufacturer", "admin"].map((m) => (
+                <div
+                  key={m}
+                  onClick={() => { setMode(m); setShowDropdown(false); }}
+                  className="px-3 py-2 cursor-pointer hover:bg-[#90a955] hover:text-white transition"
+                >
+                  {m.charAt(0).toUpperCase() + m.slice(1)} Login
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Form */}
+
+        {/* 🧾 Login Form */}
         <AnimatePresence mode="wait">
           <motion.form
             key={mode}
@@ -123,38 +171,25 @@ export default function LoginPage() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Email or User ID */}
-            {mode === "lab" ? (
-              <div>
-                <label htmlFor="userId" className="block text-sm font-medium text-gray-700">
-                  Email ID
-                </label>
-                <input
-                  type="text"
-                  id="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="mt-1 w-full px-3 py-2 rounded-md border bg-white focus:outline-none focus:ring-2 focus:ring-green-600"
-                  placeholder="Enter your Email ID"
-                />
-              </div>
-            ) : (
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="mt-1 w-full px-3 py-2 rounded-md border bg-white focus:outline-none focus:ring-2 focus:ring-green-600"
-                  placeholder="you@example.com"
-                />
-              </div>
-            )}
+            {/* Email / Username */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                {mode === "admin" ? "Admin Username" : "Email Address"}
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="mt-1 w-full px-3 py-2 rounded-md border bg-white focus:outline-none focus:ring-2 focus:ring-green-600"
+                placeholder={
+                  mode === "admin"
+                    ? "Enter admin username"
+                    : "you@example.com"
+                }
+              />
+            </div>
 
             {/* Password */}
             <div className="relative">
@@ -179,14 +214,14 @@ export default function LoginPage() {
               </button>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full py-2.5 rounded-md text-white text-lg font-medium shadow-lg cursor-pointer ${
-                isSubmitting
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-[#90a955] hover:bg-[#4F772D] focus:ring-4 focus:outline-none focus:ring-green-300"
-              }`}
+              className={`w-full py-2.5 rounded-md text-white text-lg font-medium shadow-lg cursor-pointer ${isSubmitting
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-[#90a955] hover:bg-[#4F772D] focus:ring-4 focus:outline-none focus:ring-green-300"
+                }`}
             >
               {isSubmitting
                 ? "Logging in..."
@@ -202,7 +237,7 @@ export default function LoginPage() {
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
 
-        {/* Google Auth Button */}
+        {/* Google Auth */}
         <button
           onClick={() => toast.info("Google Auth coming soon!!", { autoClose: 1500 })}
           className="w-full py-2.5 rounded-md border flex items-center justify-center gap-2 text-gray-700 bg-white hover:bg-gray-50 shadow-sm cursor-pointer"
