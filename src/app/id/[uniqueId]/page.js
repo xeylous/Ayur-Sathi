@@ -34,7 +34,7 @@ export default function Page() {
 
   if (!user) return null; // while redirecting
 
-  console.log("user in [uniqueId]:", user);
+  // console.log("user in [uniqueId]:", user);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#ECF39E]  ">

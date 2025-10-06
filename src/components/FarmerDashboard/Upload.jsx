@@ -26,7 +26,6 @@ export default function UploadCrop() {
   const pathname = usePathname(); // e.g., "/id/d284fa"
   const uniqueId = pathname.split("/").pop(); // "d284fa"
 
-  console.log(uniqueId);
 
   
 
