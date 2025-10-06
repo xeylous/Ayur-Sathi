@@ -24,16 +24,13 @@ const CropUploadSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    initialQualityMetrics: {
-      moisture: { type: Number },
-      weight: { type: Number },
-      purity: { type: Number },
-      remarks: { type: String },
+    quantity: {
+      type: Number,
     },
     // ✅ New field to store barcode URL
-    batchBarCodeUrl: {
-      type: String,
-      default: null,
+    batchBarCode: {
+      url: { type: String, default: null },
+      publicId: { type: String, default: null },
     },
   },
   { timestamps: true }
