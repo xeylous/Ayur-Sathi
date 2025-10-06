@@ -5,7 +5,7 @@ const CropUploadSchema = new mongoose.Schema(
     batchId: {
       type: String,
       required: true,
-      unique: true, // enforce unique batchId across all data
+      unique: true,
       index: true,
     },
     uniqueId: {
@@ -29,6 +29,11 @@ const CropUploadSchema = new mongoose.Schema(
       weight: { type: Number },
       purity: { type: Number },
       remarks: { type: String },
+    },
+    // ✅ New field to store barcode URL
+    batchBarCodeUrl: {
+      type: String,
+      default: null,
     },
   },
   { timestamps: true }
