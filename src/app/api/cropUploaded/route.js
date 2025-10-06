@@ -1,11 +1,7 @@
 import CropUpload from "@/models/CropUpload";
 import { connectDB } from "@/lib/db";
 
-/**
- * Generate a batch ID for a given species.
- * Format: <SPECIESID>-<YEAR>-<4DIGIT>
- * Backend-generated — guaranteed unique because backend controls insertions.
- */
+
 function generateBatchName(speciesId) {
   const year = new Date().getFullYear();
   const randomNum = Math.floor(1000 + Math.random() * 9000); // random 4-digit number
@@ -32,7 +28,7 @@ export async function POST(req) {
       );
     }
 
-    // ✅ Generate new batch ID (unique by design)
+    //  Generate new batch ID (unique by design)
     const batchId = generateBatchName(speciesId);
 
     const newCrop = new CropUpload({
