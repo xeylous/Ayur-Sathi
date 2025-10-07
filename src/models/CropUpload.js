@@ -27,7 +27,7 @@ const CropUploadSchema = new mongoose.Schema(
     quantity: {
       type: Number,
     },
-    // ✅ New field to store barcode URL
+    // New field to store barcode URL
     batchBarCode: {
       url: { type: String, default: null },
       publicId: { type: String, default: null },
@@ -37,6 +37,7 @@ const CropUploadSchema = new mongoose.Schema(
       enum: ["Pending", "Verified", "Rejected"],
       default: "Pending",
     },
+    rejectionReason: { type: String, default: null },
   },
   { timestamps: true }
 );
