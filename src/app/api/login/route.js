@@ -208,7 +208,7 @@ export async function POST(req) {
 
     const isMatch = await bcrypt.compare(password, hashed);
     if (!isMatch) {
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+      return NextResponse.json({ error: "Invalid credentials", message: "password mismatch" }, { status: 401 });
     }
 
     // create token
