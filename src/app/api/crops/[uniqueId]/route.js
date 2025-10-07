@@ -4,6 +4,29 @@ import CropUpload from "@/models/CropUpload";
 export async function GET(req, { params }) {
   try {
     await connectDB();
+    // Get token from cookies
+    const cookie = req.cookies.get("auth_token");
+    if (!cookie) {
+      return new Response(
+        JSON.stringify({ success: false, message: "No auth token provided" }),
+        { status: 401 }
+      );
+    }
+
+    const token = cookie.value;
+
+    // Verify JWT token
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      console.error("JWT verification failed:", err);
+      return new Response(
+        JSON.stringify({ success: false, message: "Invalid or expired token" }),
+        { status: 401 }
+      );
+    }
+
 
     const { uniqueId } = params;
 
@@ -11,6 +34,12 @@ export async function GET(req, { params }) {
       return new Response(
         JSON.stringify({ success: false, message: "Missing uniqueId" }),
         { status: 400 }
+      );
+    }
+    if (decoded.uniqueId !== uniqueId) {
+      return new Response(
+        JSON.stringify({ success: false, message: "Unauthorized access" }),
+        { status: 403 }
       );
     }
 

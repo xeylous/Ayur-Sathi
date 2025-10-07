@@ -66,7 +66,7 @@ const sections = [
   },
   {
     id: "manufacture",
-    title: "Manufacturer Partnership",
+    title: "Manufacture Partnership",
     component: <ApplyForManufacture />,
   },
 ];
