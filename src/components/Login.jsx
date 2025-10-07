@@ -1,25 +1,35 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthContext";
-import { ChevronDown } from "lucide-react";
 
 export default function LoginPage() {
   const { setUser } = useAuth();
   const router = useRouter();
-  const [mode, setMode] = useState("user"); // "user" | "farmer" | "lab" | "admin" | "manufacturer"
+  const [mode, setMode] = useState("user");
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Reset fields when switching mode
   useEffect(() => {
@@ -101,38 +111,17 @@ export default function LoginPage() {
             {mode === "user"
               ? "Login to your User account"
               : mode === "farmer"
-                ? "Login to your Farmer account"
-                : mode === "lab"
-                  ? "Login to your Lab account"
-                  : mode === "manufacturer"
-                    ? "Login to your Manufacturer account"
-                    : "Admin access panel"}
+              ? "Login to your Farmer account"
+              : mode === "lab"
+              ? "Login to your Lab account"
+              : mode === "manufacturer"
+              ? "Login to your Manufacturer account"
+              : "Admin access panel"}
           </p>
         </div>
 
-        {/* 🔽 Dropdown for Login Type */}
-        {/* <div className="mb-6">
-          <label
-            htmlFor="mode"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Select Login Type
-          </label>
-          <select
-            id="mode"
-            value={mode}
-            onChange={(e) => setMode(e.target.value)}
-            disabled={isSubmitting}
-            className="w-full px-3 py-2 rounded-md border bg-white focus:outline-none focus:ring-2 focus:ring-green-600 cursor-pointer"
-          >
-            <option value="user" >User Login</option>
-            <option value="farmer">Farmer Login</option>
-            <option value="lab">Lab Login</option>
-            <option value="manufacturer">Manufacturer Login</option>
-            <option value="admin">Admin Login</option>
-          </select>
-        </div> */}
-        <div className="mb-6 relative">
+        {/* 🔽 Custom Dropdown */}
+        <div className="mb-6 relative" ref={dropdownRef}>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Select Login Type
           </label>
@@ -142,14 +131,22 @@ export default function LoginPage() {
             className="w-full px-3 py-2 rounded-md border bg-white text-left focus:outline-none focus:ring-2 focus:ring-[#90a955] flex justify-between items-center"
           >
             <span>{mode.charAt(0).toUpperCase() + mode.slice(1)} Login</span>
-            <ChevronDown size={20} className="text-gray-500" />
+            <ChevronDown
+              size={20}
+              className={`text-gray-500 transition-transform duration-200 ${
+                showDropdown ? "rotate-180" : ""
+              }`}
+            />
           </button>
           {showDropdown && (
             <div className="absolute z-10 mt-1 w-full bg-white border rounded-md shadow-lg">
               {["user", "farmer", "lab", "manufacturer", "admin"].map((m) => (
                 <div
                   key={m}
-                  onClick={() => { setMode(m); setShowDropdown(false); }}
+                  onClick={() => {
+                    setMode(m);
+                    setShowDropdown(false);
+                  }}
                   className="px-3 py-2 cursor-pointer hover:bg-[#90a955] hover:text-white transition"
                 >
                   {m.charAt(0).toUpperCase() + m.slice(1)} Login
@@ -158,7 +155,6 @@ export default function LoginPage() {
             </div>
           )}
         </div>
-
 
         {/* 🧾 Login Form */}
         <AnimatePresence mode="wait">
@@ -184,9 +180,7 @@ export default function LoginPage() {
                 required
                 className="mt-1 w-full px-3 py-2 rounded-md border bg-white focus:outline-none focus:ring-2 focus:ring-green-600"
                 placeholder={
-                  mode === "admin"
-                    ? "Enter admin username"
-                    : "you@example.com"
+                  mode === "admin" ? "Enter admin username" : "you@example.com"
                 }
               />
             </div>
@@ -218,10 +212,11 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full py-2.5 rounded-md text-white text-lg font-medium shadow-lg cursor-pointer ${isSubmitting
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-[#90a955] hover:bg-[#4F772D] focus:ring-4 focus:outline-none focus:ring-green-300"
-                }`}
+              className={`w-full py-2.5 rounded-md text-white text-lg font-medium shadow-lg cursor-pointer ${
+                isSubmitting
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#90a955] hover:bg-[#4F772D] focus:ring-4 focus:outline-none focus:ring-green-300"
+              }`}
             >
               {isSubmitting
                 ? "Logging in..."
@@ -239,7 +234,9 @@ export default function LoginPage() {
 
         {/* Google Auth */}
         <button
-          onClick={() => toast.info("Google Auth coming soon!!", { autoClose: 1500 })}
+          onClick={() =>
+            toast.info("Google Auth coming soon!!", { autoClose: 1500 })
+          }
           className="w-full py-2.5 rounded-md border flex items-center justify-center gap-2 text-gray-700 bg-white hover:bg-gray-50 shadow-sm cursor-pointer"
         >
           <img
