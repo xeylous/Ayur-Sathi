@@ -222,7 +222,7 @@ export async function POST(req) {
           labId: account.labId,
         },
         process.env.JWT_SECRET,
-        { expiresIn: "1h" }
+        { expiresIn: "9h" }
       );
     } else {
       token = jwt.sign(
@@ -233,7 +233,7 @@ export async function POST(req) {
           uniqueId: account.uniqueId,
         },
         process.env.JWT_SECRET,
-        { expiresIn: "1h" }
+        { expiresIn: "9h" }
       );
     }
 

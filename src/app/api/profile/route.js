@@ -50,6 +50,65 @@ import Farmer from "@/models/Farmer";
 import User from "@/models/User";
 import jwt from "jsonwebtoken";
 
+export async function GET(req) {
+  try {
+    await connectDB();
+
+    // 🔹 1. Get token from cookies
+    const cookie = req.cookies.get("auth_token");
+    if (!cookie) {
+      return new Response(
+        JSON.stringify({ error: "No auth token provided" }),
+        { status: 401 }
+      );
+    }
+
+    const token = cookie.value;
+
+    // 🔹 2. Verify JWT
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      console.error("JWT verification failed:", err);
+      return new Response(
+        JSON.stringify({ error: "Invalid or expired token" }),
+        { status: 401 }
+      );
+    }
+
+    // 🔹 3. Extract query params (if you want to allow specifying type)
+    const url = new URL(req.url);
+    const type = url.searchParams.get("type") || "user"; // default to "user"
+
+    // 🔹 4. Choose model dynamically
+    const Model = type === "farmer" ? Farmer : User;
+
+    // 🔹 5. Fetch the user's profile
+    const userProfile = await Model.findOne({ uniqueId: decoded.uniqueId }).lean();
+    
+
+    if (!userProfile) {
+      return new Response(
+        JSON.stringify({ error: "Profile not found" }),
+        { status: 404 }
+      );
+    }
+
+    // 🔹 6. Return profile
+    return new Response(
+      JSON.stringify({ success: true, profile: userProfile }),
+      { status: 200 }
+    );
+  } catch (error) {
+    
+    return new Response(
+      JSON.stringify({ error: "Something went wrong" }),
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(req) {
   try {
     await connectDB();
@@ -71,7 +130,7 @@ export async function POST(req) {
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
-      console.error("JWT verification failed:", err);
+     
       return new Response(
         JSON.stringify({ error: "Invalid or expired token" }),
         { status: 401 }
@@ -119,7 +178,7 @@ export async function POST(req) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Profile update error:", error);
+    
     return new Response(
       JSON.stringify({ error: "Something went wrong" }),
       { status: 500 }
