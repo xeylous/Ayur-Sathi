@@ -1,7 +1,9 @@
+'use server';
 import CropUpload from "@/models/CropUpload";
 import { connectDB } from "@/lib/db";
 import cloudinary from "@/lib/cloudinary";
-import bwipjs from "bwip-js"; // 📦 npm install bwip-js
+import bwipjs from "bwip-js"; 
+import jwt from "jsonwebtoken";
 
 function generateBatchName(speciesId) {
   const year = new Date().getFullYear();
@@ -35,11 +37,36 @@ export async function POST(req) {
   try {
     await connectDB();
 
+    
+    // Verify JWT from cookies
+    const cookie = req.cookies.get("auth_token");
+    if (!cookie) {
+      return new Response(
+        JSON.stringify({ success: false, message: "No auth token provided" }),
+        { status: 401 }
+      );
+    }
+
+    const token = cookie.value;
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return new Response(
+        JSON.stringify({ success: false, message: "Invalid or expired token" }),
+        { status: 403 }
+      );
+    }
+
+    // ✅ Extract user details from token
+    const { uniqueId } = decoded;
+
+
     const body = await req.json();
-    const { gpsCoordinates, timestamp, uniqueId, speciesId, quantity } = body;
+    const { gpsCoordinates, timestamp, speciesId, quantity } = body;
 
     // ✅ Validate required fields
-    if (!gpsCoordinates || !speciesId || !uniqueId) {
+    if (!gpsCoordinates || !speciesId ) {
       return new Response(
         JSON.stringify({ success: false, message: "Missing required fields" }),
         { status: 400 }
