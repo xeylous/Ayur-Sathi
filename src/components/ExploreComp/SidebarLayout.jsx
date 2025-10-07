@@ -9,6 +9,7 @@ import AyurSaathiEcosystem from "./AyurSaathiTechnology";
 import AyurSaathiOrganizationalModel from "./AyurSaathiOrganizationalModel";
 import ApplyForLabs from "./ApplyForLabs";
 import PartnershipForm from "./PartnershipForm";
+import ApplyForManufacture from "./ApplyForManufacture";
 
 const sections = [
   {
@@ -62,6 +63,11 @@ const sections = [
     id: "exchange",
     title: "Lab Partnership",
     component: <ApplyForLabs />,
+  },
+  {
+    id: "manufacture",
+    title: "Manufacturer Partnership",
+    component: <ApplyForManufacture />,
   },
 ];
 
