@@ -17,7 +17,7 @@ export async function POST(req) {
       return NextResponse.json({ error: "Lab ID required" }, { status: 400 });
     }
 
-    // 1️⃣ Find the lab application
+    //  Find the lab application
     const lab = await LabApplication.findOne({ labId: labId });
     console.log("Found Lab:", lab);
     if (!lab) {
