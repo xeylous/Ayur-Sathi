@@ -2,9 +2,7 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/db";
 import AcceptedBatch from "@/models/AcceptedBatch";
-import { unique } from "next/dist/build/utils";
-import { u } from "react-router/dist/development/index-react-server-client-BYr9g50r";
-import { use } from "react";
+
 
 const uploadToCloudinary = (fileBuffer, fileName, folder = "labUpload") => {
   return new Promise((resolve, reject) => {
