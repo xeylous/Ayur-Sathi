@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/db";
 import CropUpload from "@/models/CropUpload";
+import jwt from "jsonwebtoken";
 
 export async function GET(req, { params }) {
   try {
@@ -28,7 +29,7 @@ export async function GET(req, { params }) {
     }
 
 
-    const { uniqueId } = params;
+    const { uniqueId } = await params;
 
     if (!uniqueId) {
       return new Response(
