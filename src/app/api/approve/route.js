@@ -13,11 +13,6 @@ export async function POST(req) {
      const body = await req.json();
     const { labId } = body;
 
-    console.log("=== APPROVE API DEBUG ===");
-    console.log("Full body received:", body);
-    console.log("Lab ID extracted:", labId);
-    console.log("Lab ID type:", typeof labId);
-
     if (!labId) {
       return NextResponse.json({ error: "Lab ID required" }, { status: 400 });
     }

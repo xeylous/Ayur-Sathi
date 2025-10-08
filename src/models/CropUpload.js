@@ -38,6 +38,12 @@ const CropUploadSchema = new mongoose.Schema(
       default: "Pending",
     },
     rejectionReason: { type: String, default: null },
+    acceptedBy: { type: String, default: null },
+    certificate: {
+      url: { type: String, default: null },
+      uploadedAt: { type: Date },
+    },
+    tests: { type: Object, default: {} },
   },
   { timestamps: true }
 );
