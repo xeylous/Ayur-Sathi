@@ -55,14 +55,6 @@ export async function POST(req) {
       600
     );
 
-    // const account = await model.create({
-    //   name,
-    //   email: normalizedEmail, // save lowercase
-    //   password: hashedPassword,
-    //   type,
-    //   uniqueId, // ✅ Save generated ID
-    // });
-    // console.log("generated account details:", account);
     return NextResponse.json({
       message: `OTP sent to ${email}. Please verify to complete registration.`,
       userData: {
