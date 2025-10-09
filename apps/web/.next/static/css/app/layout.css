@@ -107,6 +107,7 @@
     --color-green-600: oklch(62.7% 0.194 149.214);
     --color-green-700: oklch(52.7% 0.154 150.069);
     --color-green-800: oklch(44.8% 0.119 151.328);
+    --color-emerald-700: oklch(50.8% 0.118 165.612);
     --color-emerald-800: oklch(43.2% 0.095 166.913);
     --color-emerald-900: oklch(37.8% 0.077 168.94);
     --color-teal-50: oklch(98.4% 0.014 180.72);
@@ -1505,6 +1506,9 @@
   }
   .text-blue-800 {
     color: var(--color-blue-800);
+  }
+  .text-emerald-700 {
+    color: var(--color-emerald-700);
   }
   .text-emerald-800 {
     color: var(--color-emerald-800);

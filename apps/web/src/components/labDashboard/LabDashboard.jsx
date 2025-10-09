@@ -12,7 +12,7 @@ const LaboratoryPage = () => {
   const [activeTab, setActiveTab] = useState('batchVerification');
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen ">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="flex-1 ml-64 p-8 overflow-y-auto">
         <header className="mb-8">
