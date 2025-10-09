@@ -95,8 +95,9 @@ export default function CropHistory() {
                 </div>
 
                 {expandedId === item._id && (
-                  <div className="mt-4 pl-2 border-t pt-3 text-sm  animate-fadeIn">
-                    <p>
+                 <div className="mt-4 pl-2 border-t pt-3 text-sm animate-fadeIn flex flex-col sm:flex-row justify-between items-start gap-1">
+                   <div>
+                     <p>
                       <strong>Batch ID:</strong> {item.batchId}
                     </p>
                     <p>
@@ -107,18 +108,21 @@ export default function CropHistory() {
                       <strong>Created At:</strong>{" "}
                       {new Date(item.createdAt).toLocaleString("en-IN")}
                     </p>
+                   </div>
                     
-                    {item.batchBarCode?.url && (
-                      <div className="mt-3">
-                        <p className="font-medium mb-1">Batch Barcode:</p>
+                    <div>
+                      {item.batchBarCode?.url && (
+                      
+                       
                         
                         <img
                           src={item.batchBarCode.url}
                           alt="Batch Barcode"
-                          className="mt-2 w-32 h-32 object-contain border rounded"
+                          className=" mx-auto w-[80%] h-16 object-contain"
                         />
-                      </div>
+                     
                     )}
+                    </div>
                   </div>
                 )}
               </li>
