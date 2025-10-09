@@ -10,6 +10,13 @@
 !.yarn/releases
 !.yarn/versions
 
+# Include env files in any subfolder (like apps/web/.env.local)
+apps/*/.env
+apps/*/.env.local
+apps/*/.env.development.local
+apps/*/.env.test.local
+apps/*/.env.production.local
+
 # testing
 /coverage
 
