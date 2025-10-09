@@ -31,7 +31,7 @@ const BatchVerification = () => {
     setBatchLoading(true);
     try {
       const res = await fetch(
-        "http://localhost:3000/api/accepted-batch?status=Pending",
+        "/api/accepted-batch?status=Pending",
         {
           method: "GET",
           credentials: "include",
@@ -134,7 +134,7 @@ const BatchVerification = () => {
         : `Batch ${currentBatchId} DECLINED. Farmer notified.`;
 
     try {
-      const res = await fetch("http://localhost:3000/api/labverification", {
+      const res = await fetch("/api/labverification", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
