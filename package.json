@@ -9,5 +9,8 @@
     "build:web": "npm run build --workspace=web",
     "start:web": "npm run start --workspace=web",
     "dev:mobile": "npm run start --workspace=mobile"
+  },
+  "dependencies": {
+    "recharts": "^3.2.1"
   }
 }

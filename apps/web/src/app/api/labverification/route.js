@@ -26,8 +26,8 @@ export async function GET(req) {
       { status: 403 }
     );
   }
-const labId = decoded.labId || decoded.id;
-// console.log("Decoded labId:", labId);
+  const labId = decoded.labId || decoded.id;
+  // console.log("Decoded labId:", labId);
 
   // Extract batchId from query
   const { searchParams } = new URL(req.url);
@@ -51,12 +51,13 @@ const labId = decoded.labId || decoded.id;
 
   return NextResponse.json({ success: true, data: batch });
 }
-
 export async function POST(req) {
   await connectDB();
+  console.log("hello");
 
   // Verify token from cookies
   const cookie = req.cookies.get("auth_token");
+  
   if (!cookie) {
     return NextResponse.json(
       { success: false, message: "No auth token provided" },
@@ -76,10 +77,11 @@ export async function POST(req) {
   }
 
   const labId = decoded.labId || decoded.id;
-
+  console.log("Decoded labId:", labId);
   // Parse body
   const body = await req.json();
   const { batchId, action, remarks } = body; // "accept" or "reject"
+  console.log("Request body:", batchId, action, remarks);
 
   if (!batchId || !action) {
     return NextResponse.json(
@@ -96,7 +98,12 @@ export async function POST(req) {
       { status: 404 }
     );
   }
-
+  if (batch.status === "Verified" && action === "accept") {
+    return NextResponse.json(
+      { success: false, message: "Batch is already verified" },
+      { status: 400 }
+    );
+  }
   // Handle based on action
   if (action === "accept") {
     // Save to accepted batch schema

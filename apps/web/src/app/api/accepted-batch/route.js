@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/db";
 import AcceptedBatch from "@/models/AcceptedBatch";
 
-
 const uploadToCloudinary = (fileBuffer, fileName, folder = "labUpload") => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
@@ -16,17 +15,17 @@ const uploadToCloudinary = (fileBuffer, fileName, folder = "labUpload") => {
       },
       (error, result) => {
         if (error) reject(error);
-        else resolve({
-          publicId: result.public_id,
-          url: result.secure_url,
-        });
+        else
+          resolve({
+            publicId: result.public_id,
+            url: result.secure_url,
+          });
       }
     );
 
     stream.end(fileBuffer);
   });
 };
-
 
 export async function GET(req) {
   await connectDB();
@@ -57,6 +56,7 @@ export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status") || "pending";
+    console.log(status, decoded.labId);
 
     // Filter by both status and labId (from decoded token)
     const batches = await AcceptedBatch.find({
@@ -68,8 +68,16 @@ export async function GET(req) {
 
     const Data = batches.map((batch) => ({
       batchId: batch.batchId,
-      barcodeUrl: batch.cropData?.batchBarCode?.url || null,
-      speciesId: batch.cropData?.speciesId || null,
+
+      cropData: batch.cropData,
+      speciesId: batch.cropData.speciesId,
+      speciesName: batch.cropData.speciesId,
+      acceptedAt: batch.acceptedAt
+        ? new Date(batch.acceptedAt).toLocaleDateString()
+        : null,
+      harvestDate: batch.cropData?.timestamp
+        ? new Date(batch.cropData.timestamp).toLocaleDateString()
+        : null,
     }));
 
     return NextResponse.json({ success: true, data: Data });
@@ -81,7 +89,6 @@ export async function GET(req) {
     );
   }
 }
-
 
 export async function POST(req) {
   try {

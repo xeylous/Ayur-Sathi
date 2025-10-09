@@ -1,66 +1,30 @@
 {
   "node": {
-    "7ff4c2ccd7432bfae2b145b85f97a4b87e5d0907e9": {
+    "7f4f575efec36786b9674d0adc2a11321e1b24f1d3": {
       "workers": {
         "app/api/login/route": {
-          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227ff4c2ccd7432bfae2b145b85f97a4b87e5d0907e9%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%2C%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f31986a338313c36666602b0b96a1ee86601c5c3c%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%5D&__client_imported__=!",
-          "async": false
-        },
-        "app/api/profile/route": {
-          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%2C%5B%7B%22id%22%3A%22402dcd6ff4b69c29bb2ed4f4192459d2b1fb51c787%22%2C%22exportedName%22%3A%22GET%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%2C%7B%22id%22%3A%2240817627bf6f73fc9a86c89ee2470284ef7684dc97%22%2C%22exportedName%22%3A%22POST%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%5D%5D%2C%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f31986a338313c36666602b0b96a1ee86601c5c3c%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%2C%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227ff4c2ccd7432bfae2b145b85f97a4b87e5d0907e9%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%5D&__client_imported__=!",
+          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227f4f575efec36786b9674d0adc2a11321e1b24f1d3%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%2C%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f85516532ca66d529a945525e169531810a88a606%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%5D&__client_imported__=!",
           "async": false
         }
       },
       "layer": {
-        "app/api/login/route": "rsc",
-        "app/api/profile/route": "rsc"
+        "app/api/login/route": "rsc"
       },
-      "filename": "../E:\\Hackathon\\Ayur-Sathi\\apps\\web\\src\\models\\User.js",
+      "filename": "../D:\\ayurtrace\\Ayur-Sathi\\apps\\web\\src\\models\\User.js",
       "exportedName": "default"
     },
-    "7f31986a338313c36666602b0b96a1ee86601c5c3c": {
+    "7f85516532ca66d529a945525e169531810a88a606": {
       "workers": {
         "app/api/login/route": {
-          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227ff4c2ccd7432bfae2b145b85f97a4b87e5d0907e9%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%2C%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f31986a338313c36666602b0b96a1ee86601c5c3c%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%5D&__client_imported__=!",
-          "async": false
-        },
-        "app/api/profile/route": {
-          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%2C%5B%7B%22id%22%3A%22402dcd6ff4b69c29bb2ed4f4192459d2b1fb51c787%22%2C%22exportedName%22%3A%22GET%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%2C%7B%22id%22%3A%2240817627bf6f73fc9a86c89ee2470284ef7684dc97%22%2C%22exportedName%22%3A%22POST%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%5D%5D%2C%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f31986a338313c36666602b0b96a1ee86601c5c3c%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%2C%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227ff4c2ccd7432bfae2b145b85f97a4b87e5d0907e9%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%5D&__client_imported__=!",
+          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227f4f575efec36786b9674d0adc2a11321e1b24f1d3%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%2C%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f85516532ca66d529a945525e169531810a88a606%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%5D&__client_imported__=!",
           "async": false
         }
       },
       "layer": {
-        "app/api/login/route": "rsc",
-        "app/api/profile/route": "rsc"
+        "app/api/login/route": "rsc"
       },
-      "filename": "../E:\\Hackathon\\Ayur-Sathi\\apps\\web\\src\\models\\Farmer.js",
+      "filename": "../D:\\ayurtrace\\Ayur-Sathi\\apps\\web\\src\\models\\Farmer.js",
       "exportedName": "default"
-    },
-    "402dcd6ff4b69c29bb2ed4f4192459d2b1fb51c787": {
-      "workers": {
-        "app/api/profile/route": {
-          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%2C%5B%7B%22id%22%3A%22402dcd6ff4b69c29bb2ed4f4192459d2b1fb51c787%22%2C%22exportedName%22%3A%22GET%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%2C%7B%22id%22%3A%2240817627bf6f73fc9a86c89ee2470284ef7684dc97%22%2C%22exportedName%22%3A%22POST%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%5D%5D%2C%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f31986a338313c36666602b0b96a1ee86601c5c3c%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%2C%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227ff4c2ccd7432bfae2b145b85f97a4b87e5d0907e9%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%5D&__client_imported__=!",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/api/profile/route": "rsc"
-      },
-      "filename": "../E:\\Hackathon\\Ayur-Sathi\\apps\\web\\src\\app\\api\\profile\\route.js",
-      "exportedName": "GET"
-    },
-    "40817627bf6f73fc9a86c89ee2470284ef7684dc97": {
-      "workers": {
-        "app/api/profile/route": {
-          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%2C%5B%7B%22id%22%3A%22402dcd6ff4b69c29bb2ed4f4192459d2b1fb51c787%22%2C%22exportedName%22%3A%22GET%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%2C%7B%22id%22%3A%2240817627bf6f73fc9a86c89ee2470284ef7684dc97%22%2C%22exportedName%22%3A%22POST%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%5D%5D%2C%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f31986a338313c36666602b0b96a1ee86601c5c3c%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%2C%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227ff4c2ccd7432bfae2b145b85f97a4b87e5d0907e9%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%5D&__client_imported__=!",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/api/profile/route": "rsc"
-      },
-      "filename": "../E:\\Hackathon\\Ayur-Sathi\\apps\\web\\src\\app\\api\\profile\\route.js",
-      "exportedName": "POST"
     }
   },
   "edge": {},
