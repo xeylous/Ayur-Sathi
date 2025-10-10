@@ -1,5 +1,4 @@
 {
-  "/labId/[labId]/page": "app/labId/[labId]/page.js",
-  "/login/page": "app/login/page.js",
-  "/explore/page": "app/explore/page.js"
+  "/api/certified-batch/route": "app/api/certified-batch/route.js",
+  "/page": "app/page.js"
 }
