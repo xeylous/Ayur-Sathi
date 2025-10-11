@@ -1,8 +1,5 @@
 # 🌿 AyurSaathi – Blockchain-based Traceability & Fair Marketplace for Ayurvedic Herbs  
 
-**Smart India Hackathon 2025 – Problem Statement ID: 25027**  
-*Team: HashCrafters*  
-
 ---
 
 ## 📌 Overview  
