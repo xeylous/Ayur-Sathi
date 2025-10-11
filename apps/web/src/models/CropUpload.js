@@ -34,7 +34,7 @@ const CropUploadSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Pending", "Verified", "Rejected"],
+      enum: ["Pending", "Rejected", "Approved"],
       default: "Pending",
     },
     rejectionReason: { type: String, default: null },

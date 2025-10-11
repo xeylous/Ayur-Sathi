@@ -1,25 +1,9 @@
 {
   "pages": {
-    "/layout": [
+    "/api/accepted-batch/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/layout.css",
-      "static/chunks/app/layout.js"
-    ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-    ],
-    "/api/verify-token/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/verify-token/route.js"
-    ],
-    "/api/certified-batch/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/certified-batch/route.js"
+      "static/chunks/app/api/accepted-batch/route.js"
     ]
   }
 }
