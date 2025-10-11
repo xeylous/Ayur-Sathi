@@ -22,7 +22,7 @@ const AcceptedBatchSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Pending", "Accepted", "Rejected"],
+      enum: ["Pending", "Rejected", "Approved"],
       default: "Pending",
     },
   },

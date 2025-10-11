@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import cloudinary from "@/lib/cloudinary";
 import { connectDB } from "@/lib/db";
 import AcceptedBatch from "@/models/AcceptedBatch";
+import CropUpload from "@/models/CropUpload";
 
 const uploadToCloudinary = (fileBuffer, fileName, folder = "labUpload") => {
   return new Promise((resolve, reject) => {
@@ -64,7 +66,7 @@ export async function GET(req) {
       acceptedBy: decoded.labId,
     }).lean();
 
-    console.log("Fetched batches:", batches);
+    // console.log("Fetched batches:", batches);
 
     const Data = batches.map((batch) => ({
       batchId: batch.batchId,
@@ -94,7 +96,7 @@ export async function POST(req) {
   try {
     await connectDB();
 
-    // Verify JWT from cookies
+    // 🧩 Verify JWT from cookies
     const cookie = req.cookies.get("auth_token");
     if (!cookie) {
       return NextResponse.json(
@@ -104,6 +106,8 @@ export async function POST(req) {
     }
 
     const token = cookie.value;
+    // console.log("token :",token );
+
     let decoded;
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -114,42 +118,79 @@ export async function POST(req) {
       );
     }
 
-    // Extract form data (because it includes a file)
+    // 🧩 Extract form data
     const formData = await req.formData();
     const batchId = formData.get("batchId");
     const status = formData.get("status");
     const note = formData.get("note") || null;
-    const tests = JSON.parse(formData.get("tests") || "{}");
-    const certificate = formData.get("certificate"); // file
+    const testsRaw = formData.get("tests");
+    const certificate = formData.get("certificate");
+    // console.log("formdata :",formData);
 
-    if (!batchId) {
+    if (!batchId || !status) {
       return NextResponse.json(
-        { success: false, message: "Batch ID is required" },
+        { success: false, message: "Batch ID and status are required" },
         { status: 400 }
       );
     }
 
-    //  Find crop
-    const crop = await CropUpload.findOne({ batchId });
-    if (!crop) {
+    let tests = {};
+    if (testsRaw) {
+      try {
+        tests = JSON.parse(testsRaw);
+      } catch {
+        return NextResponse.json(
+          { success: false, message: "Invalid JSON in tests field" },
+          { status: 400 }
+        );
+      }
+    }
+
+    // 🧩 Upload certificate if present
+    let uploadedFile = null;
+    if (certificate && certificate.size > 0) {
+      try {
+        const buffer = Buffer.from(await certificate.arrayBuffer());
+        uploadedFile = await uploadToCloudinary(buffer, certificate.name);
+      } catch (err) {
+        console.error("Cloudinary upload failed:", err);
+        return NextResponse.json(
+          { success: false, message: "Failed to upload certificate" },
+          { status: 500 }
+        );
+      }
+    }
+    console.log("Incoming batchId:", batchId, "Type:", typeof batchId);
+    const acceptedBatch = await AcceptedBatch.findOne({ batchId });
+    console.log("DB found:", acceptedBatch);
+
+    if (!acceptedBatch) {
       return NextResponse.json(
-        { success: false, message: "Crop not found for this batch ID" },
+        { success: false, message: "Accepted batch not found" },
         { status: 404 }
       );
     }
 
-    // Upload certificate (if provided)
-    let uploadedFile = null;
-    if (certificate && certificate.size > 0) {
-      const buffer = Buffer.from(await certificate.arrayBuffer());
-      uploadedFile = await uploadToCloudinary(buffer, certificate.name);
+    acceptedBatch.status = status;
+    console.log("Updated status to:", status);
+    acceptedBatch.acceptedBy = decoded.labId || decoded.uniqueId;
+    acceptedBatch.acceptedAt = new Date();
+
+    await acceptedBatch.save();
+
+    // 🧩 Find and update CropUpload
+    const crop = await CropUpload.findOne({ batchId });
+    if (!crop) {
+      return NextResponse.json(
+        { success: false, message: "CropUpload entry not found" },
+        { status: 404 }
+      );
     }
 
-    // Update crop details
-    crop.status = status || crop.status;
+    crop.status = status;
     crop.rejectionReason = note || null;
     crop.acceptedBy = decoded.labId || decoded.uniqueId;
-    crop.tests = tests || {};
+    crop.tests = tests;
 
     if (uploadedFile) {
       crop.certificate = {
@@ -162,12 +203,21 @@ export async function POST(req) {
 
     return NextResponse.json({
       success: true,
-      message: "Batch updated successfully",
+      message: "Batch and CropUpload updated successfully",
+      data: {
+        batchId,
+        status,
+        certificate: uploadedFile ? uploadedFile.url : crop.certificate.url,
+      },
     });
   } catch (error) {
-    console.error("POST /lab/update-batch error:", error);
+    console.error("POST /accepted-batch error:", error);
     return NextResponse.json(
-      { success: false, message: error.message },
+      {
+        success: false,
+        message: "Internal server error",
+        error: error.message,
+      },
       { status: 500 }
     );
   }
