@@ -1,3 +1,4 @@
 {
-  "/api/accepted-batch/route": "app/api/accepted-batch/route.js"
+  "/labId/[labId]/page": "app/labId/[labId]/page.js",
+  "/login/page": "app/login/page.js"
 }

@@ -160,9 +160,9 @@ export async function POST(req) {
         );
       }
     }
-    console.log("Incoming batchId:", batchId, "Type:", typeof batchId);
+    // console.log("Incoming batchId:", batchId, "Type:", typeof batchId);
     const acceptedBatch = await AcceptedBatch.findOne({ batchId });
-    console.log("DB found:", acceptedBatch);
+    // console.log("DB found:", acceptedBatch);
 
     if (!acceptedBatch) {
       return NextResponse.json(
@@ -172,7 +172,7 @@ export async function POST(req) {
     }
 
     acceptedBatch.status = status;
-    console.log("Updated status to:", status);
+    // console.log("Updated status to:", status);
     acceptedBatch.acceptedBy = decoded.labId || decoded.uniqueId;
     acceptedBatch.acceptedAt = new Date();
 
