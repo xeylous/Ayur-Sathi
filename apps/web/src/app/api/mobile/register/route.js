@@ -7,6 +7,16 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import redis from "@/lib/redis";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*", // or restrict later
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
 export async function POST(req) {
   await connectDB();
 
@@ -14,7 +24,7 @@ export async function POST(req) {
     const { name, email, password, type } = await req.json();
 
     if (!name || !email || !password || !type) {
-      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+      return NextResponse.json({ error: "All fields are required" }, { status: 400 , headers: corsHeaders});
     }
 
     const normalizedEmail = email.toLowerCase();
@@ -26,14 +36,14 @@ export async function POST(req) {
     } else if (type === "farmer") {
       model = Farmer;
     } else {
-      return NextResponse.json({ error: "Invalid type" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid type" }, { status: 400 , headers: corsHeaders });
     }
 
     const existing = await model.findOne({ email: normalizedEmail });
     if (existing) {
       return NextResponse.json(
         { error: `An account already exists with this email as ${type}` },
-        { status: 400 }
+        { status: 400 , headers: corsHeaders }
       );
     }
 
@@ -61,6 +71,6 @@ export async function POST(req) {
     });
   } catch (err) {
     console.error("Error in mobile register:", err);
-    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
+    return NextResponse.json({ error: "Something went wrong" }, { status: 500 , headers: corsHeaders });
   }
 }
