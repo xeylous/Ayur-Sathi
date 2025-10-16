@@ -1,8 +1,8 @@
-// File: E:\Hackathon\Ayur-Sathi\apps\web\src\app\api\accepted-batch\route.js
-import * as entry from '../../../../../src/app/api/accepted-batch/route.js'
+// File: E:\Hackathon\Ayur-Sathi\apps\web\src\app\api\verify-token\route.js
+import * as entry from '../../../../../src/app/api/verify-token/route.js'
 import type { NextRequest } from 'next/server.js'
 
-type TEntry = typeof import('../../../../../src/app/api/accepted-batch/route.js')
+type TEntry = typeof import('../../../../../src/app/api/verify-token/route.js')
 
 type SegmentParams<T extends Object = any> = T extends Record<string, any>
   ? { [K in keyof T]: T[K] extends string ? string | string[] | undefined : never }

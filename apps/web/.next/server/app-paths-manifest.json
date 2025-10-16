@@ -1,3 +1,3 @@
 {
-  "/api/accepted-batch/route": "app/api/accepted-batch/route.js"
+  "/page": "app/page.js"
 }

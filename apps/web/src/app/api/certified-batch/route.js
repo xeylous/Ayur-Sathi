@@ -18,7 +18,7 @@ export async function GET(req) {
      const token = cookie.value;
     // Decode and verify token
     let decoded;
-    console.log("Token:", token);
+    // console.log("Token:", token);
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
@@ -33,9 +33,9 @@ export async function GET(req) {
 
     // Get verified crop uploads
     const verifiedCrops = await CropUpload.find({
-      status: "Verified",
+      status: "Approved",
     }).sort({ createdAt: -1 });
-    console.log("Verified Crops:", verifiedCrops);
+    // console.log("Verified Crops:", verifiedCrops);
 
     return NextResponse.json({
       success: true,
