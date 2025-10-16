@@ -1,4 +1,4 @@
-// File: E:\Hackathon\Ayur-Sathi\apps\web\src\app\api\accepted-batch\route.js
+// File: D:\ayurtrace\Ayur-Sathi\apps\web\src\app\api\accepted-batch\route.js
 import * as entry from '../../../../../src/app/api/accepted-batch/route.js'
 import type { NextRequest } from 'next/server.js'
 

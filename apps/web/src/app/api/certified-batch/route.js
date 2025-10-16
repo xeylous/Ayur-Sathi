@@ -33,7 +33,8 @@ export async function GET(req) {
 
     // Get verified crop uploads
     const verifiedCrops = await CropUpload.find({
-      status: "Verified",
+      status: "Approved",
+      status: "Rejected"
     }).sort({ createdAt: -1 });
     console.log("Verified Crops:", verifiedCrops);
 

@@ -1,49 +1,4 @@
-// 'use server';
-// import { connectDB } from "@/lib/db";
-// import Farmer from "@/models/Farmer";
-// import User from "@/models/User";
 
-// export async function POST(req) {
-//   try {
-//     await connectDB();
-
-//     const { uniqueId, fullName, phone, email, address, pinCode, type } = await req.json();
-
-//     if (!uniqueId || !type) {
-//       return new Response(
-//         JSON.stringify({ error: "uniqueId and type are required" }),
-//         { status: 400 }
-//       );
-//     }
-
-//     // Choose the correct model
-//     const Model = type === "farmer" ? Farmer : User;
-
-//     // Update or create the profile
-//     const updatedProfile = await Model.findOneAndUpdate(
-//       { uniqueId },
-//       {
-//         name: fullName,
-//         phone,
-//         email,
-//         address,
-//         pinCode
-//       },
-//       { new: true, upsert: true } // create if not exists
-//     );
-
-//     return new Response(
-//       JSON.stringify({ success: true, message : "Profile updated successfully" }),
-//       { status: 200 }
-//     );
-//   } catch (error) {
-//     console.error(error);
-//     return new Response(
-//       JSON.stringify({ error: "Something went wrong" }),
-//       { status: 500 }
-//     );
-//   }
-// }
 'use server';
 import { connectDB } from "@/lib/db";
 import Farmer from "@/models/Farmer";

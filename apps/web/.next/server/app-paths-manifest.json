@@ -1,3 +1,6 @@
 {
-  "/api/accepted-batch/route": "app/api/accepted-batch/route.js"
+  "/login/page": "app/login/page.js",
+  "/labId/[labId]/page": "app/labId/[labId]/page.js",
+  "/id/[uniqueId]/page": "app/id/[uniqueId]/page.js",
+  "/marketplace/page": "app/marketplace/page.js"
 }

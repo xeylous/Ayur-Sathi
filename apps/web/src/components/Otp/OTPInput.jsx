@@ -54,7 +54,7 @@ export default function OTPPage({ length = 6, uniqueId, onClose }) {
       const data = await res.json();
 
       if (res.ok) {
-        setMessage("✅ OTP verified successfully! Redirecting...");
+        setMessage(" OTP verified successfully! Redirecting...");
         setTimeout(() => router.push("/login"), 1500);
       } else {
         const remaining = attemptsLeft - 1;
@@ -62,14 +62,14 @@ export default function OTPPage({ length = 6, uniqueId, onClose }) {
         setDisabled(false);
 
         if (remaining > 0) {
-          setMessage(`❌ Incorrect OTP. You have ${remaining} attempt(s) left.`);
+          setMessage(` Incorrect OTP. You have ${remaining} attempt(s) left.`);
         } else {
           setMessage("⚠️ Registration failed. Redirecting...");
           setTimeout(() => router.push("/register"), 2000);
         }
       }
     } catch (err) {
-      setMessage("❌ Server error. Please try again.");
+      setMessage("Server error. Please try again.");
       setDisabled(false);
     }
   };
@@ -101,17 +101,17 @@ export default function OTPPage({ length = 6, uniqueId, onClose }) {
       const data = await res.json();
 
       if (!res.ok) {
-        setMessage(data.error || "❌ Failed to resend OTP. Please try again.");
+        setMessage(data.error || " Failed to resend OTP. Please try again.");
         return;
       }
 
       // ✅ Restart cooldown after resend
       setResendDisabled(true);
       setTimer(30);
-      setMessage(data.message || "✅ OTP resent. Please check your email.");
+      setMessage(data.message || " OTP resent. Please check your email.");
     } catch (error) {
       console.error("Resend OTP failed:", error);
-      setMessage("❌ Failed to resend OTP. Please try again.");
+      setMessage(" Failed to resend OTP. Please try again.");
     }
   };
 

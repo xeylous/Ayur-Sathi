@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -14,40 +13,99 @@ export default function UserProfile() {
     pinCode: "",
   });
 
-  // Load saved data from localStorage
+  const [uniqueId, setUniqueId] = useState("");
+  const [isEditing, setIsEditing] = useState(false); // 🔧 for edit mode
+
+  // ✅ Fetch profile data on mount
   useEffect(() => {
-    const savedUser = localStorage.getItem("userProfile");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
+    const fetchProfile = async () => {
+      try {
+        // Step 1️⃣: Verify token
+        const tokenRes = await fetch("/api/verify-token", { method: "GET" });
+        const tokenData = await tokenRes.json();
+
+        if (!tokenRes.ok || !tokenData?.user) {
+          toast.error("⚠️ Session expired. Please log in again.");
+          return;
+        }
+
+        const userType = tokenData.user.type || "user";
+        const email = tokenData.user.email;
+        const id = tokenData.user.uniqueId;
+
+        setUniqueId(id);
+
+        // Step 2️⃣: Fetch profile details
+        const res = await fetch(`/api/profile?type=${userType}`, {
+          method: "GET",
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success && data.profile) {
+          setUser({
+            fullName: data.profile.name || "",
+            phone: data.profile.phone || "",
+            email: email || "",
+            address: data.profile.address || "",
+            pinCode: data.profile.pinCode || "",
+          });
+        } else {
+          toast.info("📝 No profile found. Please fill in your details.");
+        }
+      } catch (err) {
+        console.error("Profile fetch failed:", err);
+        toast.error("❌ Failed to load user profile.");
+      }
+    };
+
+    fetchProfile();
   }, []);
 
-  // Handle input changes
+  // ✅ Handle input change
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  // Save data to localStorage
-  const handleSave = () => {
-    if (
-      !user.fullName ||
-      !user.phone ||
-      !user.email ||
-      !user.address ||
-      !user.pinCode
-    ) {
-      toast.error("⚠️ Please fill in all fields before saving.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+  // ✅ Save / Update profile
+  const handleSave = async () => {
+    const { fullName, phone, email, address, pinCode } = user;
+
+    if (!fullName || !phone || !email || !address || !pinCode) {
+      toast.error("⚠️ Please fill all fields!");
       return;
     }
 
-    localStorage.setItem("userProfile", JSON.stringify(user));
-    toast.success("✅ User details saved successfully!", {
-      position: "top-right",
-      autoClose: 3000,
-    });
+    if (!/^\d{10}$/.test(phone)) {
+      toast.error("📞 Phone number must be 10 digits!");
+      return;
+    }
+
+    if (!/^\d{6}$/.test(pinCode)) {
+      toast.error("📍 Pincode must be 6 digits!");
+      return;
+    }
+
+    const payload = { uniqueId, type: "user", ...user };
+
+    try {
+      const res = await fetch("/api/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        toast.success("✅ Profile updated successfully!");
+        setIsEditing(false); // Lock form again
+      } else {
+        toast.error(data.error || "❌ Failed to update profile.");
+      }
+    } catch (err) {
+      console.error("Error saving profile:", err);
+      toast.error("⚠️ Error saving profile!");
+    }
   };
 
   return (
@@ -68,7 +126,12 @@ export default function UserProfile() {
               name="fullName"
               value={user.fullName}
               onChange={handleChange}
-              className="mt-1 w-full border-b-2 border-gray-300 focus:border-green-600 focus:outline-none p-2 bg-transparent"
+              disabled={!isEditing}
+              className={`mt-1 w-full border-b-2 ${
+                isEditing
+                  ? "border-green-600 focus:border-green-700"
+                  : "border-gray-300 bg-gray-100 cursor-not-allowed"
+              } focus:outline-none p-2 bg-transparent`}
               placeholder="Enter full name"
             />
           </div>
@@ -79,11 +142,18 @@ export default function UserProfile() {
               Phone Number
             </label>
             <input
-              type="tel"
+              type="text"
+              inputMode="numeric"
               name="phone"
               value={user.phone}
+              maxLength={10}
               onChange={handleChange}
-              className="mt-1 w-full border-b-2 border-gray-300 focus:border-green-600 focus:outline-none p-2 bg-transparent"
+              disabled={!isEditing}
+              className={`mt-1 w-full border-b-2 ${
+                isEditing
+                  ? "border-green-600 focus:border-green-700"
+                  : "border-gray-300 bg-gray-100 cursor-not-allowed"
+              } focus:outline-none p-2 bg-transparent`}
               placeholder="Enter phone number"
             />
           </div>
@@ -97,8 +167,8 @@ export default function UserProfile() {
               type="email"
               name="email"
               value={user.email}
-              onChange={handleChange}
-              className="mt-1 w-full border-b-2 border-gray-300 focus:border-green-600 focus:outline-none p-2 bg-transparent"
+              disabled
+              className="mt-1 w-full border-b-2 border-gray-300 cursor-not-allowed p-2 bg-transparent"
               placeholder="Enter email"
             />
           </div>
@@ -110,15 +180,22 @@ export default function UserProfile() {
             </label>
             <input
               type="text"
+              inputMode="numeric"
               name="pinCode"
               value={user.pinCode}
+              maxLength={6}
               onChange={handleChange}
-              className="mt-1 w-full border-b-2 border-gray-300 focus:border-green-600 focus:outline-none p-2 bg-transparent"
+              disabled={!isEditing}
+              className={`mt-1 w-full border-b-2 ${
+                isEditing
+                  ? "border-green-600 focus:border-green-700"
+                  : "border-gray-300 bg-gray-100 cursor-not-allowed"
+              } focus:outline-none p-2 bg-transparent`}
               placeholder="Enter pin code"
             />
           </div>
 
-          {/* Address (full width always) */}
+          {/* Address */}
           <div className="sm:col-span-2">
             <label className="block text-sm font-medium text-gray-700">
               Address
@@ -127,8 +204,13 @@ export default function UserProfile() {
               name="address"
               value={user.address}
               onChange={handleChange}
+              disabled={!isEditing}
               rows={3}
-              className="mt-1 w-full border-b-2 border-gray-300 focus:border-green-600 focus:outline-none p-2 bg-transparent resize-none"
+              className={`mt-1 w-full border-b-2 ${
+                isEditing
+                  ? "border-green-600 focus:border-green-700"
+                  : "border-gray-300 bg-gray-100 cursor-not-allowed"
+              } focus:outline-none p-2 bg-transparent resize-none`}
               placeholder="Enter address"
             />
           </div>
@@ -138,38 +220,33 @@ export default function UserProfile() {
             <button
               type="button"
               onClick={handleSave}
-              className="flex-1 text-base font-medium text-black hover:text-white bg-[#90A955] hover:bg-[#4F772D] py-3 rounded-lg text-center transition"
+              disabled={!isEditing}
+              className={`flex-1 text-base font-medium ${
+                isEditing
+                  ? "text-black hover:text-white bg-[#90A955] hover:bg-[#4F772D]"
+                  : "text-gray-400 bg-gray-200 cursor-not-allowed"
+              } py-3 rounded-lg text-center transition`}
             >
               Save
             </button>
 
             <button
               type="button"
-              onClick={() => {
-                localStorage.removeItem("userProfile");
-                setUser({
-                  fullName: "",
-                  phone: "",
-                  email: "",
-                  address: "",
-                  pinCode: "",
-                });
-                toast.info("Profile data cleared!", {
-                  position: "top-right",
-                  autoClose: 3000,
-                });
-              }}
-              className="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-500 hover:text-white transition"
+              onClick={() => setIsEditing(!isEditing)}
+              className={`flex-1 py-3 rounded-lg font-semibold transition ${
+                isEditing
+                  ? "bg-gray-400 text-white hover:bg-gray-500"
+                  : "bg-yellow-400 text-black hover:bg-yellow-500"
+              }`}
             >
-              Clear
+              {isEditing ? "Cancel" : "Edit"}
             </button>
           </div>
         </form>
       </div>
 
-      {/* Toast Container */}
-      <ToastContainer />
+      {/* Toasts */}
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }
-
