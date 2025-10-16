@@ -2,6 +2,18 @@ import { NextResponse } from "next/server";
 import redis from "@/lib/redis";
 import nodemailer from "nodemailer";
 
+// ✅ Define CORS headers once
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*", // or restrict later
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+// ✅ Handle preflight request (important!)
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
 export async function POST(req, context) {
   const { uniqueId } = await context.params;
 
@@ -9,7 +21,7 @@ export async function POST(req, context) {
     // ✅ Get pending user data from Redis
     const userDataRaw = await redis.get(`pending_user:${uniqueId}`);
     if (!userDataRaw) {
-      return NextResponse.json({ error: "User not found or registration expired" }, { status: 404 });
+      return NextResponse.json({ error: "User not found or registration expired" }, { status: 404 , headers: corsHeaders  });
     }
 
     const user = JSON.parse(userDataRaw);
@@ -50,6 +62,6 @@ export async function POST(req, context) {
     return NextResponse.json({ message: "OTP sent to your email" });
   } catch (err) {
     console.error("Error sending OTP:", err);
-    return NextResponse.json({ error: "Failed to send OTP" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to send OTP" }, { status: 500 , headers: corsHeaders   });
   }
 }
