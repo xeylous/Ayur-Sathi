@@ -1,32 +1,5 @@
 {
-  "node": {
-    "7ff4c2ccd7432bfae2b145b85f97a4b87e5d0907e9": {
-      "workers": {
-        "app/api/login/route": {
-          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227ff4c2ccd7432bfae2b145b85f97a4b87e5d0907e9%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%2C%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f31986a338313c36666602b0b96a1ee86601c5c3c%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%5D&__client_imported__=!",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/api/login/route": "rsc"
-      },
-      "filename": "../E:\\Hackathon\\Ayur-Sathi\\apps\\web\\src\\models\\User.js",
-      "exportedName": "default"
-    },
-    "7f31986a338313c36666602b0b96a1ee86601c5c3c": {
-      "workers": {
-        "app/api/login/route": {
-          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227ff4c2ccd7432bfae2b145b85f97a4b87e5d0907e9%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%2C%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f31986a338313c36666602b0b96a1ee86601c5c3c%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%5D&__client_imported__=!",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/api/login/route": "rsc"
-      },
-      "filename": "../E:\\Hackathon\\Ayur-Sathi\\apps\\web\\src\\models\\Farmer.js",
-      "exportedName": "default"
-    }
-  },
+  "node": {},
   "edge": {},
   "encryptionKey": "d3TEERoCXGEwFDAii16VAtNIqOf1PTyMJkUfQDrzNMk="
 }
