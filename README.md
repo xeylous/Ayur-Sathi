@@ -67,7 +67,7 @@ The Ayurvedic herbal supply chain in India is highly fragmented, with issues lik
 
 ---
 
-## 📲 How It Works (Flow)
+##  How It Works (Flow)
 
 1. **Farmer Harvests Crop** → sends details via SMS/app → blockchain logs event.  
 2. **Lab Tests Sample** → results + certificate uploaded → blockchain validates.  
