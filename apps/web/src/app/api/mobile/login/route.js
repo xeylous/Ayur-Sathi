@@ -134,6 +134,7 @@ let response;
             email: account.email,
             uniqueId: account.uniqueId || account._id,
             type,
+            verified: account.verified || false,
           },
         },
         { status: 200 }
