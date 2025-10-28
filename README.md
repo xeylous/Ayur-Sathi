@@ -6,10 +6,10 @@
 The Ayurvedic herbal supply chain in India is highly fragmented, with issues like adulteration, mislabeling, lack of provenance, and unfair pricing for farmers.  
 
 **AyurSaathi** is a blockchain-powered traceability and fair marketplace platform that ensures:  
-- ✅ **Authenticity** – herbs tracked from farm to consumer  
-- ✅ **Transparency** – every stage logged immutably on blockchain  
-- ✅ **Fair Pricing** – farmers receive government-set rates  
-- ✅ **Consumer Trust** – QR code reveals complete product provenance  
+- **Authenticity** – herbs tracked from farm to consumer  
+- **Transparency** – every stage logged immutably on blockchain  
+- **Fair Pricing** – farmers receive government-set rates  
+- **Consumer Trust** – QR code reveals complete product provenance  
 
 ---
 
