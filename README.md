@@ -52,7 +52,7 @@ The Ayurvedic herbal supply chain in India is highly fragmented, with issues lik
 
 ---
 
-## 🧑‍💻 Tech Stack  
+## Tech Stack  
 
 | Layer            | Technology |
 |------------------|------------|
