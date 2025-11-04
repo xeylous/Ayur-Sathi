@@ -13,7 +13,7 @@ The Ayurvedic herbal supply chain in India is highly fragmented, with issues lik
 
 ---
 
-## 🛠️ Core Features  
+##  Core Features  
 
 ### 1. **Farmer Integration**  
 - Farmers record **geo-tagged collection events** via **mobile app or SMS/IVR**.  
