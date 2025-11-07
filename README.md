@@ -44,7 +44,7 @@ The Ayurvedic herbal supply chain in India is highly fragmented, with issues lik
   - Processing steps & sustainability proofs  
 - Products purchasable via **fair marketplace** at verified rates.  
 
-### 6. **Admin & Dashboards**  
+### 6. **Admin Dashboards**  
 - Central admin panel for:  
   - Monitoring batches & supply chain health  
   - Generating compliance/export reports  
