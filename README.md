@@ -60,7 +60,7 @@ The Ayurvedic herbal supply chain in India is highly fragmented, with issues lik
 | **Backend**      | Node.js, Express.js |
 | **Blockchain**   | Hyperledger Fabric (permissioned ledger) |
 | **Database**     | MongoDB (off-chain data & cache) |
-| **Communication**| SMS/IVR (Twilio, Gupshup, Exotel) |
+| **Communication**| SMS/IVR (Twilio, Exotel) |
 | **AI/Services**  | Google Speech-to-Text, Bhashini (IVR/local language) |
 | **Auth & OTP**   | JWT, bcrypt, Nodemailer (email), SMS OTP |
 | **Deployment**   | Vercel (frontend), Docker (backend), Cloud/On-prem blockchain |
