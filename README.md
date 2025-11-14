@@ -16,7 +16,7 @@ The Ayurvedic herbal supply chain in India is highly fragmented, with issues lik
 ##  Core Features  
 
 ### 1. **Farmer Integration**  
-- Farmers record **geo-tagged collection events** via **mobile app or SMS/IVR**.  
+- Farmers record **geo-tagged collection events** via **mobile app or SMS**.  
 - Local language support for ease of use.  
 - Events include crop type, weight, location, and timestamp.  
 
