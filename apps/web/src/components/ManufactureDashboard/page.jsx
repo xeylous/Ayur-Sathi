@@ -5,6 +5,7 @@ import BatchVerification from "./BatchVerification";
 import LogProcessing from "./LogProcessing";
 import Analytics from "./Analytics";
 import PaymentWithdraw from "./PaymentWithdraw";
+
 import Toast from "./Toast";
 
 import "./styles.css";
@@ -36,7 +37,7 @@ export default function ManufactureDashboard() {
         {activeTab === "log" && <LogProcessing showToast={showToast} />}
         {activeTab === "analytics" && <Analytics />}
         {activeTab === "payment" && <PaymentWithdraw showToast={showToast} />}
-
+        
         {/* Toast Message */}
         <Toast message={toast.message} type={toast.type} />
       </div>

@@ -98,7 +98,7 @@ export async function POST(req) {
       { status: 404 }
     );
   }
-  if (batch.status === "Verified" && action === "accept") {
+  if (batch.status === "Approved" && action === "accept") {
     return NextResponse.json(
       { success: false, message: "Batch is already verified" },
       { status: 400 }
@@ -106,6 +106,7 @@ export async function POST(req) {
   }
   // Handle based on action
   if (action === "accept") {
+    
     // Save to accepted batch schema
     const acceptedBatch = new AcceptedBatch({
       batchId,
@@ -116,7 +117,7 @@ export async function POST(req) {
     await acceptedBatch.save();
 
     // Update CropUpload status
-    batch.status = "Verified";
+    batch.status = "Pending";
     await batch.save();
 
     return NextResponse.json({

@@ -16,35 +16,30 @@ import {
   Cell,
 } from "recharts";
 import { Activity, BarChart2, Clock, CheckCircle, XCircle } from "lucide-react";
-import StatusDisplay from "./StatusDisplay";
 
-// 🎨 Chart colors
-const COLORS = ["#10B981", "#F59E0B", "#EF4444", "#3B82F6"];
+// 🎨 Colors
+const COLORS = {
+  approved: "#10B981", // green
+  rejected: "#EF4444", // red
+  pending: "#3B82F6", // blue
+};
 
-// 📊 Mock analytics data
-const mockData = {
-  monthlyCertifications: [
-    { month: "Jan", approved: 8, rejected: 1 },
-    { month: "Feb", approved: 12, rejected: 3 },
-    { month: "Mar", approved: 10, rejected: 2 },
-    { month: "Apr", approved: 14, rejected: 1 },
-    { month: "May", approved: 18, rejected: 2 },
-    { month: "Jun", approved: 15, rejected: 4 },
-    { month: "Jul", approved: 20, rejected: 3 },
-    { month: "Aug", approved: 22, rejected: 1 },
-    { month: "Sep", approved: 25, rejected: 2 },
-  ],
-  totalStats: {
-    totalBatches: 250,
-    approved: 200,
-    rejected: 40,
-    pending: 10,
-  },
-  distribution: [
-    { name: "Approved", value: 200 },
-    { name: "Rejected", value: 40 },
-    { name: "Pending", value: 10 },
-  ],
+// 🧩 Status message component
+const StatusDisplay = ({ status }) => {
+  if (!status) return null;
+  return (
+    <div
+      className={`mt-4 text-center p-3 rounded-md ${
+        status.loading
+          ? "bg-blue-100 text-blue-800"
+          : status.isSuccess
+          ? "bg-green-100 text-green-800"
+          : "bg-red-100 text-red-800"
+      }`}
+    >
+      {status.message}
+    </div>
+  );
 };
 
 const Analytics = () => {
@@ -52,23 +47,43 @@ const Analytics = () => {
   const [status, setStatus] = useState(null);
 
   useEffect(() => {
-    // Simulate data fetch delay
-    setStatus({ message: "Fetching analytics data...", loading: true });
-    setTimeout(() => {
-      setAnalyticsData(mockData);
-      setStatus({
-        message: "Analytics data loaded successfully!",
-        isSuccess: true,
-      });
-      setTimeout(() => setStatus(null), 3000);
-    }, 1200);
+    const fetchAnalytics = async () => {
+      try {
+        setStatus({ message: "Fetching analytics data...", loading: true });
+        const res = await fetch("/api/analytics", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          setAnalyticsData(data.data);
+          setStatus({
+            message: "Analytics data loaded successfully!",
+            isSuccess: true,
+          });
+          setTimeout(() => setStatus(null), 3000);
+        } else {
+          setStatus({
+            message: data.message || "Failed to fetch analytics.",
+            isError: true,
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching analytics:", err);
+        setStatus({ message: "Error loading analytics.", isError: true });
+      }
+    };
+
+    fetchAnalytics();
   }, []);
 
   if (!analyticsData) {
     return (
       <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
         <h2 className="text-2xl font-semibold text-emerald-800 mb-4 flex items-center gap-2">
-          <BarChart2 size={22} /> 4. Analytics Dashboard
+          <BarChart2 size={22} /> Analytics Dashboard
         </h2>
         <StatusDisplay status={status} />
       </div>
@@ -80,10 +95,10 @@ const Analytics = () => {
   return (
     <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
       <h2 className="text-2xl font-semibold text-emerald-800 mb-6 flex items-center gap-2">
-        <Activity size={22} /> 4. Analytics Dashboard
+        <Activity size={22} /> Analytics Dashboard
       </h2>
 
-      {/* Top summary cards */}
+      {/* 📦 Top Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div className="bg-teal-50 border border-teal-200 p-5 rounded-xl text-center shadow-sm">
           <h3 className="text-lg font-bold text-teal-800">Total Batches</h3>
@@ -107,19 +122,19 @@ const Analytics = () => {
             {totalStats.rejected}
           </p>
         </div>
-        <div className="bg-yellow-50 border border-yellow-200 p-5 rounded-xl text-center shadow-sm">
-          <h3 className="text-lg font-bold text-yellow-800 flex justify-center items-center gap-2">
+        <div className="bg-blue-50 border border-blue-200 p-5 rounded-xl text-center shadow-sm">
+          <h3 className="text-lg font-bold text-blue-800 flex justify-center items-center gap-2">
             <Clock size={18} /> Pending
           </h3>
-          <p className="text-3xl font-extrabold text-yellow-700">
+          <p className="text-3xl font-extrabold text-blue-700">
             {totalStats.pending}
           </p>
         </div>
       </div>
 
-      {/* Charts */}
+      {/* 📊 Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        {/* Monthly Certifications (Bar Chart) */}
+        {/* 📅 Monthly Bar Chart */}
         <div className="p-6 bg-gray-50 border border-gray-200 rounded-xl shadow-sm">
           <h3 className="text-lg font-bold text-emerald-900 mb-4">
             Monthly Certifications Overview
@@ -131,13 +146,14 @@ const Analytics = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="approved" fill="#10B981" name="Approved" />
-              <Bar dataKey="rejected" fill="#EF4444" name="Rejected" />
+              <Bar dataKey="approved" fill={COLORS.approved} name="Approved" />
+              <Bar dataKey="rejected" fill={COLORS.rejected} name="Rejected" />
+             
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Distribution Pie Chart */}
+        {/* 🥧 Pie Chart */}
         <div className="p-6 bg-gray-50 border border-gray-200 rounded-xl shadow-sm">
           <h3 className="text-lg font-bold text-emerald-900 mb-4">
             Certification Status Distribution
@@ -151,15 +167,14 @@ const Analytics = () => {
                 cx="50%"
                 cy="50%"
                 outerRadius={100}
-                fill="#10B981"
                 label
               >
-                {distribution.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
+                {distribution.map((entry, index) => {
+                  let fillColor = COLORS.approved;
+                  if (entry.name === "Rejected") fillColor = COLORS.rejected;
+                  if (entry.name === "Pending") fillColor = COLORS.pending;
+                  return <Cell key={`cell-${index}`} fill={fillColor} />;
+                })}
               </Pie>
               <Tooltip />
               <Legend />
@@ -168,10 +183,10 @@ const Analytics = () => {
         </div>
       </div>
 
-      {/* Line Chart (trend) */}
+      {/* 📈 Line Chart */}
       <div className="mt-10 p-6 bg-gray-50 border border-gray-200 rounded-xl shadow-sm">
         <h3 className="text-lg font-bold text-emerald-900 mb-4">
-          Certification Trend (Approved vs Rejected)
+          Certification Trend (Approved vs Rejected )
         </h3>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={monthlyCertifications}>
@@ -183,7 +198,7 @@ const Analytics = () => {
             <Line
               type="monotone"
               dataKey="approved"
-              stroke="#10B981"
+              stroke={COLORS.approved}
               strokeWidth={3}
               dot={{ r: 5 }}
               name="Approved"
@@ -191,11 +206,12 @@ const Analytics = () => {
             <Line
               type="monotone"
               dataKey="rejected"
-              stroke="#EF4444"
+              stroke={COLORS.rejected}
               strokeWidth={3}
               dot={{ r: 5 }}
               name="Rejected"
             />
+           
           </LineChart>
         </ResponsiveContainer>
       </div>

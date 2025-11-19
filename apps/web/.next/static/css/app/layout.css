@@ -94,7 +94,6 @@
     --color-amber-800: oklch(47.3% 0.137 46.201);
     --color-yellow-50: oklch(98.7% 0.026 102.212);
     --color-yellow-100: oklch(97.3% 0.071 103.193);
-    --color-yellow-200: oklch(94.5% 0.129 101.54);
     --color-yellow-500: oklch(79.5% 0.184 86.047);
     --color-yellow-700: oklch(55.4% 0.135 66.442);
     --color-yellow-800: oklch(47.6% 0.114 61.907);
@@ -120,16 +119,18 @@
     --color-teal-800: oklch(43.7% 0.078 188.216);
     --color-blue-50: oklch(97% 0.014 254.604);
     --color-blue-100: oklch(93.2% 0.032 255.585);
+    --color-blue-200: oklch(88.2% 0.059 254.128);
     --color-blue-600: oklch(54.6% 0.245 262.881);
     --color-blue-700: oklch(48.8% 0.243 264.376);
     --color-blue-800: oklch(42.4% 0.199 265.638);
-    --color-blue-900: oklch(37.9% 0.146 265.522);
     --color-indigo-100: oklch(93% 0.034 272.788);
     --color-indigo-500: oklch(58.5% 0.233 277.117);
     --color-indigo-600: oklch(51.1% 0.262 276.966);
     --color-indigo-700: oklch(45.7% 0.24 277.023);
     --color-indigo-800: oklch(39.8% 0.195 277.366);
     --color-indigo-900: oklch(35.9% 0.144 278.697);
+    --color-purple-50: oklch(97.7% 0.014 308.299);
+    --color-purple-800: oklch(43.8% 0.218 303.724);
     --color-gray-50: oklch(98.5% 0.002 247.839);
     --color-gray-100: oklch(96.7% 0.003 264.542);
     --color-gray-200: oklch(92.8% 0.006 264.531);
@@ -840,6 +841,9 @@
   .grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
   .flex-col {
     flex-direction: column;
   }
@@ -1059,6 +1063,9 @@
   .border-black {
     border-color: var(--color-black);
   }
+  .border-blue-200 {
+    border-color: var(--color-blue-200);
+  }
   .border-gray-100 {
     border-color: var(--color-gray-100);
   }
@@ -1091,9 +1098,6 @@
   }
   .border-teal-200 {
     border-color: var(--color-teal-200);
-  }
-  .border-yellow-200 {
-    border-color: var(--color-yellow-200);
   }
   .border-yellow-500 {
     border-color: var(--color-yellow-500);
@@ -1161,6 +1165,9 @@
   .bg-blue-600 {
     background-color: var(--color-blue-600);
   }
+  .bg-emerald-700 {
+    background-color: var(--color-emerald-700);
+  }
   .bg-emerald-900 {
     background-color: var(--color-emerald-900);
   }
@@ -1205,6 +1212,9 @@
   }
   .bg-indigo-900 {
     background-color: var(--color-indigo-900);
+  }
+  .bg-purple-50 {
+    background-color: var(--color-purple-50);
   }
   .bg-red-50 {
     background-color: var(--color-red-50);
@@ -1558,6 +1568,9 @@
   .text-indigo-900 {
     color: var(--color-indigo-900);
   }
+  .text-purple-800 {
+    color: var(--color-purple-800);
+  }
   .text-red-500 {
     color: var(--color-red-500);
   }
@@ -1659,6 +1672,9 @@
   }
   .blur-3xl {
     --tw-blur: blur(var(--blur-3xl));
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .filter {
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
   }
   .backdrop-blur {
@@ -1920,13 +1936,6 @@
     &:hover {
       @media (hover: hover) {
         color: var(--color-blue-800);
-      }
-    }
-  }
-  .hover\:text-blue-900 {
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-blue-900);
       }
     }
   }

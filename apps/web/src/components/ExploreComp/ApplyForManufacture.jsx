@@ -49,7 +49,6 @@ export default function ApplyForManufacture() {
 
       // ✅ Validate file size (<=200KB)
       if (file.size > 200 * 1024) {
-        console.error(`${name} file is larger than 200KB`);
         setErrors((prev) => ({
           ...prev,
           [name]: "File size must be below 200KB.",
@@ -67,7 +66,6 @@ export default function ApplyForManufacture() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // block submission if errors exist
     if (Object.values(errors).some((err) => err !== "")) {
       toast.error("Please fix file errors before submitting.", { autoClose: 3000 });
       return;
@@ -80,16 +78,17 @@ export default function ApplyForManufacture() {
     Object.entries(files).forEach(([key, value]) => value && formData.append(key, value));
 
     try {
-      const res = await fetch("/api/manufacture", {
+      const res = await fetch("/api/manufacturePartnership", {
         method: "POST",
         body: formData,
       });
 
       const data = await res.json();
+
       if (res.ok && data.success) {
         toast.success("Application submitted successfully!", { autoClose: 3000 });
 
-        // ✅ Reset form & files
+        // ✅ Reset all fields
         setForm({
           manufacturerName: "",
           factoryAddress: "",
@@ -112,12 +111,11 @@ export default function ApplyForManufacture() {
           signedAgreement: "",
         });
 
-        // reset file inputs
+        // Reset file inputs
         document.querySelectorAll("input[type=file]").forEach((input) => (input.value = ""));
       } else {
-        toast.error("Submission failed: " + (data.error || "Unknown error"), { autoClose: 3000 });
+        toast.error(`Submission failed: ${data.error || "Unknown error"}`, { autoClose: 3000 });
       }
-      console.log("Server Response:", data);
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("Submission failed. Please try again.", { autoClose: 3000 });
@@ -239,10 +237,7 @@ export default function ApplyForManufacture() {
               { name: "signedAgreement", label: "Signed Partnership Agreement" },
             ].map(({ name, label }) => (
               <div key={name}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {label}
-                </label>
-
+                <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
                 <div className="flex items-center gap-3">
                   <label
                     htmlFor={name}
@@ -266,12 +261,8 @@ export default function ApplyForManufacture() {
                   )}
                 </div>
 
-                <p className="text-xs text-gray-500 mt-1">
-                  Only PDF files up to 200KB are allowed.
-                </p>
-                {errors[name] && (
-                  <p className="text-xs text-red-500 mt-1">{errors[name]}</p>
-                )}
+                <p className="text-xs text-gray-500 mt-1">Only PDF files up to 200KB are allowed.</p>
+                {errors[name] && <p className="text-xs text-red-500 mt-1">{errors[name]}</p>}
 
                 {name === "signedAgreement" && (
                   <button
@@ -300,7 +291,8 @@ export default function ApplyForManufacture() {
         </form>
       </div>
 
-      <ToastContainer />
+      {/* ✅ Toast Container with 3-second duration */}
+      <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={false} />
     </div>
   );
 }
