@@ -33,7 +33,7 @@ export async function sendManufacturerApprovalEmail({ name, email, password, Man
       <mj-section background-color="#ffffff" padding="20px" border-radius="8px">
         <mj-column>
           <mj-text align="center" font-size="22px" font-weight="bold" color="#31572C">
-            Your Lab Has Been Approved!
+            Your Manufacturer Application Has Been Approved!
           </mj-text>
           <mj-text>
             Hi <strong>${name}</strong>,<br/><br/>
