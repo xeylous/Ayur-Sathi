@@ -51,6 +51,10 @@ export async function GET(req) {
 
   return NextResponse.json({ success: true, data: batch });
 }
+
+
+//--------------------------------POST REQUEST--------------------------------
+//----------------------------------------------------------------------------
 export async function POST(req) {
   await connectDB();
   console.log("hello");

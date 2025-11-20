@@ -59,24 +59,26 @@ export default function AdminManufactureApplications() {
       `Are you sure you want to APPROVE "${app.manufacturerName}" owned by ${app.ownerName}?`
     );
     if (!confirmApprove) return;
-
+    console.log(app);
+    
     setActionLoading(true);
     try {
-      const res = await fetch("/api/manufactureApprove", {
+      const res = await fetch("/api/manu-approve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ manufacturerId: app._id }),
+        body: JSON.stringify({ manufacturerId: app.manufacturerId }),
       });
 
       const json = await res.json();
-
+      console.log(json);
+      
       if (res.ok && json.success) {
         alert(`${app.manufacturerName} approved successfully.`);
         setApps((prev) =>
-          prev.map((a) => (a._id === app._id ? { ...a, status: "Approved" } : a))
+          prev.map((a) => (a.manufacturerId === app.manufacturerId ? { ...a, status: "Approved" } : a))
         );
         setSelected((prev) =>
-          prev && prev._id === app._id ? { ...prev, status: "Approved" } : prev
+          prev && prev.manufacturerId === app.manufacturerId ? { ...prev, status: "Approved" } : prev
         );
       } else {
         alert("Approval failed: " + (json.error || "Unknown error"));
@@ -231,14 +233,14 @@ export default function AdminManufactureApplications() {
 
             {/* Document Viewer */}
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-              {Object.entries(selected.documents || {}).map(([key, id]) => (
+              {Object.entries(selected.documents || {}).map(([key, file]) => (
                 <div key={key} className="border rounded p-3">
                   <div className="flex justify-between items-center">
                     <div className="font-medium">
                       {key.replace(/([A-Z])/g, " $1")}
                     </div>
                     <button
-                      onClick={() => openInPopup(id)}
+                      onClick={() => openInPopup(typeof file === "string" ? file : file.publicId)}
                       className="text-sm underline"
                     >
                       Open

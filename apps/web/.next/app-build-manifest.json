@@ -21,6 +21,11 @@
       "static/chunks/main-app.js",
       "static/chunks/app/admin/page.js"
     ],
+    "/api/partnership/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/partnership/route.js"
+    ],
     "/api/manufacturePartnership/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -31,68 +36,16 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/signed-url/route.js"
     ],
-    "/api/partnership/route": [
+    "/explore/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/partnership/route.js"
+      "static/css/app/explore/page.css",
+      "static/chunks/app/explore/page.js"
     ],
-    "/manuId/page": [
+    "/api/manu-approve/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/manuId/page.css",
-      "static/chunks/app/manuId/page.js"
-    ],
-    "/login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/login/page.js"
-    ],
-    "/api/login/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/login/route.js"
-    ],
-    "/id/[uniqueId]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/id/[uniqueId]/page.css",
-      "static/chunks/app/id/[uniqueId]/page.js"
-    ],
-    "/api/profile/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/profile/route.js"
-    ],
-    "/api/crops/[uniqueId]/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/crops/[uniqueId]/route.js"
-    ],
-    "/api/logout/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/logout/route.js"
-    ],
-    "/labId/[labId]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/labId/[labId]/page.css",
-      "static/chunks/app/labId/[labId]/page.js"
-    ],
-    "/api/accepted-batch/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/accepted-batch/route.js"
-    ],
-    "/api/certified-batch/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/certified-batch/route.js"
-    ],
-    "/api/analytics/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/analytics/route.js"
+      "static/chunks/app/api/manu-approve/route.js"
     ]
   }
 }

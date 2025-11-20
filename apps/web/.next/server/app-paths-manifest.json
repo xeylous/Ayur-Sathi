@@ -1,12 +1,5 @@
 {
-  "/api/accepted-batch/route": "app/api/accepted-batch/route.js",
-  "/api/certified-batch/route": "app/api/certified-batch/route.js",
-  "/api/analytics/route": "app/api/analytics/route.js",
-  "/api/logout/route": "app/api/logout/route.js",
+  "/page": "app/page.js",
   "/admin/page": "app/admin/page.js",
-  "/manuId/page": "app/manuId/page.js",
-  "/login/page": "app/login/page.js",
-  "/labId/[labId]/page": "app/labId/[labId]/page.js",
-  "/id/[uniqueId]/page": "app/id/[uniqueId]/page.js",
-  "/page": "app/page.js"
+  "/explore/page": "app/explore/page.js"
 }

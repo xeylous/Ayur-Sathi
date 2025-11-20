@@ -1,66 +1,17 @@
 {
   "node": {
-    "7f4f575efec36786b9674d0adc2a11321e1b24f1d3": {
+    "401d6a3a218727cda2580702f349c4e7854dec4e1a": {
       "workers": {
-        "app/api/login/route": {
-          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227f4f575efec36786b9674d0adc2a11321e1b24f1d3%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%2C%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f85516532ca66d529a945525e169531810a88a606%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%5D&__client_imported__=!",
-          "async": false
-        },
-        "app/api/profile/route": {
-          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%2C%5B%7B%22id%22%3A%2240adbd281611585c6ef048072554fdb016dea47362%22%2C%22exportedName%22%3A%22GET%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%2C%7B%22id%22%3A%2240e4adb7b9a79d9dfcf6840f7d2a94c58209e9b82c%22%2C%22exportedName%22%3A%22POST%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%5D%5D%2C%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f85516532ca66d529a945525e169531810a88a606%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%2C%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227f4f575efec36786b9674d0adc2a11321e1b24f1d3%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%5D&__client_imported__=!",
+        "app/api/manu-approve/route": {
+          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22E%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Clib%5C%5CmanufacturerMailer.js%22%2C%5B%7B%22id%22%3A%22401d6a3a218727cda2580702f349c4e7854dec4e1a%22%2C%22exportedName%22%3A%22sendManufacturerApprovalEmail%22%2C%22filename%22%3A%22..%2FE%3A%5C%5CHackathon%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Clib%5C%5CmanufacturerMailer.js%22%7D%5D%5D%5D&__client_imported__=!",
           "async": false
         }
       },
       "layer": {
-        "app/api/login/route": "rsc",
-        "app/api/profile/route": "rsc"
+        "app/api/manu-approve/route": "rsc"
       },
-      "filename": "../D:\\ayurtrace\\Ayur-Sathi\\apps\\web\\src\\models\\User.js",
-      "exportedName": "default"
-    },
-    "7f85516532ca66d529a945525e169531810a88a606": {
-      "workers": {
-        "app/api/login/route": {
-          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227f4f575efec36786b9674d0adc2a11321e1b24f1d3%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%2C%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f85516532ca66d529a945525e169531810a88a606%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%5D&__client_imported__=!",
-          "async": false
-        },
-        "app/api/profile/route": {
-          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%2C%5B%7B%22id%22%3A%2240adbd281611585c6ef048072554fdb016dea47362%22%2C%22exportedName%22%3A%22GET%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%2C%7B%22id%22%3A%2240e4adb7b9a79d9dfcf6840f7d2a94c58209e9b82c%22%2C%22exportedName%22%3A%22POST%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%5D%5D%2C%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f85516532ca66d529a945525e169531810a88a606%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%2C%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227f4f575efec36786b9674d0adc2a11321e1b24f1d3%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%5D&__client_imported__=!",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/api/login/route": "rsc",
-        "app/api/profile/route": "rsc"
-      },
-      "filename": "../D:\\ayurtrace\\Ayur-Sathi\\apps\\web\\src\\models\\Farmer.js",
-      "exportedName": "default"
-    },
-    "40adbd281611585c6ef048072554fdb016dea47362": {
-      "workers": {
-        "app/api/profile/route": {
-          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%2C%5B%7B%22id%22%3A%2240adbd281611585c6ef048072554fdb016dea47362%22%2C%22exportedName%22%3A%22GET%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%2C%7B%22id%22%3A%2240e4adb7b9a79d9dfcf6840f7d2a94c58209e9b82c%22%2C%22exportedName%22%3A%22POST%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%5D%5D%2C%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f85516532ca66d529a945525e169531810a88a606%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%2C%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227f4f575efec36786b9674d0adc2a11321e1b24f1d3%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%5D&__client_imported__=!",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/api/profile/route": "rsc"
-      },
-      "filename": "../D:\\ayurtrace\\Ayur-Sathi\\apps\\web\\src\\app\\api\\profile\\route.js",
-      "exportedName": "GET"
-    },
-    "40e4adb7b9a79d9dfcf6840f7d2a94c58209e9b82c": {
-      "workers": {
-        "app/api/profile/route": {
-          "moduleId": "(rsc)/../../node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%2C%5B%7B%22id%22%3A%2240adbd281611585c6ef048072554fdb016dea47362%22%2C%22exportedName%22%3A%22GET%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%2C%7B%22id%22%3A%2240e4adb7b9a79d9dfcf6840f7d2a94c58209e9b82c%22%2C%22exportedName%22%3A%22POST%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Capp%5C%5Capi%5C%5Cprofile%5C%5Croute.js%22%7D%5D%5D%2C%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%2C%5B%7B%22id%22%3A%227f85516532ca66d529a945525e169531810a88a606%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CFarmer.js%22%7D%5D%5D%2C%5B%22D%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%2C%5B%7B%22id%22%3A%227f4f575efec36786b9674d0adc2a11321e1b24f1d3%22%2C%22exportedName%22%3A%22default%22%2C%22filename%22%3A%22..%2FD%3A%5C%5Cayurtrace%5C%5CAyur-Sathi%5C%5Capps%5C%5Cweb%5C%5Csrc%5C%5Cmodels%5C%5CUser.js%22%7D%5D%5D%5D&__client_imported__=!",
-          "async": false
-        }
-      },
-      "layer": {
-        "app/api/profile/route": "rsc"
-      },
-      "filename": "../D:\\ayurtrace\\Ayur-Sathi\\apps\\web\\src\\app\\api\\profile\\route.js",
-      "exportedName": "POST"
+      "filename": "../E:\\Hackathon\\Ayur-Sathi\\apps\\web\\src\\lib\\manufacturerMailer.js",
+      "exportedName": "sendManufacturerApprovalEmail"
     }
   },
   "edge": {},

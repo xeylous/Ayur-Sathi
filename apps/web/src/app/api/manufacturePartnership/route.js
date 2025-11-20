@@ -24,7 +24,7 @@ const uploadToCloudinary = (fileBuffer, fileName, folder = "manufacture_applicat
       },
       (error, result) => {
         if (error) reject(error);
-        else resolve(result.secure_url);
+        else resolve(result.public_id);
       }
     );
     stream.end(fileBuffer);
@@ -84,7 +84,7 @@ export async function POST(req) {
     console.log("Generated Manufacturer ID:", manufacturerId);
 
     // ✅ Save to MongoDB
-    const newApp = await ManufacturerApplication.create({
+    const ManuApp = await ManufacturerApplication.create({
       manufacturerId,
       manufacturerName,
       factoryAddress,
@@ -96,9 +96,9 @@ export async function POST(req) {
       submittedAt: new Date(),
     });
 
-    console.log("✅ Manufacturer application created successfully:", newApp);
+    console.log("Manufacturer application created successfully:", ManuApp);
 
-    return NextResponse.json({ success: true, data: newApp }, { status: 201 });
+    return NextResponse.json({ success: true, data: ManuApp }, { status: 201 });
   } catch (error) {
     console.error("❌ Partnership API POST Error:", error);
     return NextResponse.json(
@@ -172,7 +172,7 @@ export async function PATCH(req) {
 
     return NextResponse.json({ success: true, data: updatedApp }, { status: 200 });
   } catch (error) {
-    console.error("❌ Partnership API PATCH Error:", error);
+    console.error("Partnership API PATCH Error:", error);
     return NextResponse.json(
       { success: false, error: error.message || "Server error" },
       { status: 500 }

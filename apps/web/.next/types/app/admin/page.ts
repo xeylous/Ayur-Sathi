@@ -1,4 +1,4 @@
-// File: D:\ayurtrace\Ayur-Sathi\apps\web\src\app\admin\page.js
+// File: E:\Hackathon\Ayur-Sathi\apps\web\src\app\admin\page.js
 import * as entry from '../../../../src/app/admin/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
