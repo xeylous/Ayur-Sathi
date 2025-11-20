@@ -6,7 +6,7 @@ export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     let publicId = searchParams.get("id");
-
+    
     if (!publicId) {
       return NextResponse.json(
         { success: false, error: "Missing publicId" },

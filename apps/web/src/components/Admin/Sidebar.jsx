@@ -12,6 +12,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => (
         { id: "user", icon: Users, label: "Lab Approvals" },
         { id: "farmerPayment", icon: DollarSign, label: "Farmer Payments" },
         { id: "laboratory", icon: FlaskConical, label: "Marketplace Listing" },
+        {id: "manufacturer", icon: FlaskConical, label: "Manufacturer Approvals"}
       ].map(({ id, icon: Icon, label }) => (
         <button
           key={id}

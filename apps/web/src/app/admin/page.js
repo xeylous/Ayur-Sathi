@@ -8,6 +8,7 @@ import FarmerPaymentControl from "@/components/Admin/FarmerPaymentControl";
 import LabMarketplaceControl from "@/components/Admin/LabMarketplaceControl";
 import { mockBatches, mockUsers } from "@/lib/mockData";
 import AdminLabApplications from "@/components/Admin/AdminLabApplications";
+import AdminManufactureApplications from "@/components/Admin/AdminManufactureApplications";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -50,6 +51,9 @@ const AdminPage = () => {
               setBatches={setBatches}
               setStatusMessage={setStatusMessage}
             />
+          )}
+          {activeTab === "manufacturer" && (
+            <AdminManufactureApplications/>
           )}
         </div>
 
