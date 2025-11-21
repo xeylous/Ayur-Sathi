@@ -9,6 +9,7 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+.next/
 
 # Include env files in any subfolder (like apps/web/.env.local)
 apps/*/.env

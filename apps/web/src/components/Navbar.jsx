@@ -97,7 +97,7 @@ export default function Navbar() {
               <Link
                 href={
                   user.type === "lab"
-                    ?`/labId/${user.labId}` 
+                    ? `/labId/${user.labId}`
                     : `/id/${user.uniqueId}`
                 }
                 className="flex items-center gap-2 text-sm font-medium text-brand-700 hover:text-brand-900"
@@ -110,7 +110,11 @@ export default function Navbar() {
                   className="rounded-full border object-cover"
                 />
                 <span className="hidden sm:inline">
-                  {user.type === "lab" ? user.labId : user.name}
+                  {user.type === "lab"
+                    ? user.labId
+                    : user.type === "manu"
+                    ? user.manuId
+                    : user.name}
                 </span>
               </Link>
 

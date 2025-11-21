@@ -91,6 +91,7 @@ export default function LoginPage() {
         labId: data.account.labId || null,
         email: data.account.email || null,
         userId: data.account.userId || null,
+        manuId : data.account.manuId || null,
         uniqueId: data.account.uniqueId || null,
         type: data.account.type,
       });
@@ -141,7 +142,7 @@ export default function LoginPage() {
             onClick={() => setShowDropdown(!showDropdown)}
             className="w-full px-3 py-2 rounded-md border bg-white text-left focus:outline-none focus:ring-2 focus:ring-[#90a955] flex justify-between items-center"
           >
-            <span>{mode.charAt(0).toUpperCase() + mode.slice(1)} Login</span>
+            <span>{labelMap[mode]}</span>
             <ChevronDown
               size={20}
               className={`text-gray-500 transition-transform duration-200 ${
