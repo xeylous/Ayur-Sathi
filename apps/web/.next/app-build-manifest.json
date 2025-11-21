@@ -16,37 +16,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/verify-token/route.js"
     ],
-    "/admin/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin/page.js"
-    ],
-    "/api/partnership/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/partnership/route.js"
-    ],
-    "/api/manufacturePartnership/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/manufacturePartnership/route.js"
-    ],
-    "/api/signed-url/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/signed-url/route.js"
-    ],
-    "/explore/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/explore/page.css",
-      "static/chunks/app/explore/page.js"
-    ],
-    "/api/manu-approve/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/manu-approve/route.js"
-    ],
     "/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -56,6 +25,23 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/login/route.js"
+    ],
+    "/manuId/[ManuId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/manuId/[ManuId]/page.css",
+      "static/chunks/app/manuId/[ManuId]/page.js"
+    ],
+    "/api/logout/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/logout/route.js"
+    ],
+    "/id/[uniqueId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/id/[uniqueId]/page.css",
+      "static/chunks/app/id/[uniqueId]/page.js"
     ]
   }
 }
