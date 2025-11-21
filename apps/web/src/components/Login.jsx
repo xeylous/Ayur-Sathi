@@ -20,6 +20,15 @@ export default function LoginPage() {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
+  const labelMap = {
+  user: "User Login",
+  farmer: "Farmer Login",
+  lab: "Lab Login",
+  manu: "Manufacturer Login",
+  admin: "Admin Login",
+};
+
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -59,7 +68,8 @@ export default function LoginPage() {
 
     // 🧩 Other login types (API call)
     const payload = { email, password, type: mode };
-
+    // console.log(payload);
+    
     try {
       const res = await fetch("/api/login", {
         method: "POST",
@@ -84,7 +94,8 @@ export default function LoginPage() {
         uniqueId: data.account.uniqueId || null,
         type: data.account.type,
       });
-
+      // console.log(User);
+      
       toast.success("Login successful", { autoClose: 1500 });
       setTimeout(() => router.push(data.redirectUrl), 500);
     } catch (error) {
@@ -114,7 +125,7 @@ export default function LoginPage() {
               ? "Login to your Farmer account"
               : mode === "lab"
               ? "Login to your Lab account"
-              : mode === "manufacturer"
+              : mode === "manu"
               ? "Login to your Manufacturer account"
               : "Admin access panel"}
           </p>
@@ -140,7 +151,7 @@ export default function LoginPage() {
           </button>
           {showDropdown && (
             <div className="absolute z-10 mt-1 w-full bg-white border rounded-md shadow-lg">
-              {["user", "farmer", "lab", "manufacturer", "admin"].map((m) => (
+              {["user", "farmer", "lab", "manu", "admin"].map((m) => (
                 <div
                   key={m}
                   onClick={() => {
@@ -149,7 +160,7 @@ export default function LoginPage() {
                   }}
                   className="px-3 py-2 cursor-pointer hover:bg-[#90a955] hover:text-white transition"
                 >
-                  {m.charAt(0).toUpperCase() + m.slice(1)} Login
+                  {labelMap[m]}
                 </div>
               ))}
             </div>

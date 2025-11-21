@@ -17,8 +17,8 @@ const ManufacturerCredentialSchema = new mongoose.Schema({
   },
   type:{
     type: String,
-    default: "Manu",
-    enum: ["Manu"],
+    default: "manu",
+    enum: ["manu"],
   },
   createdAt: {
     type: Date,
