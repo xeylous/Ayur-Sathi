@@ -54,5 +54,5 @@ export async function middleware(req) {
 
 // ✅ Apply middleware only for /id/* and /admin
 export const config = {
-  matcher: ["/id/:path*", "/admin/:path*"],
+  matcher: ["/id/:path*", "/admin/:path*","/labId/:path*","/manuId/:path*"],
 };

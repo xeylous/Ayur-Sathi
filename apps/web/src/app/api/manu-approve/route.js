@@ -83,7 +83,7 @@ export async function POST(req) {
     await ManufacturerCredential.create({
       ManuId: manufacturer.manufacturerId,
       email,
-      role: "Manu",
+      role: "manu",
       hashedPassword,
     });
 
