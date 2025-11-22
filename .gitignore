@@ -9,6 +9,7 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+.next/
 
 # Include env files in any subfolder (like apps/web/.env.local)
 apps/*/.env
@@ -22,6 +23,10 @@ apps/*/.env.production.local
 
 # next.js
 /.next/
+apps/web/.gitignore
+apps/web/.next/
+apps/**/.next/
+apps/**/node_modules/
 /out/
 
 # production
@@ -39,7 +44,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
-
+*.log
+.DS_Store
 # vercel
 .vercel
 
