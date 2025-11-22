@@ -1,3 +1,5 @@
 {
-  "/page": "app/page.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/api/verify-token/route": "app/api/verify-token/route.js",
+  "/herbslib/page": "app/herbslib/page.js"
 }

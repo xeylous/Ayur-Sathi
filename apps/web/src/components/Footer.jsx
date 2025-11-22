@@ -16,9 +16,9 @@ export default function Fooer() {
 
   const quickLinks = [
     { label: "Home", href: "/" },
-    { label: "About", href: "/about" },
+    { label: "About", href: "/explore" },
     { label: "Consultation", href: "/consultation" },
-    { label: "Herb Library", href: "/herbs" },
+    { label: "Herb Library", href: "/herbslib" },
     { label: "Blog", href: "/blog" },
   ];
 
@@ -105,10 +105,10 @@ export default function Fooer() {
               <div className="flex items-center gap-2">
                 <Mail size={16} />
                 <a
-                  href="mailto:hello@ayursaathi.app"
+                  href="mailto:ayursaathi@gmail.com"
                   className="hover:underline"
                 >
-                  hello@ayursaathi.app
+                 ayursaathi@gmail.com
                 </a>
               </div>
 
