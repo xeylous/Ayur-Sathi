@@ -2,7 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Cropinfo from "@/components/cropinfo";
+import Cropinfo from "@/components/Cropinfo";
 
 
 export default function Home() {
