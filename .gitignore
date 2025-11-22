@@ -23,6 +23,10 @@ apps/*/.env.production.local
 
 # next.js
 /.next/
+apps/web/.gitignore
+apps/web/.next/
+apps/**/.next/
+apps/**/node_modules/
 /out/
 
 # production
@@ -40,7 +44,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
-
+*.log
+.DS_Store
 # vercel
 .vercel
 
