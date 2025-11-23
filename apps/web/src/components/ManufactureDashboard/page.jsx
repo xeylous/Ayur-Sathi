@@ -9,6 +9,7 @@ import PaymentWithdraw from "./PaymentWithdraw";
 import Toast from "./Toast";
 
 import "./styles.css";
+import PendingBatchManager from "./PendingBactches";
 
 export default function ManufactureDashboard() {
   const [activeTab, setActiveTab] = useState("batch");
@@ -35,6 +36,7 @@ export default function ManufactureDashboard() {
         {/* Tab Switching */}
         {activeTab === "batch" && <BatchVerification showToast={showToast} />}
         {activeTab === "log" && <LogProcessing showToast={showToast} />}
+        {activeTab === "pending" && <PendingBatchManager showToast={showToast}/>}
         {activeTab === "analytics" && <Analytics />}
         {activeTab === "payment" && <PaymentWithdraw showToast={showToast} />}
         
