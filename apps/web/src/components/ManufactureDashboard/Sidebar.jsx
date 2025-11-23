@@ -3,6 +3,7 @@ import { Scan, FileText, BarChart3, Wallet } from "lucide-react";
 export default function Sidebar({ activeTab, setActiveTab }) {
   const links = [
     { id: "batch", label: "Batch Verification", icon: <Scan size={18} /> },
+  {id : "pending", label : "Pending Batches",icon : <Scan size={18} />},
     { id: "log", label: "Log Processing & QR", icon: <FileText size={18} /> },
     { id: "analytics", label: "Analytics", icon: <BarChart3 size={18} /> },
     { id: "payment", label: "Payment Withdraw", icon: <Wallet size={18} /> },

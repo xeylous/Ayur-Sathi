@@ -3,46 +3,47 @@ import jwt from "jsonwebtoken";
 
 export async function GET(req) {
   try {
-    // Get the cookie from the request
     const cookie = req.cookies.get("auth_token");
+
     if (!cookie) {
-      return NextResponse.json(
-        { error: "No auth token provided" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, user: null }, { status: 200 });
     }
 
     const token = cookie.value;
 
-    // Verify JWT
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    if (decoded.type === "lab") {
-      return NextResponse.json({
-        message: "Token is valid",
-        user: {
-          id: decoded.id,
-          labId: decoded.labId,
-          email: decoded.email,
-          type: decoded.type,
-          uniqueId: decoded.uniqueId,
-        },
-      });
-    } else {
-      return NextResponse.json({
-        message: "Token is valid",
-        user: {
-          id: decoded.id,
-          email: decoded.email,
-          type: decoded.type,
-          uniqueId: decoded.uniqueId,
-        },
-      });
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return NextResponse.json({ success: false, user: null }, { status: 200 });
     }
+
+    // Base response user object
+    let user = {
+      id: decoded.id,
+      email: decoded.email,
+      type: decoded.type,
+      uniqueId: decoded.uniqueId,
+    };
+
+    // Special case for lab
+    if (decoded.type === "lab") {
+      user.labId = decoded.labId;
+    }
+
+    // Special case for manufacturer
+    if (decoded.type === "manu") {
+      user.manuId = decoded.manuId;
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Token valid",
+      user,
+    });
+
   } catch (err) {
-    console.error("Token verification error:", err);
-    return NextResponse.json(
-      { error: "Invalid or expired token" },
-      { status: 401 }
-    );
+    console.error("VERIFY TOKEN ERROR:", err);
+    return NextResponse.json({ success: false, user: null }, { status: 500 });
   }
 }
