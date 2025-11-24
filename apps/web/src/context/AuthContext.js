@@ -1,28 +1,48 @@
 "use client";
+
 import LandingSkeleton from "@/components/LandingSkeleton";
-import { createContext, useContext, useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo
+} from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [adminToken, setAdminToken] = useState(null);
-  console.log("hello", user);
 
-  // Existing token verification
+  // ✅ PUBLIC ROUTES
+  const publicRoutes = [
+    "/",
+    "/login",
+    "/register",
+    "/admin-login"
+  ];
+
+  const isPublicRoute =
+    publicRoutes.includes(pathname) ||
+    pathname.startsWith("/batchid") ||
+    pathname.startsWith("/api/public");
+
+  // ✅ Verify existing token
   useEffect(() => {
     const verify = async () => {
       try {
         const res = await fetch("/api/verify-token", {
           credentials: "include",
         });
+
         if (res.ok) {
           const data = await res.json();
-          console.log("auth context", data);
           setUser(data.user);
         } else {
           setUser(null);
@@ -33,22 +53,30 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
       }
     };
+
     verify();
   }, []);
 
-  // New admin login (client-side only)
+  // ✅ Admin login handler
   const adminLogin = (token) => {
-    // you can decode the token here if needed, but we'll trust input for now
     setAdminToken(token);
   };
+
+  // ✅ Prevent redirect on public pages
   useEffect(() => {
-    if (!loading && !user) {
+    if (!loading && !user && !isPublicRoute) {
       router.push("/login");
     }
-  }, [user, loading, router]);
+  }, [user, loading, isPublicRoute, router]);
 
   const value = useMemo(
-    () => ({ user, setUser, loading, adminToken, adminLogin }),
+    () => ({
+      user,
+      setUser,
+      loading,
+      adminToken,
+      adminLogin,
+    }),
     [user, loading, adminToken]
   );
 
@@ -60,7 +88,12 @@ export const AuthProvider = ({ children }) => {
     );
   }
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
+// ✅ Custom hook
 export const useAuth = () => useContext(AuthContext);
