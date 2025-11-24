@@ -39,7 +39,8 @@
     "swiper": "^12.0.1",
     "toast": "^0.5.4",
     "twilio": "^5.10.1",
-    "uglify-js": "^3.19.3"
+    "uglify-js": "^3.19.3",
+    "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
