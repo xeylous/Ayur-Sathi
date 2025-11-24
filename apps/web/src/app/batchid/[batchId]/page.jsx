@@ -1,6 +1,6 @@
 "use client";
 
-import {use, useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import {
   Loader2,
   MapPin,
@@ -167,31 +167,38 @@ export default function BatchTracePage({ params }) {
 
       {/* CERTIFICATE + APPROVED STAMP */}
       <div className="relative bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
-
-  {/* 🔥 Circular Approved Stamp */}
-  <div className="absolute top-6 right-6 w-32 h-32 flex items-center justify-center 
+        {/* 🔥 Circular Approved Stamp */}
+        <div
+          className="absolute top-6 right-6 w-32 h-32 flex items-center justify-center 
     rounded-full border-[6px] border-green-700 bg-white text-green-700 font-bold 
-    rotate-[-15deg] shadow-lg">
+    rotate-[-15deg] shadow-lg"
+        >
+          <div
+            className="w-24 h-24 rounded-full border-2 border-dashed border-green-700 
+      flex items-center justify-center text-center leading-tight"
+          >
+            <span className="uppercase tracking-wide">Approved</span>
+          </div>
+        </div>
 
-    <div className="w-24 h-24 rounded-full border-2 border-dashed border-green-700 
-      flex items-center justify-center text-center leading-tight">
-      <span className="uppercase tracking-wide">Approved</span>
-    </div>
-  </div>
+        <h2 className="text-lg font-semibold text-green-900 mb-3 flex items-center gap-2">
+          <FileText className="text-green-700" /> Quality Certificate
+        </h2>
 
-  <h2 className="text-lg font-semibold text-green-900 mb-3 flex items-center gap-2">
-    <FileText className="text-green-700" /> Quality Certificate
-  </h2>
-
-  <div className="bg-gray-50 rounded-xl border border-gray-300 shadow-inner p-4">
-    {data.certificateUrl.endsWith(".pdf") ? (
-      <iframe src={data.certificateUrl} className="w-full h-[400px] rounded-lg"></iframe>
-    ) : (
-      <img src={data.certificateUrl} className="w-full rounded-lg shadow" />
-    )}
-  </div>
-</div>
-
+        <div className="bg-gray-50 rounded-xl border border-gray-300 shadow-inner p-4">
+          {data.certificateUrl.endsWith(".pdf") ? (
+            <iframe
+              src={data.certificateUrl}
+              className="w-full h-[400px] rounded-lg"
+            ></iframe>
+          ) : (
+            <img
+              src={data.certificateUrl}
+              className="w-full rounded-lg shadow"
+            />
+          )}
+        </div>
+      </div>
 
       {/* FOOTER */}
       <p className="text-center text-sm text-gray-400 mt-10">
