@@ -4,7 +4,6 @@ import { connectDB } from "@/lib/db";
 import CropUpload from "@/models/CropUpload";
 import AcceptedBatchByManu from "@/models/AcceptedBatchByManu";
 
-
 export async function GET(req) {
   try {
     // ⛔ Check auth cookie

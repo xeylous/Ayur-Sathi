@@ -88,6 +88,18 @@ export default function Navbar() {
           <NavItem to="/" label="Home" />
           <NavItem to="/explore" label="Explore" />
           <NavItem to="/marketplace" label="Marketplace" />
+          {user && (
+            <NavItem
+              to={
+                user.type === "lab"
+                  ? `/labId/${user.labId}`
+                  : user.type === "manu"
+                  ? `/manuId/${user.manuId}`
+                  : `/id/${user.uniqueId}`
+              }
+              label="Dashboard"
+            />
+          )}
         </div>
 
         {/* Right Buttons */}
@@ -196,6 +208,18 @@ export default function Navbar() {
                   label="Marketplace"
                   closeMenu={() => setOpen(false)}
                 />
+                {user && (
+                  <NavItem
+                    to={
+                      user.type === "lab"
+                        ? `/labId/${user.labId}`
+                        : user.type === "manu"
+                        ? `/manuId/${user.manuId}`
+                        : `/id/${user.uniqueId}`
+                    }
+                    label="Dashboard"
+                  />
+                )}
 
                 {user ? (
                   <>
