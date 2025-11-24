@@ -92,7 +92,7 @@ export async function POST(req) {
     }
 
     // 8️⃣ Generate QR code (NO JSON.stringify)
-    const qrPayload = `https://ayur-sathi.vercel.app/batchid=${batch.batchId}`;
+    const qrPayload = `https://ayur-sathi.vercel.app/batchid/${batch.batchId}`;
     const qrBase64 = await QRCode.toDataURL(qrPayload);
 
     // Convert base64 → buffer
