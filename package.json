@@ -11,6 +11,7 @@
     "dev:mobile": "cd apps/mobile && npx expo start"
   },
   "dependencies": {
+    "qrcode": "^1.5.4",
     "recharts": "^3.2.1"
   }
 }

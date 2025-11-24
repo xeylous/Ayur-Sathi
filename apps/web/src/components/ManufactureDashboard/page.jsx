@@ -10,6 +10,7 @@ import Toast from "./Toast";
 
 import "./styles.css";
 import PendingBatchManager from "./PendingBactches";
+import ManufacturedBatches from "./Manufactured";
 
 export default function ManufactureDashboard() {
   const [activeTab, setActiveTab] = useState("batch");
@@ -39,6 +40,7 @@ export default function ManufactureDashboard() {
         {activeTab === "pending" && <PendingBatchManager showToast={showToast}/>}
         {activeTab === "analytics" && <Analytics />}
         {activeTab === "payment" && <PaymentWithdraw showToast={showToast} />}
+        {activeTab === "manufactured" && <ManufacturedBatches showToast={showToast}/>}
         
         {/* Toast Message */}
         <Toast message={toast.message} type={toast.type} />

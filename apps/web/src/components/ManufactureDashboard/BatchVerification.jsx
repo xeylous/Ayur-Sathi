@@ -100,6 +100,18 @@ export default function BatchVerification({ showToast }) {
       showToast("No certificate URL available.", "error");
     }
   };
+  const getStatusClass = (status) => {
+  switch (status?.toLowerCase()) {
+    case "Approved":
+      return "bg-green-100 text-green-700 border border-green-300";
+    case "Pending":
+      return "bg-yellow-100 text-yellow-700 border border-yellow-300";
+    case "Rejected":
+      return "bg-red-100 text-red-700 border border-red-300";
+    default:
+      return "bg-gray-200 text-gray-600 border border-gray-300";
+  }
+};
 
   // 🔒 Logic: Check if buttons should be enabled
   // Buttons are disabled if loading, no result, OR status is not the target status
@@ -141,7 +153,8 @@ export default function BatchVerification({ showToast }) {
                   </p>
                   <p className="text-gray-600 mt-1">
                     <span className="font-medium">Status: </span> 
-                    <span className={`font-bold ${result.status === TARGET_STATUS ? "text-yellow-600" : "text-gray-800"}`}>
+ <span className={`font-bold ${result.status === TARGET_STATUS ? getStatusClass(result.status) : ""}`}>
+
                       {result.status}
                     </span>
                   </p>
