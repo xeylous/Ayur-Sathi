@@ -24,6 +24,13 @@
 | POST  | /api/labverification | Save crop batches which is accepted by the lab for testing. |
 | POST | /api/approve | Approve/reject crop batch, upload certificate, update test results. |
 
+## Manufacture Processing
+| Method | Endpoint | Description |
+|--------|---------|-------------|
+| GET  | /api/manufacture | Fetch crop batches that came for manufacturing unit. |
+| POST  | /api/labverification | Save crop batches which is accepted by the lab for testing. |
+| POST | /api/approve | Approve/reject crop batch, upload certificate, update test results. |
+
 ## Profile Management
 | Method | Endpoint | Description |
 |--------|---------|-------------|
