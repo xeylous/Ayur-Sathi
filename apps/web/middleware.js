@@ -12,7 +12,7 @@ export function middleware(req) {
     "/register",
     "/api/public",
     "/marketplace",
-    "/explore/:path*",
+    "/explore",
     "/admin"
   ];
 
