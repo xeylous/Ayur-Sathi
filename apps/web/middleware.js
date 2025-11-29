@@ -12,7 +12,8 @@ export function middleware(req) {
     "/register",
     "/api/public",
     "/marketplace",
-    "/explore"
+    "/explore",
+    "/admin"
   ];
 
   // Allow dynamic public route: /batchid/*
