@@ -6,7 +6,8 @@ import {
   useContext,
   useState,
   useEffect,
-  useMemo
+  useMemo,
+  use
 } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -20,12 +21,16 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [adminToken, setAdminToken] = useState(null);
 
-  // ✅ PUBLIC ROUTES
+  // 🔹 Add missing public routes
   const publicRoutes = [
     "/",
     "/login",
     "/register",
-    "/admin-login"
+    "/admin-login",
+    "/explore",
+    "/marketplace",
+    "/herbslib",
+    "/blog"
   ];
 
   const isPublicRoute =
@@ -33,7 +38,6 @@ export const AuthProvider = ({ children }) => {
     pathname.startsWith("/batchid") ||
     pathname.startsWith("/api/public");
 
-  // ✅ Verify existing token
   useEffect(() => {
     const verify = async () => {
       try {
@@ -47,7 +51,7 @@ export const AuthProvider = ({ children }) => {
         } else {
           setUser(null);
         }
-      } catch (err) {
+      } catch {
         setUser(null);
       } finally {
         setLoading(false);
@@ -57,13 +61,8 @@ export const AuthProvider = ({ children }) => {
     verify();
   }, []);
 
-  // ✅ Admin login handler
-  const adminLogin = (token) => {
-    setAdminToken(token);
-  };
-
-  // ✅ Prevent redirect on public pages
   useEffect(() => {
+    // 🛑 Prevent redirect if route is public
     if (!loading && !user && !isPublicRoute) {
       router.push("/login");
     }
@@ -75,18 +74,12 @@ export const AuthProvider = ({ children }) => {
       setUser,
       loading,
       adminToken,
-      adminLogin,
+      loginAdmin: setAdminToken,
     }),
     [user, loading, adminToken]
   );
 
-  if (loading) {
-    return (
-      <div>
-        <LandingSkeleton />
-      </div>
-    );
-  }
+  if (loading) return <LandingSkeleton />;
 
   return (
     <AuthContext.Provider value={value}>
@@ -95,5 +88,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// ✅ Custom hook
 export const useAuth = () => useContext(AuthContext);
