@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { MessageCircle } from "lucide-react";
+import Image from "next/image";
+
 
 function TypingIndicator() {
   return (
@@ -113,9 +115,16 @@ export default function ChatbotAssistant() {
         <div className="fixed bottom-20 right-5 w-80 bg-[#F4F9E9] rounded-2xl shadow-2xl p-4 border border-green-300 flex flex-col animate-fadeIn z-50">
 
           {/* HEADER */}
-          <div className="text-center py-2 font-semibold text-green-700 text-lg border-b">
-            🌿 Ayur Gyani
-          </div>
+          <div className="flex items-center justify-center gap-3 py-2 border-b ">
+      <Image
+        src="/saint.jpg"
+        alt="AyurSaathi Logo"
+        width={50}
+        height={50}
+        className="h-10 w-10 rounded-3xl"
+      />
+      <h1 className="font-semibold text-green-700 text-lg">Ayur Gyani</h1>
+    </div>
 
           {/* CHAT WINDOW */}
           <div className="flex-1 overflow-y-auto space-y-3 p-2 max-h-72">
