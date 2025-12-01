@@ -30,7 +30,8 @@ export const AuthProvider = ({ children }) => {
     "/explore",
     "/marketplace",
     "/herbslib",
-    "/blog"
+    "/blog",
+    "/admin"
   ];
 
   const isPublicRoute =
