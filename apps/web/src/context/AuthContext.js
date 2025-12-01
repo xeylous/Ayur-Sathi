@@ -62,6 +62,27 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+  const SERVER_URL = "https://ayurgyani.onrender.com/ping"; // your backend
+
+  const pingServer = async () => {
+    try {
+      await fetch(SERVER_URL);
+      console.log("💖 Keep-alive ping sent");
+    } catch (error) {
+      console.log("⚠️ Ping failed:", error);
+    }
+  };
+
+  // Call immediately when user visits site
+  pingServer();
+
+  // Continue pinging every 10 minutes
+  const interval = setInterval(pingServer, 10 * 60 * 1000);
+
+  return () => clearInterval(interval);
+}, []);
+
+  useEffect(() => {
     // 🛑 Prevent redirect if route is public
     if (!loading && !user && !isPublicRoute) {
       router.push("/login");
