@@ -1,71 +1,68 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, X, Loader2 } from "lucide-react";
 import Image from "next/image";
-
-
-function TypingIndicator() {
-  return (
-    <div className="flex space-x-1 bg-[#E7F5CE] px-3 py-2 rounded-xl shadow-sm w-fit">
-      <span className="w-2 h-2 bg-gray-600 rounded-full animate-bounce"></span>
-      <span className="w-2 h-2 bg-gray-600 rounded-full animate-bounce delay-200"></span>
-      <span className="w-2 h-2 bg-gray-600 rounded-full animate-bounce delay-400"></span>
-    </div>
-  );
-}
+import CryptoJS from "crypto-js";
 
 export default function ChatbotAssistant() {
   const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [batchInput, setBatchInput] = useState("");
   const chatEndRef = useRef(null);
 
-  // Auto scroll
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+  }, [messages]);
 
-  // Auto send greeting message when opened
-  useEffect(() => {
-    if (open && messages.length === 0) {
-      sendMessageToAPI("hi");
-    }
-  }, [open]);
+  const decrypt = (encryptedText) => {
+    const key = CryptoJS.enc.Utf8.parse(process.env.NEXT_PUBLIC_SECRET.padEnd(32, "0"));
+    const [ivBase64, encryptedBase64] = encryptedText.split(":");
 
-  // Format newline responses
-  const formatMessage = (text) =>
-    text.split("\n").map((line, i) => <p key={i}>{line}</p>);
+    const decrypted = CryptoJS.AES.decrypt(encryptedBase64, key, {
+      iv: CryptoJS.enc.Base64.parse(ivBase64),
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7,
+    });
 
-  const sendMessageToAPI = async (msg) => {
-    setLoading(true);
+    return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+  };
 
-    // Smart ending logic
-    if (["thanks", "thank you", "thx"].includes(msg.toLowerCase())) {
-      setMessages((prev) => [...prev, { sender: "user", text: msg }]);
-
-      setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            sender: "bot",
-            text: "🙏 Thank you! Take care and stay healthy 💚",
-          },
-        ]);
-      }, 700);
-
-      setTimeout(() => {
-        setOpen(false);
-        setMessages([]);
-      }, 2500);
-
-      setLoading(false);
+  const handleBatchCheck = async () => {
+    if (!/^ASW-\d{4}-\d{4}$/i.test(batchInput)) {
+      alert("❌ Invalid Batch ID Format. Use: ASW-2025-5031");
       return;
     }
 
-    if (msg !== "hi") {
-      setMessages((prev) => [...prev, { sender: "user", text: msg }]);
+    setLoading(true);
+
+    try {
+      const res = await fetch(`/api/public/batchStatus/${batchInput}`);
+      const data = await res.json();
+      const decrypted = decrypt(data.encrypted);
+
+      setMessages([
+        {
+          sender: "bot",
+          type: "batch",
+          batch: decrypted
+        },
+      ]);
+    } catch {
+      setMessages([{ sender: "bot", text: "⚠️ Could not fetch status." }]);
     }
+
+    setLoading(false);
+  };
+
+  const sendMessageToAPI = async (msg) => {
+    if (!msg.trim()) return;
+
+    setMessages((prev) => [...prev, { sender: "user", text: msg }]);
+    setMessage("");
+    setLoading(true);
 
     try {
       const res = await fetch("https://ayurgyani.onrender.com/chat", {
@@ -75,28 +72,19 @@ export default function ChatbotAssistant() {
       });
 
       const data = await res.json();
-
-      setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          { sender: "bot", text: data.reply || "⚠️ No reply received." },
-        ]);
-        setLoading(false);
-      }, 1000);
-    } catch (error) {
-      setMessages((prev) => [
-        ...prev,
-        { sender: "bot", text: "⚠️ Network error. Try again." },
-      ]);
-      setLoading(false);
+      setMessages((prev) => [...prev, { sender: "bot", text: data.reply }]);
+    } catch {
+      setMessages((prev) => [...prev, { sender: "bot", text: "⚠️ Network error." }]);
     }
+
+    setLoading(false);
   };
 
-  // Toggle / Reset chat when closed
   const handleToggle = () => {
     if (open) {
       setMessages([]);
-      setMessage("");
+      setMode(null);
+      setBatchInput("");
     }
     setOpen(!open);
   };
@@ -108,87 +96,130 @@ export default function ChatbotAssistant() {
         onClick={handleToggle}
         className="fixed bottom-5 right-5 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-xl"
       >
-        <MessageCircle size={28} />
+        {open ? <X size={28} /> : <MessageCircle size={28} />}
       </button>
 
+      {/* Chat Window */}
       {open && (
-        <div className="fixed bottom-20 right-5 w-80 bg-[#F4F9E9] rounded-2xl shadow-2xl p-4 border border-green-300 flex flex-col animate-fadeIn z-50">
+        <div className="fixed bottom-20 right-5 w-80 bg-[#ECECEC] rounded-2xl shadow-2xl border flex flex-col overflow-hidden">
 
-          {/* HEADER */}
-          <div className="flex items-center justify-center gap-3 py-2 border-b ">
-      <Image
-        src="/saint.jpg"
-        alt="AyurSaathi Logo"
-        width={50}
-        height={50}
-        className="h-10 w-10 rounded-3xl"
-      />
-      <h1 className="font-semibold text-green-700 text-lg">Ayur Gyani</h1>
-    </div>
+          {/* Header */}
+          <div className="bg-green-600 text-white flex items-center gap-3 p-3">
+            <Image src="/saint.jpg" width={40} height={40} alt="logo" className="rounded-full" />
+            <h1 className="font-semibold text-lg">Ayur Gyani</h1>
+          </div>
 
-          {/* CHAT WINDOW */}
-          <div className="flex-1 overflow-y-auto space-y-3 p-2 max-h-72">
-            {messages.map((msg, index) => (
+          {/* Main Area */}
+          <div className="flex-1 overflow-y-auto p-3 space-y-3 max-h-80 bg-[#F5F5F5]">
+            {mode === null && (
+              <div className="space-y-3">
+                <button
+                  className="bg-green-600 text-white py-2 rounded-lg w-full"
+                  onClick={() => setMode("chat")}
+                >
+                  💬 Talk to Assistant
+                </button>
+                <button
+                  className="bg-green-500 text-white py-2 rounded-lg w-full"
+                  onClick={() => setMode("batch")}
+                >
+                  🔍 Check Batch Status
+                </button>
+              </div>
+            )}
+
+            {messages.map((m, i) => (
               <div
-                key={index}
-                className={`max-w-[75%] px-3 py-2 rounded-2xl text-sm leading-tight shadow-sm ${
-                  msg.sender === "bot"
-                    ? "bg-white border border-green-200 text-gray-900 self-start rounded-bl-sm"
-                    : "bg-green-600 text-white self-end ml-auto rounded-br-sm"
+                key={i}
+                className={`p-2 rounded-lg max-w-[75%] ${
+                  m.sender === "bot"
+                    ? "bg-white border shadow-sm"
+                    : "bg-green-600 text-white ml-auto"
                 }`}
               >
-                {formatMessage(msg.text)}
 
-                {/* Tip under bot reply */}
-                {msg.sender === "bot" && (
-                  <p className="text-[10px] text-gray-500 mt-1 italic">
-                    💡 Tip: Type “Thanks” anytime to end the chat.
-                  </p>
+                {/* Regular bot text */}
+                {m.type !== "batch" && <p>{m.text}</p>}
+
+                {/* Batch Card */}
+                {m.type === "batch" && (
+                  <>
+                    <div className="text-sm leading-relaxed whitespace-pre-wrap font-medium">
+{`📦 Batch Status
+
+🆔 ${m.batch.batchId}
+🌱 Species: ${m.batch.speciesId}
+🟢 Status: ${m.batch.status}
+🕒 ${m.batch.lastUpdated}
+`}
+                    </div>
+
+                    {m.batch.certificateUrl && (
+                      <button
+                        onClick={() => {
+                          setLoading(true);
+                          setTimeout(() => {
+                            window.open(m.batch.certificateUrl, "_blank");
+                            setLoading(false);
+                          }, 1000);
+                        }}
+                        className="mt-3 w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg transition text-sm"
+                      >
+                        {loading ? "⏳ Opening..." : "📄 View Certificate"}
+                      </button>
+                    )}
+                  </>
                 )}
               </div>
             ))}
 
-            {loading && <TypingIndicator />}
+            {loading && (
+              <div className="flex justify-center">
+                <Loader2 className="animate-spin text-green-600" />
+              </div>
+            )}
 
             <div ref={chatEndRef}></div>
           </div>
 
-          {/* INPUT SECTION */}
-          <div className="flex gap-2 mt-2">
-            <input
-              type="text"
-              placeholder="Type a message..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && message.trim()) {
-                  sendMessageToAPI(message);
-                  setMessage("");
-                }
-              }}
-              className="flex-1 px-3 py-2 rounded-full border outline-none text-sm shadow-sm"
-            />
+          {/* WhatsApp Style Input */}
+          {mode === "chat" && (
+            <div className="flex items-center gap-2 p-2 bg-white border-t">
+              <input
+                type="text"
+                placeholder="Type message..."
+                className="flex-1 px-3 py-2 rounded-full border outline-none text-sm"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && sendMessageToAPI(message)}
+              />
+              <button
+                onClick={() => sendMessageToAPI(message)}
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full"
+              >
+                Send
+              </button>
+            </div>
+          )}
 
-            <button
-              onClick={() => {
-                if (message.trim()) {
-                  sendMessageToAPI(message);
-                  setMessage("");
-                }
-              }}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 rounded-full text-sm"
-            >
-              Send
-            </button>
-          </div>
+          {/* Batch Input */}
+          {mode === "batch" && (
+            <div className="p-3 space-y-2">
+              <input
+                className="border px-3 py-2 w-full rounded-md"
+                placeholder="ASW-2025-5031"
+                value={batchInput}
+                onChange={(e) => setBatchInput(e.target.value)}
+              />
 
-          {/* CLOSE BUTTON */}
-          <button
-            onClick={handleToggle}
-            className="absolute top-2 right-4 text-gray-600 hover:text-red-500 text-lg font-bold"
-          >
-            ×
-          </button>
+              <button
+                onClick={handleBatchCheck}
+                className="bg-green-600 text-white py-2 rounded-lg w-full"
+              >
+                {loading ? "Checking..." : "Submit"}
+              </button>
+            </div>
+          )}
         </div>
       )}
     </>
