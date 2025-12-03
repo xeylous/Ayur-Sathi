@@ -12,13 +12,16 @@ export default function ChatbotAssistant() {
   const [messages, setMessages] = useState([]);
   const [batchInput, setBatchInput] = useState("");
   const chatEndRef = useRef(null);
+  const chatActive = useRef(false);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const decrypt = (encryptedText) => {
-    const key = CryptoJS.enc.Utf8.parse(process.env.NEXT_PUBLIC_SECRET.padEnd(32, "0"));
+    const key = CryptoJS.enc.Utf8.parse(
+      process.env.NEXT_PUBLIC_SECRET.padEnd(32, "0")
+    );
     const [ivBase64, encryptedBase64] = encryptedText.split(":");
 
     const decrypted = CryptoJS.AES.decrypt(encryptedBase64, key, {
@@ -47,7 +50,7 @@ export default function ChatbotAssistant() {
         {
           sender: "bot",
           type: "batch",
-          batch: decrypted
+          batch: decrypted,
         },
       ]);
     } catch {
@@ -57,28 +60,46 @@ export default function ChatbotAssistant() {
     setLoading(false);
   };
 
-  const sendMessageToAPI = async (msg) => {
-    if (!msg.trim()) return;
+const sendMessageToAPI = async (msg) => {
+  if (!msg.trim()) return;
 
-    setMessages((prev) => [...prev, { sender: "user", text: msg }]);
-    setMessage("");
-    setLoading(true);
+  if (!chatActive.current || mode !== "chat") return; // prevent ghost messages
 
-    try {
-      const res = await fetch("https://ayurgyani.onrender.com/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: "test-user", message: msg }),
-      });
+  setMessages((prev) => [...prev, { sender: "user", text: msg }]);
+  setMessage("");
+  setLoading(true);
 
-      const data = await res.json();
-      setMessages((prev) => [...prev, { sender: "bot", text: data.reply }]);
-    } catch {
-      setMessages((prev) => [...prev, { sender: "bot", text: "⚠️ Network error." }]);
-    }
+  let active = true;
 
+  try {
+    const res = await fetch("https://ayurgyani.onrender.com/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: "test-user", message: msg }),
+    });
+
+    const data = await res.json();
+
+    if (!active || !chatActive.current || mode !== "chat") return; // 🛑 BLOCK UPDATE
+
+    setMessages((prev) => [...prev, { sender: "bot", text: data.reply }]);
+  } catch {
+    if (!active || !chatActive.current || mode !== "chat") return; // 🛑 BLOCK UPDATE
+
+    setMessages((prev) => [
+      ...prev,
+      { sender: "bot", text: "⚠️ Network error." },
+    ]);
+  }
+
+  if (active && chatActive.current && mode === "chat") {
     setLoading(false);
+  }
+
+  return () => {
+    active = false;
   };
+};
 
   const handleToggle = () => {
     if (open) {
@@ -88,6 +109,58 @@ export default function ChatbotAssistant() {
     }
     setOpen(!open);
   };
+  useEffect(() => {
+  if (mode !== "chat") return;
+
+  let active = true;
+  chatActive.current = true;
+  setLoading(true);
+
+  fetch("https://ayurgyani.onrender.com/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId: "test-user", message: "hi" }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (!active) return; // ⛔ Prevent updating if user left
+      if (!chatActive.current) return;
+
+      setMessages([
+        {
+          sender: "bot",
+          text: data.reply || "Hello! How can I assist you today?",
+        },
+      ]);
+    })
+    .catch(() => {
+      if (!active) return;
+      if (!chatActive.current) return;
+
+      setMessages([
+        { sender: "bot", text: "⚠️ Unable to connect. Try again later." },
+      ]);
+    })
+    .finally(() => {
+      if (active && chatActive.current) setLoading(false);
+    });
+
+  return () => {
+    active = false;        // ⛔ Stop updates
+    chatActive.current = false;
+  };
+}, [mode]);
+
+
+  function TypingDots() {
+    return (
+      <div className="flex items-center gap-1 bg-white border rounded-lg shadow-sm px-3 py-2 w-fit">
+        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></span>
+        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-150"></span>
+        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-300"></span>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -102,11 +175,70 @@ export default function ChatbotAssistant() {
       {/* Chat Window */}
       {open && (
         <div className="fixed bottom-20 right-5 w-80 bg-[#ECECEC] rounded-2xl shadow-2xl border flex flex-col overflow-hidden">
-
           {/* Header */}
-          <div className="bg-green-600 text-white flex items-center gap-3 p-3">
-            <Image src="/saint.jpg" width={40} height={40} alt="logo" className="rounded-full" />
-            <h1 className="font-semibold text-lg">Ayur Gyani</h1>
+          {/* <div className="bg-green-600 text-white flex items-center justify-between p-3">
+            {mode !== null ? (
+              <button
+                className="text-white text-sm flex items-center gap-1 px-2 py-1 rounded hover:bg-white/20 transition"
+                onClick={() => {
+                  setMessages([]);
+                  setBatchInput("");
+                  setMode(null);
+                }}
+              >
+                <span className="text-lg leading-none">←</span>
+                Back
+              </button>
+            ) : (
+              <div className="w-14"></div> // balanced spacing
+            )}
+
+            <div className="flex items-center gap-2">
+              <Image
+                src="/saint.jpg"
+                width={40}
+                height={40}
+                alt="logo"
+                className="rounded-full"
+              />
+              <h1 className="font-semibold text-lg">Ayur Gyani</h1>
+            </div>
+
+            <div className="w-14"></div>
+          </div> */}
+
+          <div className="bg-green-600 text-white flex items-center gap-3 px-3 py-2">
+            {/* Back Button */}
+            {mode !== null && (
+              <button
+                onClick={() => {
+                  chatActive.current = false;
+                  setMessages([]);
+                  setBatchInput("");
+                  setMode(null);
+                }}
+                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/20 transition"
+              >
+                <span className="text-xl leading-none">←</span>
+              </button>
+            )}
+
+            {/* Profile Image */}
+            <Image
+              src="/saint.jpg"
+              width={38}
+              height={38}
+              alt="logo"
+              className="rounded-full border border-white/40"
+            />
+
+            {/* Name + Status */}
+            <div className="flex flex-col leading-tight">
+              <span className="text-[16px] font-semibold">Ayur Gyani</span>
+              {/* <span className="text-[12px] text-white/80">
+      {mode === "chat" ? "Online" : "How can I help you?"}
+    </span> */}
+            </div>
           </div>
 
           {/* Main Area */}
@@ -115,7 +247,11 @@ export default function ChatbotAssistant() {
               <div className="space-y-3">
                 <button
                   className="bg-green-600 text-white py-2 rounded-lg w-full"
-                  onClick={() => setMode("chat")}
+                  onClick={() => {
+                    chatActive.current = true;
+                    setMessages([]);
+                    setMode("chat");
+                  }}
                 >
                   💬 Talk to Assistant
                 </button>
@@ -137,7 +273,6 @@ export default function ChatbotAssistant() {
                     : "bg-green-600 text-white ml-auto"
                 }`}
               >
-
                 {/* Regular bot text */}
                 {m.type !== "batch" && <p>{m.text}</p>}
 
@@ -145,7 +280,7 @@ export default function ChatbotAssistant() {
                 {m.type === "batch" && (
                   <>
                     <div className="text-sm leading-relaxed whitespace-pre-wrap font-medium">
-{`📦 Batch Status
+                      {`📦 Batch Status
 
 🆔 ${m.batch.batchId}
 🌱 Species: ${m.batch.speciesId}
@@ -173,9 +308,9 @@ export default function ChatbotAssistant() {
               </div>
             ))}
 
-            {loading && (
-              <div className="flex justify-center">
-                <Loader2 className="animate-spin text-green-600" />
+            {loading && mode === "chat" && (
+              <div className="flex">
+                <TypingDots />
               </div>
             )}
 
@@ -191,7 +326,9 @@ export default function ChatbotAssistant() {
                 className="flex-1 px-3 py-2 rounded-full border outline-none text-sm"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && sendMessageToAPI(message)}
+                onKeyDown={(e) =>
+                  e.key === "Enter" && sendMessageToAPI(message)
+                }
               />
               <button
                 onClick={() => sendMessageToAPI(message)}
