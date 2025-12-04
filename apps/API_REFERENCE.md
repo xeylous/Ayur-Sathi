@@ -52,3 +52,8 @@
 | Method | Endpoint | Description |
 |--------|---------|-------------|
 | Any | /api/auth/[...nextauth] | Handles NextAuth.js authentication flows (Google, Email, OAuth, etc.). |
+
+## Public api (for batch related query)
+| Method | Endpoint | Description |
+|--------|---------|-------------|
+| GET | /api/public/batchStatus | Fetch the current status of the batch and give batchId, speciesId , status and certificate generated. |
