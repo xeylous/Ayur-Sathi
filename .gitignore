@@ -1,0 +1,54 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+.next/
+
+# Include env files in any subfolder (like apps/web/.env.local)
+apps/*/.env
+apps/*/.env.local
+apps/*/.env.development.local
+apps/*/.env.test.local
+apps/*/.env.production.local
+
+# testing
+/coverage
+
+# next.js
+/.next/
+apps/web/.gitignore
+apps/web/.next/
+apps/**/.next/
+apps/**/node_modules/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+*.log
+.DS_Store
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
