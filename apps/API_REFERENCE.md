@@ -56,4 +56,5 @@
 ## Public api (for batch related query)
 | Method | Endpoint | Description |
 |--------|---------|-------------|
-| GET | /api/public/batchStatus | Fetch the current status of the batch and give batchId, speciesId , status and certificate generated. |
+| GET | /api/public/batchStatus/[batchId] | Fetch the current status of the batch and give batchId, speciesId , status and certificate generated. |
+| GET | /api/public/batch | Fetches the details of specific batch , used in the finally generated QR. |
