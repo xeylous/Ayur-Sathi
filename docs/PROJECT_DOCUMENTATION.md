@@ -1,8 +1,8 @@
-# 🚀 AyurSaathi – Blockchain-based Traceability & Fair Marketplace for Ayurvedic Herbs
+#  AyurSaathi – Blockchain-based Traceability & Fair Marketplace for Ayurvedic Herbs
 
 ---
 
-## 📌 Overview
+##  Overview
 
 **AyurSaathi** is a blockchain-enabled supply chain transparency and fair marketplace platform for the Ayurvedic herbs ecosystem.  
 It ensures:
@@ -15,7 +15,7 @@ It ensures:
 
 This documentation describes the **architecture, folder structure, component system, models, utilities, and API endpoints** of the project.
 
----
+<!-- ---
 
 # 🗂️ 1. Project Structure
 
@@ -45,7 +45,7 @@ src/
 └── public/
 
 
----
+--- -->
 
 # 🎨 2. Components Documentation
 
