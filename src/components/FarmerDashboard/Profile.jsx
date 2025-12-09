@@ -1,81 +1,63 @@
 "use client";
+
 import { useState, useEffect } from "react";
+import { useFarmer } from "@/context/FarmerContext";
 import { toast, ToastContainer } from "react-toastify";
-import { usePathname } from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function FarmerProfile() {
-  const pathname = usePathname(); // e.g. /id/d284fa
-  const uniqueId = pathname.split("/").pop();
+  const { farmer, setFarmer, loadingFarmer } = useFarmer();
 
-  const [farmer, setFarmer] = useState({
+  const [editMode, setEditMode] = useState(false);
+
+  const [form, setForm] = useState({
     fullName: "",
     phone: "",
     email: "",
     address: "",
     pinCode: "",
+    uniqueId: "",
   });
 
-  // ✅ Page load pe data fetch karna
- useEffect(() => {
-  const fetchProfile = async () => {
-    try {
-      const tokenRes = await fetch("/api/verify-token", { method: "GET" });
-      const tokenData = await tokenRes.json();
-      const userType = tokenData.user.type; // farmer ya user
-      const email = tokenData.user.email;
+  const [originalForm, setOriginalForm] = useState(null); // for cancel + comparison
 
-      const res = await fetch(`/api/profile?type=${userType}`); // ✅ type as query param
-      const data = await res.json();
+  // Load form data from context
+  useEffect(() => {
+    if (farmer) {
+      const initial = {
+        fullName: farmer.name || "",
+        phone: farmer.phone || "",
+        email: farmer.email || "",
+        address: farmer.address || "",
+        pinCode: farmer.pinCode || "",
+        uniqueId: farmer.uniqueId || "",
+      };
 
-      if (res.ok && data.success && data.profile) {
-        setFarmer({
-          fullName: data.profile.name || "",
-          phone: data.profile.phone || "",
-          email: email || "",
-          address: data.profile.address || "",
-          pinCode: data.profile.pinCode || "",
-          uniqueId: uniqueId,
-          type: userType,
-        });
-      } else {
-        toast.info("No existing profile found, please fill your details.");
-      }
-    } catch (error) {
-     
-      toast.error("Failed to load profile data!");
+      setForm(initial);
+      setOriginalForm(initial);
     }
-  };
+  }, [farmer]);
 
-  fetchProfile();
-}, [uniqueId]);
+  // Check if form is modified
+  const formChanged =
+    originalForm &&
+    JSON.stringify(form) !== JSON.stringify(originalForm);
 
-
-  // ✅ Input change
   const handleChange = (e) => {
-    setFarmer({ ...farmer, [e.target.name]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // ✅ Save / Update profile
+  // Cancel button → revert changes + exit edit mode
+  const handleCancel = () => {
+    setForm(originalForm);
+    setEditMode(false);
+  };
+
+  // Save Profile
   const handleSave = async () => {
-    const { fullName, phone, email, address, pinCode } = farmer;
+    if (!formChanged) return;
 
-    if (!fullName || !phone || !email || !address || !pinCode) {
-      toast.error("Please fill all fields!");
-      return;
-    }
-
-    if (!/^\d{10}$/.test(phone)) {
-      toast.error("Phone number must be 10 digits!");
-      return;
-    }
-
-    if (!/^\d{6}$/.test(pinCode)) {
-      toast.error("Pincode must be 6 digits!");
-      return;
-    }
-
-    const payload = { uniqueId, ...farmer };
+    const payload = { ...form };
 
     try {
       const res = await fetch("/api/profile", {
@@ -86,20 +68,49 @@ export default function FarmerProfile() {
 
       const data = await res.json();
 
-      if (res.ok && data.success) {
+      if (data.success) {
         toast.success("Profile updated successfully!");
+
+        // Update context
+        setFarmer({
+          ...farmer,
+          name: form.fullName,
+          phone: form.phone,
+          address: form.address,
+          pinCode: form.pinCode,
+        });
+
+        setOriginalForm(form); // update original reference
+        setEditMode(false);
       } else {
-        toast.error("Failed to update profile!");
+        toast.error("Failed to update profile");
       }
-    } catch (error) {
-     
-      toast.error("Error saving profile!");
+    } catch (err) {
+      toast.error("Error updating profile");
     }
   };
+
+  // Skeleton Loader
+  if (loadingFarmer) {
+    return (
+      <div className="animate-pulse max-w-3xl mx-auto p-6 mt-10">
+        <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
+        <div className="h-6 bg-gray-300 rounded w-full mb-3"></div>
+        <div className="h-6 bg-gray-300 rounded w-full mb-3"></div>
+        <div className="h-6 bg-gray-300 rounded w-full mb-3"></div>
+        <div className="h-20 bg-gray-300 rounded w-full"></div>
+      </div>
+    );
+  }
+
+  if (!farmer) {
+    return <p className="text-center mt-10">No profile found.</p>;
+  }
 
   return (
     <div className="flex items-center justify-center py-6 m-3">
       <div className="w-full max-w-4xl bg-white shadow-xl rounded-2xl p-6 sm:p-10">
+
         <h1 className="text-3xl font-bold text-center mb-8 text-green-700">
           Farmer Profile
         </h1>
@@ -110,22 +121,22 @@ export default function FarmerProfile() {
             <input
               type="text"
               name="fullName"
-              value={farmer.fullName}
+              value={form.fullName}
               onChange={handleChange}
-              placeholder="Enter full name"
-              className="mt-1 w-full border-b-2 border-gray-300 focus:border-green-600 p-2"
+              disabled={!editMode}
+              className="mt-1 w-full border-b-2 border-gray-300 p-2 focus:border-green-600 disabled:bg-gray-100"
             />
           </div>
 
           <div>
             <label>Phone Number</label>
             <input
-              type="tel"
+              type="text"
               name="phone"
-              value={farmer.phone}
+              value={form.phone}
               onChange={handleChange}
-              placeholder="Enter phone number"
-              className="mt-1 w-full border-b-2 border-gray-300 focus:border-green-600 p-2"
+              disabled={!editMode}
+              className="mt-1 w-full border-b-2 border-gray-300 p-2 focus:border-green-600 disabled:bg-gray-100"
             />
           </div>
 
@@ -134,11 +145,9 @@ export default function FarmerProfile() {
             <input
               type="email"
               name="email"
-              value={farmer.email}
-              onChange={handleChange}
-              placeholder="Enter email"
-              className="mt-1 w-full border-b-2 border-gray-300 focus:border-green-600 p-2"
-              readOnly
+              value={form.email}
+              disabled
+              className="mt-1 w-full border-b-2 bg-gray-100 border-gray-300 p-2"
             />
           </div>
 
@@ -147,10 +156,10 @@ export default function FarmerProfile() {
             <input
               type="text"
               name="pinCode"
-              value={farmer.pinCode}
+              value={form.pinCode}
               onChange={handleChange}
-              placeholder="Enter pin code"
-              className="mt-1 w-full border-b-2 border-gray-300 focus:border-green-600 p-2"
+              disabled={!editMode}
+              className="mt-1 w-full border-b-2 border-gray-300 p-2 focus:border-green-600 disabled:bg-gray-100"
             />
           </div>
 
@@ -158,24 +167,51 @@ export default function FarmerProfile() {
             <label>Address</label>
             <textarea
               name="address"
-              value={farmer.address}
+              value={form.address}
               onChange={handleChange}
+              disabled={!editMode}
               rows={2}
-              placeholder="Enter address"
-              className="mt-1 w-full border-b-2 border-gray-300 focus:border-green-600 p-2 resize-none"
+              className="mt-1 w-full border-b-2 border-gray-300 p-2 resize-none focus:border-green-600 disabled:bg-gray-100"
             />
           </div>
+        </form>
 
-          <div className="sm:col-span-2">
+        {/* BUTTONS AT BOTTOM */}
+        <div className="flex justify-end gap-4 mt-10">
+
+          {/* Cancel Button */}
+          {editMode && (
             <button
-              type="button"
+              onClick={handleCancel}
+              className="px-6 py-2 rounded-lg border border-red-500 text-red-500 hover:bg-red-100 transition"
+            >
+              Cancel
+            </button>
+          )}
+
+          {/* Edit / Update Button */}
+          {!editMode ? (
+            <button
+              onClick={() => setEditMode(true)}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            >
+              Edit Profile
+            </button>
+          ) : (
+            <button
               onClick={handleSave}
-              className="w-full py-3 rounded-lg font-semibold bg-green-600 hover:bg-green-700 text-white"
+              disabled={!formChanged}
+              className={`px-6 py-2 rounded-lg text-white transition ${
+                formChanged
+                  ? "bg-green-600 hover:bg-green-700"
+                  : "bg-gray-300 cursor-not-allowed"
+              }`}
             >
               Update Profile
             </button>
-          </div>
-        </form>
+          )}
+        </div>
+
       </div>
 
       <ToastContainer />

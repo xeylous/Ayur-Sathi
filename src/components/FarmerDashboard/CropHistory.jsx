@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 import { Clock, ChevronDown, ChevronUp } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { speciesList } from "@/lib/cropdetails";
+import { useCropCache } from "@/context/CropContext";
 
 export default function CropHistory() {
   const pathname = usePathname();
   const uniqueId = pathname.split("/").pop();
+
+  const { cachedCrops, setCachedCrops } = useCropCache();
 
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,8 +19,16 @@ export default function CropHistory() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // Fetch crop data based on page number
+  // Fetch crop data (with caching for page 1)
   const fetchCrops = async (pageNumber = 1) => {
+    // If cached page 1 exists → return it without fetching
+    if (pageNumber === 1 && cachedCrops[uniqueId]?.page1) {
+      setHistory(cachedCrops[uniqueId].page1);
+      setTotalPages(cachedCrops[uniqueId].totalPages);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -27,6 +38,17 @@ export default function CropHistory() {
       if (res.ok && data.success) {
         setHistory(data.data);
         setTotalPages(data.totalPages);
+
+        // Cache only page 1
+        if (pageNumber === 1) {
+          setCachedCrops((prev) => ({
+            ...prev,
+            [uniqueId]: {
+              page1: data.data,
+              totalPages: data.totalPages
+            }
+          }));
+        }
       } else {
         setHistory([]);
       }
@@ -38,7 +60,7 @@ export default function CropHistory() {
     }
   };
 
-  // Initial load
+  // Initial load (only once per uniqueId)
   useEffect(() => {
     if (uniqueId) fetchCrops(1);
   }, [uniqueId]);
@@ -52,18 +74,19 @@ export default function CropHistory() {
     fetchCrops(pageNum);
   };
 
-  // Sliding window for 3-page range
+  // Sliding window for pagination
   const getPageNumbers = () => {
     let start = Math.max(1, page - 1);
     let end = Math.min(totalPages, start + 2);
 
-    // Adjust start if near the end
     if (end - start < 2) start = Math.max(1, end - 2);
 
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   };
+
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-6 md:mt-0">
+      
       <h2 className="text-xl md:text-2xl font-bold mb-4 flex items-center gap-2 text-green-800">
         <Clock className="w-6 h-6" />
         Crop Upload History
@@ -83,10 +106,8 @@ export default function CropHistory() {
               const cropName = species ? species.name : item.speciesId;
 
               return (
-                <li
-                  key={item._id}
-                  className="p-4 border rounded-lg bg-[#ECF39E]/30 hover:bg-[#90A955]/10 transition"
-                >
+                <li key={item._id} className="p-4 border rounded-lg bg-[#ECF39E]/30 hover:bg-[#90A955]/10 transition">
+                  
                   <div
                     className="flex justify-between items-center cursor-pointer"
                     onClick={() => toggleExpand(item._id)}
@@ -94,8 +115,7 @@ export default function CropHistory() {
                     <div>
                       <p className="font-semibold text-gray-800">{cropName}</p>
                       <p className="text-sm text-gray-600">
-                        {item.quantity} unit •{" "}
-                        {new Date(item.createdAt).toLocaleDateString("en-IN")}
+                        {item.quantity} unit • {new Date(item.createdAt).toLocaleDateString("en-IN")}
                       </p>
                     </div>
 
@@ -120,16 +140,9 @@ export default function CropHistory() {
                   {expandedId === item._id && (
                     <div className="mt-4 pl-2 border-t pt-3 text-sm animate-fadeIn flex flex-col sm:flex-row justify-between items-start gap-1">
                       <div>
-                        <p>
-                          <strong>Batch ID:</strong> {item.batchId}
-                        </p>
-                        <p>
-                          <strong>Species ID:</strong> {item.speciesId}
-                        </p>
-                        <p>
-                          <strong>Created At:</strong>{" "}
-                          {new Date(item.createdAt).toLocaleString("en-IN")}
-                        </p>
+                        <p><strong>Batch ID:</strong> {item.batchId}</p>
+                        <p><strong>Species ID:</strong> {item.speciesId}</p>
+                        <p><strong>Created At:</strong> {new Date(item.createdAt).toLocaleString("en-IN")}</p>
                       </div>
 
                       <div>
@@ -143,35 +156,31 @@ export default function CropHistory() {
                       </div>
                     </div>
                   )}
+
                 </li>
               );
             })}
           </ul>
 
-          {/* Pagination UI - Sliding Window 3 Numbers */}
+          {/* Pagination UI */}
           <div className="flex justify-center mt-8">
             <nav className="flex items-center space-x-2 text-sm">
-              {/* Prev Button */}
+
               <button
                 onClick={() => page > 1 && changePage(page - 1)}
                 disabled={page === 1}
-                className={`px-3 py-2 rounded-md border transition ${
-                  page === 1
-                    ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
-                    : "bg-white text-gray-700 border-gray-300 hover:bg-green-100"
-                }`}
+                className="px-3 py-2 rounded-md border bg-white text-gray-700 disabled:bg-gray-100 disabled:text-gray-400"
               >
                 Prev
               </button>
 
-              {/* Page Numbers (Sliding Window) */}
               {getPageNumbers().map((num) => (
                 <button
                   key={num}
                   onClick={() => changePage(num)}
-                  className={`px-3 py-2 rounded-md border transition ${
+                  className={`px-3 py-2 rounded-md border ${
                     num === page
-                      ? "bg-green-700 text-white border-green-700 font-semibold"
+                      ? "bg-green-700 text-white border-green-700"
                       : "bg-white text-gray-700 border-gray-300 hover:bg-green-100"
                   }`}
                 >
@@ -179,20 +188,17 @@ export default function CropHistory() {
                 </button>
               ))}
 
-              {/* Next Button */}
               <button
                 onClick={() => page < totalPages && changePage(page + 1)}
                 disabled={page === totalPages}
-                className={`px-3 py-2 rounded-md border transition ${
-                  page === totalPages
-                    ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
-                    : "bg-white text-gray-700 border-gray-300 hover:bg-green-100"
-                }`}
+                className="px-3 py-2 rounded-md border bg-white text-gray-700 disabled:bg-gray-100 disabled:text-gray-400"
               >
                 Next
               </button>
+
             </nav>
           </div>
+
         </>
       )}
     </div>
