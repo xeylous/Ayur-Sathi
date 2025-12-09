@@ -3,6 +3,8 @@ import "./globals.css";
 import ChatbotAssistant from "@/components/ChatbotAssistant";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider } from "@/context/AuthContext";
+import { FarmerProvider } from "@/context/FarmerContext";
+import { CropProvider } from "@/context/CropContext"; 
 import { Analytics } from '@vercel/analytics/next';
 
 const geistSans = Geist({
@@ -27,6 +29,10 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider >
+          <FarmerProvider>
+            <CropProvider>
+
+            
         {children}
         <ChatbotAssistant />
         <ToastContainer
@@ -39,6 +45,8 @@ export default function RootLayout({ children }) {
           autoClose={2000}
         />
         <Analytics />
+        </CropProvider>
+        </FarmerProvider>
         </AuthProvider>
       </body>
     </html>

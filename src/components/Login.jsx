@@ -21,13 +21,12 @@ export default function LoginPage() {
   const dropdownRef = useRef(null);
 
   const labelMap = {
-  user: "User Login",
-  farmer: "Farmer Login",
-  lab: "Lab Login",
-  manu: "Manufacturer Login",
-  admin: "Admin Login",
-};
-
+    user: "User Login",
+    farmer: "Farmer Login",
+    lab: "Lab Login",
+    manu: "Manufacturer Login",
+    admin: "Admin Login",
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -69,7 +68,7 @@ export default function LoginPage() {
     // 🧩 Other login types (API call)
     const payload = { email, password, type: mode };
     // console.log(payload);
-    
+
     try {
       const res = await fetch("/api/login", {
         method: "POST",
@@ -91,17 +90,22 @@ export default function LoginPage() {
         labId: data.account.labId || null,
         email: data.account.email || null,
         userId: data.account.userId || null,
-        manuId : data.account.manuId || null,
+        manuId: data.account.manuId || null,
         uniqueId: data.account.uniqueId || null,
         type: data.account.type,
       });
+      console.log("hello");
+      // console.log("Apurv",User);
+
       // console.log(User);
-      
+
       toast.success("Login successful", { autoClose: 1500 });
       setTimeout(() => router.push(data.redirectUrl), 500);
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Something went wrong. Please try again", { autoClose: 1500 });
+      toast.error("Something went wrong. Please try again", {
+        autoClose: 1500,
+      });
       setTimeout(() => setIsSubmitting(false), 1500);
     }
   };
@@ -118,7 +122,9 @@ export default function LoginPage() {
             height={50}
             className="h-12 w-12 rounded-lg"
           />
-          <h1 className="mt-3 text-2xl font-bold text-[#4F772D]">Welcome Back</h1>
+          <h1 className="mt-3 text-2xl font-bold text-[#4F772D]">
+            Welcome Back
+          </h1>
           <p className="text-sm text-gray-500">
             {mode === "user"
               ? "Login to your User account"
@@ -181,7 +187,10 @@ export default function LoginPage() {
           >
             {/* Email / Username */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 {mode === "admin" ? "Admin Username" : "Email Address"}
               </label>
               <input
@@ -199,7 +208,10 @@ export default function LoginPage() {
 
             {/* Password */}
             <div className="relative">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Password
               </label>
               <input
