@@ -73,4 +73,6 @@ The Ayurvedic herbal supply chain in India is highly fragmented, with issues lik
 2. **Lab Tests Sample** → results + certificate uploaded → blockchain validates.  
 3. **Processor Records Steps** → drying, grinding, packaging → blockchain updates.  
 4. **Unique QR Code Generated** → added to final batch label.  
-5. **Consumer Scans QR** → full provenance displayed → product purchased securely.  
+5. **Consumer Scans QR** → full provenance displayed → product purchased securely.
+
+##  For More Reference refer to Docs.(/docs)
