@@ -43,7 +43,7 @@ export function FarmerProvider({ children }) {
 
     setLoadingFarmer(true);
     fetchFarmer();
-  }, [user]); // 🔥 Critical: re-fetch when login changes user
+  }, [user]); //  Critical: re-fetch when login changes user
 
   return (
     <FarmerContext.Provider value={{ farmer, setFarmer, loadingFarmer }}>

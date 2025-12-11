@@ -251,7 +251,7 @@ export const AuthProvider = ({ children }) => {
     }),
     [user, loading]
   );
-  console.log("user",user);
+  // console.log("user",user);
   
   // ----------------------------
   // LOAD SKELETON DURING VERIFY

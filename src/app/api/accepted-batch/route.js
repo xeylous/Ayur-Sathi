@@ -4,6 +4,7 @@ import cloudinary from "@/lib/cloudinary";
 import { connectDB } from "@/lib/db";
 import AcceptedBatch from "@/models/AcceptedBatch";
 import CropUpload from "@/models/CropUpload";
+import { pusherServer } from "@/lib/pusher";
 
 const uploadToCloudinary = (fileBuffer, fileName, folder = "labUpload") => {
   return new Promise((resolve, reject) => {
@@ -200,6 +201,33 @@ export async function POST(req) {
     }
 
     await crop.save();
+// console.log(crop.uniqueId)
+    const farmerChannel = `farmer-${String(crop.uniqueId)}`;
+
+// console.log("PUSHER: triggering channel:", farmerChannel, "payload:", {
+//   type: status === "Approved" ? "LAB_ACCEPTED" : "LAB_REJECTED",
+//   batchId,
+//   status,
+//   reason: crop.rejectionReason || null,
+// });
+
+try {
+  const triggerResult = await pusherServer.trigger(farmerChannel, "crop-status", {
+    type: status === "Approved" ? "LAB_ACCEPTED" : "LAB_REJECTED",
+    batchId,
+    status,
+    reason: crop.rejectionReason || null,
+    message:
+      status === "Approved"
+        ? `Your crop (Batch ID: ${batchId}) has been approved by the lab.`
+        : `Your crop (Batch ID: ${batchId}) was rejected by the lab.`,
+    timestamp: Date.now(),
+  });
+  // console.log("PUSHER triggerResult:", triggerResult);
+} catch (err) {
+  console.error("PUSHER trigger error:", err);
+}
+
 
     return NextResponse.json({
       success: true,
