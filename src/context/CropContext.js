@@ -5,7 +5,6 @@ const CropContext = createContext();
 
 export function CropProvider({ children }) {
   const [cachedCrops, setCachedCrops] = useState({});  
-  // Example: { b77229: { page1: [...], totalPages: 5 } }
 
   return (
     <CropContext.Provider value={{ cachedCrops, setCachedCrops }}>

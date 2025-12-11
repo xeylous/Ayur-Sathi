@@ -6,6 +6,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { FarmerProvider } from "@/context/FarmerContext";
 import { CropProvider } from "@/context/CropContext"; 
 import { Analytics } from '@vercel/analytics/next';
+import SocketInitializer from "./SocketInitializer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* <SocketInitializer /> */}
         <AuthProvider >
           <FarmerProvider>
             <CropProvider>

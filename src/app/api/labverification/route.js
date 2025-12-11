@@ -3,6 +3,7 @@ import CropUpload from "@/models/CropUpload";
 import AcceptedBatch from "@/models/AcceptedBatch";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
+import { pusherServer } from "@/lib/pusher";
 
 export async function GET(req) {
   await connectDB();
@@ -52,7 +53,6 @@ export async function GET(req) {
   return NextResponse.json({ success: true, data: batch });
 }
 
-
 //--------------------------------POST REQUEST--------------------------------
 //----------------------------------------------------------------------------
 export async function POST(req) {
@@ -61,7 +61,7 @@ export async function POST(req) {
 
   // Verify token from cookies
   const cookie = req.cookies.get("auth_token");
-  
+
   if (!cookie) {
     return NextResponse.json(
       { success: false, message: "No auth token provided" },
@@ -110,7 +110,6 @@ export async function POST(req) {
   }
   // Handle based on action
   if (action === "accept") {
-    
     // Save to accepted batch schema
     const acceptedBatch = new AcceptedBatch({
       batchId,
