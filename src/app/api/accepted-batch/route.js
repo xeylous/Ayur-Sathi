@@ -4,6 +4,7 @@ import cloudinary from "@/lib/cloudinary";
 import { connectDB } from "@/lib/db";
 import AcceptedBatch from "@/models/AcceptedBatch";
 import CropUpload from "@/models/CropUpload";
+import Notification from "@/models/Notification";
 import { pusherServer } from "@/lib/pusher";
 
 const uploadToCloudinary = (fileBuffer, fileName, folder = "labUpload") => {
@@ -211,22 +212,39 @@ export async function POST(req) {
 //   reason: crop.rejectionReason || null,
 // });
 
-try {
-  const triggerResult = await pusherServer.trigger(farmerChannel, "crop-status", {
-    type: status === "Approved" ? "LAB_ACCEPTED" : "LAB_REJECTED",
-    batchId,
-    status,
-    reason: crop.rejectionReason || null,
-    message:
-      status === "Approved"
-        ? `Your crop (Batch ID: ${batchId}) has been approved by the lab.`
-        : `Your crop (Batch ID: ${batchId}) was rejected by the lab.`,
-    timestamp: Date.now(),
-  });
-  // console.log("PUSHER triggerResult:", triggerResult);
-} catch (err) {
-  console.error("PUSHER trigger error:", err);
-}
+
+    try {
+      // Save notification to database
+      const newNotification = await Notification.create({
+        recipientId: crop.uniqueId,
+        type: status === "Approved" ? "LAB_ACCEPTED" : "LAB_REJECTED",
+        message:
+          status === "Approved"
+            ? `Your crop (Batch ID: ${batchId}) has been approved by the lab.`
+            : `Your crop (Batch ID: ${batchId}) was rejected by the lab.`,
+        data: {
+          batchId,
+          status,
+          reason: crop.rejectionReason || null,
+        },
+      });
+
+      const triggerResult = await pusherServer.trigger(farmerChannel, "crop-status", {
+        _id: newNotification._id, // Send the DB ID so frontend can delete it
+        type: status === "Approved" ? "LAB_ACCEPTED" : "LAB_REJECTED",
+        batchId,
+        status,
+        reason: crop.rejectionReason || null,
+        message:
+          status === "Approved"
+            ? `Your crop (Batch ID: ${batchId}) has been approved by the lab.`
+            : `Your crop (Batch ID: ${batchId}) was rejected by the lab.`,
+        timestamp: Date.now(),
+      });
+      // console.log("PUSHER triggerResult:", triggerResult);
+    } catch (err) {
+      console.error("Notification/Pusher error:", err);
+    }
 
 
     return NextResponse.json({

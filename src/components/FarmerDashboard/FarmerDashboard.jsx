@@ -23,34 +23,27 @@ export default function FarmerDashboard() {
   // Notifications state lifted here
   const [notifications, setNotifications] = useState([]);
 
-  // Load saved notifications on mount or when user changes
-  useEffect(() => {
-    if (!user?.uniqueId) {
-      setNotifications([]);
-      return;
-    }
-    const key = `notifications-${user.uniqueId}`;
-    const saved = localStorage.getItem(key);
-    if (saved) {
-      try {
-        setNotifications(JSON.parse(saved));
-      } catch (e) {
-        console.warn("Failed to parse saved notifications", e);
-        setNotifications([]);
+  // Fetch notifications from API
+  const fetchNotifications = async () => {
+    try {
+      const res = await fetch("/api/notifications");
+      const data = await res.json();
+      if (data.success) {
+        setNotifications(data.data);
       }
+    } catch (err) {
+      console.error("Failed to fetch notifications:", err);
+    }
+  };
+
+  // Load notifications on mount or when user changes
+  useEffect(() => {
+    if (user?.uniqueId) {
+      fetchNotifications();
+    } else {
+      setNotifications([]);
     }
   }, [user?.uniqueId]);
-
-  // Persist notifications to localStorage on change
-  useEffect(() => {
-    if (!user?.uniqueId) return;
-    const key = `notifications-${user.uniqueId}`;
-    try {
-      localStorage.setItem(key, JSON.stringify(notifications));
-    } catch (e) {
-      console.warn("Failed to save notifications to localStorage", e);
-    }
-  }, [notifications, user?.uniqueId]);
 
   // Pusher listener moved here so it's mounted regardless of visible tab
   useEffect(() => {
@@ -117,8 +110,38 @@ export default function FarmerDashboard() {
     };
   }, [user?.uniqueId]);
 
-  const handleRemoveNotification = (index) => {
+  const handleRemoveNotification = async (id, index) => {
+    // Optimistic update
+    const previousNotifications = [...notifications];
     setNotifications((prev) => prev.filter((_, i) => i !== index));
+
+    try {
+      // If the notification has an _id, delete it from DB
+      // Real-time pusher notifications might not have _id until refreshed, 
+      // but usually we care about persisting what's in DB.
+      // If it's a fresh pusher event, it might not be in DB yet? 
+      // Actually, the API saves it first then pushes. So it should be in DB. 
+      // But the pusher payload might not have the _id unless we include it. 
+      // In accepted-batch route, we didn't send the _id in pusher payload.
+      // So we might need to rely on refreshing or just accept that fresh ones might lack _id?
+      // Wait, if we want to delete, we need _id.
+      // If `id` is missing (fresh pusher event), we can't delete from DB easily.
+      
+      if (id) {
+        const res = await fetch(`/api/notifications?id=${id}`, {
+          method: "DELETE",
+        });
+        const data = await res.json();
+        if (!data.success) {
+            // Revert if failed (optional, but good UX)
+             console.warn("Failed to delete notification from DB");
+             // setNotifications(previousNotifications); 
+        }
+      }
+    } catch (err) {
+      console.error("Error deleting notification:", err);
+      // setNotifications(previousNotifications);
+    }
   };
 
   const renderContent = (key) => {
