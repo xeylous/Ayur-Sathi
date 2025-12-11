@@ -18,7 +18,7 @@ export default function FarmerNotifications({ notifications = [], onRemove }) {
               </div>
             </div>
             <button
-              onClick={() => onRemove && onRemove(i)}
+              onClick={() => onRemove && onRemove(n._id, i)}
               className="text-red-500 font-semibold ml-3"
             >
               ×
