@@ -7,6 +7,7 @@ import { Eye, EyeOff, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthContext";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
   const { setUser } = useAuth();
@@ -258,9 +259,7 @@ export default function LoginPage() {
 
         {/* Google Auth */}
         <button
-          onClick={() =>
-            toast.info("Google Auth coming soon!!", { autoClose: 1500 })
-          }
+          onClick={() => signIn("google", { callbackUrl: "/google-callback" })}
           className="w-full py-2.5 rounded-md border flex items-center justify-center gap-2 text-gray-700 bg-white hover:bg-gray-50 shadow-sm cursor-pointer"
         >
           <img
