@@ -1,6 +1,7 @@
 
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
@@ -24,9 +25,17 @@ export const authOptions = {
         return { id: user._id, name: user.name, email: user.email, type: user.type };
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
   ],
   session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/login",
+    error: "/login",
+  },
 };
 
 const handler = NextAuth(authOptions);
