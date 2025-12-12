@@ -31,8 +31,8 @@ export default function GoogleCallbackPage() {
             window.location.href = data.redirectUrl; 
         } else {
           console.error("Sync failed:", data.error);
-          toast.error("Failed to sync Google account.");
-          router.push("/login"); // Fallback
+          toast.error(data.error || "Failed to sync Google account.");
+          setTimeout(() => router.push("/login"), 1500); // Allow toast to be seen
         }
       } catch (err) {
         console.error("Sync error:", err);

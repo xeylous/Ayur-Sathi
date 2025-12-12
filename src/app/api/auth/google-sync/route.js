@@ -60,25 +60,12 @@ export async function POST(req) {
         }
     }
 
-    // 2. If NO account found, create a new "User"
+    // 2. If NO account found, return error
     if (!user) {
-      // Generate random password
-      const randomPassword = crypto.randomBytes(16).toString("hex");
-      const hashedPassword = await bcrypt.hash(randomPassword, 10);
-
-      // Generate uniqueId
-      const uniqueId = crypto.randomBytes(3).toString("hex");
-
-      user = await User.create({
-        name: name,
-        email: normalizedEmail,
-        password: hashedPassword,
-        type: "user",
-        uniqueId: uniqueId,
-        verified: true, 
-        // image: image,
-      });
-      userType = "user";
+      return NextResponse.json({ 
+        success: false, 
+        error: "No account found with this email. Please sign up first." 
+      }, { status: 404 });
     }
 
     // 3. Create Custom Token Payload
