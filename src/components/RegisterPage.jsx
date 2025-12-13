@@ -262,15 +262,15 @@ export default function RegisterPage() {
           </motion.form>
         </AnimatePresence>
 
-        {/* Divider */}
+        {/* Divider
         <div className="flex items-center my-6">
           <div className="flex-grow border-t border-gray-300"></div>
           <span className="mx-2 text-gray-500 text-sm">OR</span>
           <div className="flex-grow border-t border-gray-300"></div>
-        </div>
+        </div> */}
 
         {/* Google Auth */}
-        <button
+        {/* <button
           onClick={() => signIn("google")}
           className="w-full py-2.5 cursor-pointer rounded-md border flex items-center justify-center gap-2 text-gray-700 bg-white hover:bg-gray-50 shadow-sm"
         >
@@ -280,7 +280,7 @@ export default function RegisterPage() {
             className="w-5 h-5"
           />
           Continue with Google
-        </button>
+        </button> */}
 
         {/* Footer */}
         <p className="mt-6 text-center text-sm text-gray-600">
