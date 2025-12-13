@@ -8,8 +8,6 @@ import Farmer from "@/models/Farmer";
 import LabCredential from "@/models/LabCredential";
 import ManufacturerCredential from "@/models/ManufacturerCredential";
 import jwt from "jsonwebtoken";
-import crypto from "crypto";
-import bcrypt from "bcryptjs";
 
 export async function POST(req) {
   try {
