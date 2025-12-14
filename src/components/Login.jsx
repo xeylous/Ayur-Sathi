@@ -175,7 +175,7 @@ export default function LoginPage() {
           )}
         </div>
 
-        {/* 🧾 Login Form */}
+        {/* Login Form */}
         <AnimatePresence mode="wait">
           <motion.form
             key={mode}

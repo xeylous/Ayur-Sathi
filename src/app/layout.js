@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ChatbotAssistant from "@/components/ChatbotAssistant";
 import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from "@/context/AuthContext";
 import { FarmerProvider } from "@/context/FarmerContext";
 import { CropProvider } from "@/context/CropContext"; 
