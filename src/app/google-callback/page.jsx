@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
+import LandingSkeleton from "@/components/LandingSkeleton";
+
 
 export default function GoogleCallbackPage() {
   const router = useRouter();
@@ -23,11 +25,7 @@ export default function GoogleCallbackPage() {
         const data = await res.json();
 
         if (res.ok && data.success) {
-            // Force verify-token update via AuthContext if possible, or just rely on the verify-token called by layout/context on route change
-            // Actually, we should probably manually refetch user or just trust the redirect.
-            // The AuthContext runs verifyToken on mount, but we are already mounted.
-            // We can reload the page or use setUser with null to trigger re-fetch if logic supported it, 
-            // but a hard navigation to dashboard is safest.
+            // Force verify-token update via AuthContext if possible, or just rely on the redirect.
             window.location.href = data.redirectUrl; 
         } else {
           console.error("Sync failed:", data.error);
@@ -45,13 +43,8 @@ export default function GoogleCallbackPage() {
   }, [router]);
 
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-[#f5f8cc]/50">
-      <div className="flex flex-col items-center gap-4">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#90a955] border-t-transparent"></div>
-        <p className="text-lg font-medium text-[#4F772D]">
-          Setting up your account...
-        </p>
-      </div>
-    </div>
+    <>
+      <LandingSkeleton />
+    </>
   );
 }

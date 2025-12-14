@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
-import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
 import OTPPage from "@/components/Otp/OTPInput";
 
@@ -21,7 +20,7 @@ export default function RegisterPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [error, setError] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [otpModalOpen, setOtpModalOpen] = useState(false);
   const [uniqueId, setUniqueId] = useState(null);
@@ -36,7 +35,7 @@ export default function RegisterPage() {
     });
     setShowPassword(false);
     setShowConfirm(false);
-    setError("");
+
   }, [mode]);
 
   const handleChange = (e) => {
@@ -47,15 +46,14 @@ export default function RegisterPage() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
     if (!formData.name || !formData.email || !formData.password) {
-      setError("Please fill all required fields.");
+      toast.error("Please fill all required fields.");
       return;
     }
 
-    setError("");
     setLoading(true);
 
     const { confirmPassword, ...safeData } = formData;
@@ -71,19 +69,20 @@ export default function RegisterPage() {
       console.log("Registration response data:", data);
 
       if (!res.ok) {
-        setError(data?.error || data?.message || "Registration failed");
+        toast.error(data?.error || data?.message || "Registration failed");
         setLoading(false);
         return;
       }
 
-      // ✅ Instead of router.push, open OTP overlay
+      toast.success("Registration successful! Please verify OTP.");
+      //  Instead of router.push, open OTP overlay
       const id = data.userData.uniqueId;
       setUniqueId(id);
       setOtpModalOpen(true);
 
     } catch (err) {
       console.error("Register error:", err);
-      setError("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
       setFormData({
@@ -166,7 +165,7 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 required
                 className="mt-1 w-full px-3 py-2 rounded-md border focus:outline-none focus:ring-2 focus:ring-green-600"
-                placeholder="John Doe"
+                placeholder="Full Name"
               />
             </div>
 
@@ -188,7 +187,6 @@ export default function RegisterPage() {
                 placeholder="you@example.com"
               />
             </div>
-
             {/* Password */}
             <div className="relative">
               <label
@@ -241,12 +239,7 @@ export default function RegisterPage() {
               </button>
             </div>
 
-            {/* Error */}
-            {error && (
-              <p className="text-red-600 text-sm font-medium text-center">
-                {error}
-              </p>
-            )}
+
 
             <button
               type="submit"
