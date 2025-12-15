@@ -17,7 +17,7 @@ This documentation describes the **architecture, folder structure, component sys
 
 <!-- ---
 
-# 🗂️ 1. Project Structure
+#  1. Project Structure
 
 src/
 │
@@ -47,7 +47,7 @@ src/
 
 --- -->
 
-# 🎨 2. Components Documentation
+#  2. Components Documentation
 
 ## 📁 `components/Admin/`
 Admin dashboard UI components.
