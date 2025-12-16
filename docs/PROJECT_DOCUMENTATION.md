@@ -7,11 +7,11 @@
 **AyurSaathi** is a blockchain-enabled supply chain transparency and fair marketplace platform for the Ayurvedic herbs ecosystem.  
 It ensures:
 
-- 🌿 **Authenticity** — herbs traced from farm to consumer  
-- 🔗 **Blockchain Traceability** — immutable, tamper-proof history  
-- ⚖️ **Fair Pricing** — farmers receive verified government-set rates  
-- 🧪 **Verified Quality** — lab-tested and certified batches  
-- 🔍 **QR Transparency** — full provenance visible to end users  
+-  **Authenticity** — herbs traced from farm to consumer  
+-  **Blockchain Traceability** — immutable, tamper-proof history  
+-  **Fair Pricing** — farmers receive verified government-set rates  
+-  **Verified Quality** — lab-tested and certified batches  
+-  **QR Transparency** — full provenance visible to end users  
 
 This documentation describes the **architecture, folder structure, component system, models, utilities, and API endpoints** of the project.
 
