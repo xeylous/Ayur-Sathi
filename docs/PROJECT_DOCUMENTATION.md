@@ -49,13 +49,13 @@ src/
 
 #  2. Components Documentation
 
-## 📁 `components/Admin/`
+##  `components/Admin/`
 Admin dashboard UI components.
 
-## 📁 `components/ExploreComp/`
+##  `components/ExploreComp/`
 UI components for the Explore section.
 
-## 📁 `components/FarmerDashboard/`
+##  `components/FarmerDashboard/`
 Dashboard for farmers — batch uploads, activity display.
 
 ## 📁 `components/labDashboard/`
