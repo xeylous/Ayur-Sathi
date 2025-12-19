@@ -58,19 +58,19 @@ UI components for the Explore section.
 ##  `components/FarmerDashboard/`
 Dashboard for farmers — batch uploads, activity display.
 
-## 📁 `components/labDashboard/`
+##  `components/labDashboard/`
 Lab workflow UI — test entry, report upload.
 
-## 📁 `components/ManufactureDashboard/`
+##  `components/ManufactureDashboard/`
 Manufacturer processing & batch management UI.
 
-## 📁 `components/marketplace/`
+##  `components/marketplace/`
 Marketplace UI components.
 
-## 📁 `components/Otp/`
+##  `components/Otp/`
 OTP input and resend UI.
 
-## 📁 `components/UserDashboard/`
+##  `components/UserDashboard/`
 General authenticated user dashboard.
 
 ---
