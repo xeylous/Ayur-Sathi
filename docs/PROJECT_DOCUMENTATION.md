@@ -75,7 +75,7 @@ General authenticated user dashboard.
 
 ---
 
-## ⭐ Common Reusable Components
+##  Common Reusable Components
 
 | Component | Description |
 |----------|-------------|
@@ -93,7 +93,7 @@ General authenticated user dashboard.
 
 ---
 
-# 🧠 3. Library Documentation (lib/)
+#  3. Library Documentation (lib/)
 
 | File | Purpose |
 |------|---------|
@@ -109,7 +109,7 @@ General authenticated user dashboard.
 
 ---
 
-# 🗃️ 4. Data Models (models/)
+#  4. Data Models (models/)
 
 | Model | Description |
 |-------|-------------|
@@ -126,9 +126,9 @@ General authenticated user dashboard.
 
 ---
 
-# 🔌 5. API Documentation (Structure-Only Version)
+#  5. API Documentation (Structure-Only Version)
 
-> ⚠️ Add method, request body, response format once finalized.  
+>  Add method, request body, response format once finalized.  
 > This section lists every API endpoint included in the repository.
 
 ---
