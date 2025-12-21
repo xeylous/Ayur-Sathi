@@ -133,35 +133,35 @@ General authenticated user dashboard.
 
 ---
 
-## 📁 `/api/accepted-batch/`
+##  `/api/accepted-batch/`
 GET /api/accepted-batch
 ---
 
-## 📁 `/api/analytics/`
+##  `/api/analytics/`
 GET /api/analytics
 
-## 📁 `/api/approve/`
+##  `/api/approve/`
 POST /api/approve
 
-## 📁 `/api/auth/[...nextauth]/`
+##  `/api/auth/[...nextauth]/`
 ALL /api/auth/[...nextauth]
 
-## 📁 `/api/certified-batch/`
+##  `/api/certified-batch/`
 GET /api/certified-batch
 
-## 📁 `/api/crops/[uniqueId]/`
+##  `/api/crops/[uniqueId]/`
 GET /api/crops/:uniqueId
 
-## 📁 `/api/cropUploaded/`
+##  `/api/cropUploaded/`
 POST /api/cropUploaded
 
-## 📁 `/api/labverification/`
+##  `/api/labverification/`
 POST /api/labverification
 
-## 📁 `/api/login/`
+##  `/api/login/`
 POST /api/login
 
-## 📁 `/api/logout/`
+##  `/api/logout/`
 GET /api/logout
 
 ## 📁 `/api/manu-approve/`
