@@ -195,14 +195,14 @@ POST /api/mobile/verify-otp/:uniqueId
 ##  `/api/partnership/`
 POST /api/partnership
 
-## 📁 `/api/profile/`
+## `/api/profile/`
 GET /api/profile
 
-## 📁 `/api/public/batch/`
+##  `/api/public/batch/`
 ### Batch Status
 GET /api/public/batch/batchStatus/:batchId
 
-## 📁 `/api/register/`
+##  `/api/register/`
 ### User Registration
 POST /api/register
 
@@ -237,7 +237,7 @@ Protected routes (Farmer, Lab, Manufacturer dashboards)
 
 ---
 
-# 🧪 8. Testing
+#  8. Testing
 
 Recommended testing workflow:
 
@@ -248,7 +248,7 @@ Recommended testing workflow:
 
 ---
 
-# 🚀 9. Deployment Architecture
+#  9. Deployment Architecture
 
 | Layer | Deployment |
 |-------|------------|
