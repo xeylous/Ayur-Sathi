@@ -224,7 +224,7 @@ POST /api/register/verify-otp/:uniqueId
 ### Verify Token
 POST /api/register/verify-token
 
-# 🔐 6. Authentication Flow
+#  6. Authentication Flow
 
 User → Login/OTP
 ↓
