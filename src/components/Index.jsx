@@ -16,12 +16,48 @@ import LandingSkeleton from "./LandingSkeleton";
 function IndexContent() {
   const searchParams = useSearchParams();
   const [batch, setBatch] = useState("ASHW-2025-0001");
+  const [batchData, setBatchData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const param = searchParams.get("batch");
     if (param) setBatch(param);
   }, [searchParams]);
   const router = useRouter();
+
+  // Function to fetch batch details from API
+  const fetchBatchDetails = async () => {
+    if (!batch.trim()) {
+      setError("Please enter a batch ID");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    setBatchData(null);
+
+    try {
+      const response = await fetch(`/api/public/batch?batchId=${encodeURIComponent(batch)}`);
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Failed to fetch batch details");
+      }
+
+      // Decode the base64 encoded data
+      const decodedData = JSON.parse(atob(data.encoded));
+      setBatchData(decodedData);
+      
+      // Navigate to batch details page
+      router.push(`/batchid/${encodeURIComponent(batch)}`);
+    } catch (err) {
+      setError(err.message || "An error occurred while fetching batch details");
+      console.error("Batch fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const highlights = useMemo(
     () => [
@@ -90,25 +126,39 @@ function IndexContent() {
                   <input
                     id="batch"
                     value={batch}
-                    onChange={(e) => setBatch(e.target.value)}
+                    onChange={(e) => {
+                      setBatch(e.target.value);
+                      setError(null); // Clear error when user types
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') fetchBatchDetails();
+                    }}
                     className="w-full h-11 rounded-md border bg-white px-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
                     placeholder="Enter or paste batch/QR code"
+                    disabled={loading}
                   />
                 </div>
 
-                <Link
-                  // href={`/provenance?batch=${encodeURIComponent(batch)}`}
-                  href={`#`}
-                  className="h-11 px-4 flex items-center justify-center rounded-md border bg-[#90A955] hover:bg-[#4F772D]  hover:text-white"
+                <button
+                  onClick={fetchBatchDetails}
+                  disabled={loading}
+                  className="h-11 px-4 flex items-center justify-center rounded-md border bg-[#90A955] hover:bg-[#4F772D] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  View Details
-                </Link>
+                  {loading ? "Loading..." : "View Details"}
+                </button>
 
                 <button className="flex items-center justify-center gap-2 h-11 px-4 rounded-md bg-[#90A955] hover:bg-[#4F772D] hover:text-white border text-black hover:bg-brand-700">
                   <QrCode className="w-4 h-4" />
                   Scan QR
                 </button>
               </div>
+
+              {/* Error Message */}
+              {error && (
+                <div className="mt-3 p-3 rounded-md bg-red-50 border border-red-200 text-red-700 text-sm text-center lg:text-left">
+                  {error}
+                </div>
+              )}
 
               {/* Highlights */}
               <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 text-sm px-3 sm:px-0 justify-items-center lg:justify-items-start">

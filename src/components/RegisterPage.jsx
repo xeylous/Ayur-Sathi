@@ -166,6 +166,7 @@ export default function RegisterPage() {
                 required
                 className="mt-1 w-full px-3 py-2 rounded-md border focus:outline-none focus:ring-2 focus:ring-green-600"
                 placeholder="Full Name"
+                autoComplete="name"
               />
             </div>
 
@@ -185,6 +186,7 @@ export default function RegisterPage() {
                 required
                 className="mt-1 w-full px-3 py-2 rounded-md border focus:outline-none focus:ring-2 focus:ring-green-600"
                 placeholder="you@example.com"
+                autoComplete="username"
               />
             </div>
             {/* Password */}
@@ -203,6 +205,7 @@ export default function RegisterPage() {
                 required
                 className="mt-1 w-full px-3 py-2 rounded-md border focus:outline-none focus:ring-2 focus:ring-green-600"
                 placeholder="••••••••"
+                autoComplete="new-password"
               />
               <button
                 type="button"
@@ -229,6 +232,7 @@ export default function RegisterPage() {
                 required
                 className="mt-1 w-full px-3 py-2 rounded-md border focus:outline-none focus:ring-2 focus:ring-green-600"
                 placeholder="••••••••"
+                autoComplete="new-password"
               />
               <button
                 type="button"
