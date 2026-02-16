@@ -211,7 +211,7 @@ export async function POST(req) {
   try {
     await connectDB();
 
-    let { email, password, type } = await req.json();
+    let { email, password, type, rememberMe } = await req.json();
 
     if (!email || !password || !type) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -273,7 +273,11 @@ export async function POST(req) {
     if (type === "manu") tokenPayload.manuId = account.ManuId;
     if (["user", "farmer"].includes(type)) tokenPayload.uniqueId = account.uniqueId;
 
-    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, { expiresIn: "9h" });
+    // 🕰️ Determine session duration
+    const expiresIn = rememberMe ? "30d" : "9h";
+    const maxAge = rememberMe ? 30 * 24 * 60 * 60 : 9 * 60 * 60;
+
+    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, { expiresIn });
 
     // Redirect logic
     let redirectUrl;
@@ -305,7 +309,7 @@ export async function POST(req) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 60 * 9, // 9 hrs
+      maxAge, 
     });
 
     return response;

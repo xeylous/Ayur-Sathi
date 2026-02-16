@@ -19,6 +19,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const dropdownRef = useRef(null);
 
   const labelMap = {
@@ -67,7 +68,7 @@ export default function LoginPage() {
     }
 
     // 🧩 Other login types (API call)
-    const payload = { email, password, type: mode };
+    const payload = { email, password, type: mode, rememberMe };
     // console.log(payload);
 
     try {
@@ -204,6 +205,7 @@ export default function LoginPage() {
                 placeholder={
                   mode === "admin" ? "Enter admin username" : "you@example.com"
                 }
+                autoComplete="username"
               />
             </div>
 
@@ -223,6 +225,7 @@ export default function LoginPage() {
                 required
                 className="mt-1 w-full px-3 py-2 rounded-md border bg-white focus:outline-none focus:ring-2 focus:ring-green-600"
                 placeholder="••••••••"
+                autoComplete="current-password"
               />
               <button
                 type="button"
@@ -231,6 +234,21 @@ export default function LoginPage() {
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
+            </div>
+
+            {/* Remember Me Checkbox */}
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="h-4 w-4 text-[#90a955] focus:ring-[#90a955] border-gray-300 rounded cursor-pointer accent-[#90a955]"
+              />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 cursor-pointer">
+                Keep me signed in
+              </label>
             </div>
 
             {/* Submit Button */}
