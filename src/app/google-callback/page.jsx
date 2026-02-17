@@ -37,8 +37,8 @@ export default function GoogleCallbackPage() {
               });
             }
             
-            // Redirect to dashboard
-            window.location.href = data.redirectUrl; 
+            // Use router.push to preserve AuthContext (window.location.href would reload and clear it)
+            router.push(data.redirectUrl);
         } else {
           console.error("Sync failed:", data.error);
           toast.error(data.error || "Failed to sync Google account.");
