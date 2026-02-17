@@ -1,22 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
-import { Activity, BarChart2, Clock, CheckCircle, XCircle } from "lucide-react";
-
-// Dynamic imports for recharts (client-side only to avoid SSR issues with Next.js 16)
-const BarChart = dynamic(() => import("recharts").then((mod) => mod.BarChart), { ssr: false });
-const Bar = dynamic(() => import("recharts").then((mod) => mod.Bar), { ssr: false });
-const LineChart = dynamic(() => import("recharts").then((mod) => mod.LineChart), { ssr: false });
-const Line = dynamic(() => import("recharts").then((mod) => mod.Line), { ssr: false });
-const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
-const YAxis = dynamic(() => import("recharts").then((mod) => mod.YAxis), { ssr: false });
-const Tooltip = dynamic(() => import("recharts").then((mod) => mod.Tooltip), { ssr: false });
-const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
-const CartesianGrid = dynamic(() => import("recharts").then((mod) => mod.CartesianGrid), { ssr: false });
-const Legend = dynamic(() => import("recharts").then((mod) => mod.Legend), { ssr: false });
-const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
-const Pie = dynamic(() => import("recharts").then((mod) => mod.Pie), { ssr: false });
-const Cell = dynamic(() => import("recharts").then((mod) => mod.Cell), { ssr: false });
+import { Activity, BarChart2, Clock, CheckCircle, XCircle, TrendingUp, Calendar } from "lucide-react";
 
 // 🎨 Colors
 const COLORS = {
@@ -133,88 +117,84 @@ const Analytics = () => {
         </div>
       </div>
 
-      {/* 📊 Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        {/* 📅 Monthly Bar Chart */}
-        <div className="p-6 bg-gray-50 border border-gray-200 rounded-xl shadow-sm">
-          <h3 className="text-lg font-bold text-emerald-900 mb-4">
-            Monthly Certifications Overview
-          </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={monthlyCertifications}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="approved" fill={COLORS.approved} name="Approved" />
-              <Bar dataKey="rejected" fill={COLORS.rejected} name="Rejected" />
-             
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* 🥧 Pie Chart */}
-        <div className="p-6 bg-gray-50 border border-gray-200 rounded-xl shadow-sm">
-          <h3 className="text-lg font-bold text-emerald-900 mb-4">
-            Certification Status Distribution
-          </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={distribution}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                label
-              >
-                {distribution.map((entry, index) => {
-                  let fillColor = COLORS.approved;
-                  if (entry.name === "Rejected") fillColor = COLORS.rejected;
-                  if (entry.name === "Pending") fillColor = COLORS.pending;
-                  return <Cell key={`cell-${index}`} fill={fillColor} />;
-                })}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
+      {/* 📊 Monthly Certifications */}
+      <div className="mt-8">
+        <h3 className="text-xl font-bold text-emerald-900 mb-4 flex items-center gap-2">
+          <Calendar size={20} />
+          Monthly Certifications Overview
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {monthlyCertifications.map((month, index) => (
+            <div key={index} className="p-5 bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition">
+              <h4 className="text-lg font-bold text-gray-800 mb-3">{month.month}</h4>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600 flex items-center gap-1">
+                    <CheckCircle size={16} className="text-green-600" />
+                    Approved
+                  </span>
+                  <span className="text-lg font-bold text-green-700">{month.approved}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600 flex items-center gap-1">
+                    <XCircle size={16} className="text-red-600" />
+                    Rejected
+                  </span>
+                  <span className="text-lg font-bold text-red-700">{month.rejected}</span>
+                </div>
+                <div className="pt-2 border-t border-gray-300">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-semibold text-gray-700">Total</span>
+                    <span className="text-lg font-bold text-gray-900">{month.approved + month.rejected}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* 📈 Line Chart */}
-      <div className="mt-10 p-6 bg-gray-50 border border-gray-200 rounded-xl shadow-sm">
-        <h3 className="text-lg font-bold text-emerald-900 mb-4">
-          Certification Trend (Approved vs Rejected )
+      {/* 📈 Distribution Summary */}
+      <div className="mt-10 p-6 bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 rounded-xl shadow-sm">
+        <h3 className="text-xl font-bold text-emerald-900 mb-4 flex items-center gap-2">
+          <TrendingUp size={20} />
+          Certification Status Distribution
         </h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={monthlyCertifications}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="approved"
-              stroke={COLORS.approved}
-              strokeWidth={3}
-              dot={{ r: 5 }}
-              name="Approved"
-            />
-            <Line
-              type="monotone"
-              dataKey="rejected"
-              stroke={COLORS.rejected}
-              strokeWidth={3}
-              dot={{ r: 5 }}
-              name="Rejected"
-            />
-           
-          </LineChart>
-        </ResponsiveContainer>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {distribution.map((item, index) => {
+            let bgColor = "bg-green-100";
+            let textColor = "text-green-800";
+            let borderColor = "border-green-300";
+            let icon = <CheckCircle size={24} />;
+
+            if (item.name === "Rejected") {
+              bgColor = "bg-red-100";
+              textColor = "text-red-800";
+              borderColor = "border-red-300";
+              icon = <XCircle size={24} />;
+            } else if (item.name === "Pending") {
+              bgColor = "bg-blue-100";
+              textColor = "text-blue-800";
+              borderColor = "border-blue-300";
+              icon = <Clock size={24} />;
+            }
+
+            const percentage = totalStats.totalBatches > 0
+              ? ((item.value / totalStats.totalBatches) * 100).toFixed(1)
+              : 0;
+
+            return (
+              <div key={index} className={`p-6 ${bgColor} border-2 ${borderColor} rounded-xl text-center`}>
+                <div className={`flex justify-center mb-3 ${textColor}`}>
+                  {icon}
+                </div>
+                <h4 className={`text-lg font-bold ${textColor} mb-2`}>{item.name}</h4>
+                <p className={`text-4xl font-extrabold ${textColor} mb-1`}>{item.value}</p>
+                <p className={`text-sm font-medium ${textColor} opacity-80`}>{percentage}% of total</p>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <StatusDisplay status={status} />
