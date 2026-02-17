@@ -36,6 +36,23 @@ export const authOptions = {
     signIn: "/login",
     error: "/login",
   },
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      // Allow Google sign-in
+      if (account.provider === "google") {
+        return true;
+      }
+      return true;
+    },
+    async redirect({ url, baseUrl }) {
+      // After Google sign-in, redirect to google-callback page
+      if (url.startsWith(baseUrl)) {
+        return url;
+      }
+      // Default redirect to google-callback for OAuth
+      return `${baseUrl}/google-callback`;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);
