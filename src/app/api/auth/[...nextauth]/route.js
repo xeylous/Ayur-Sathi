@@ -45,12 +45,16 @@ export const authOptions = {
       return true;
     },
     async redirect({ url, baseUrl }) {
-      // After Google sign-in, redirect to google-callback page
-      if (url.startsWith(baseUrl)) {
+      // Use NEXTAUTH_URL if set, otherwise fall back to baseUrl
+      const redirectBase = process.env.NEXTAUTH_URL || baseUrl;
+
+      // If URL already starts with our base, use it as-is
+      if (url.startsWith(redirectBase)) {
         return url;
       }
-      // Default redirect to google-callback for OAuth
-      return `${baseUrl}/google-callback`;
+
+      // Default: redirect to google-callback page
+      return `${redirectBase}/google-callback`;
     },
   },
 };
