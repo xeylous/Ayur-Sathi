@@ -110,6 +110,14 @@ export async function POST(req) {
     const response = NextResponse.json({
       success: true,
       redirectUrl,
+      user: {
+        name: user.name,
+        email: user.email,
+        type: userType,
+        uniqueId: userType === "farmer" ? user.uniqueId : undefined,
+        labId: userType === "lab" ? user.labId : undefined,
+        manuId: userType === "manu" ? user.ManuId : undefined,
+      },
     });
 
     // 6. Set Auth Cookie

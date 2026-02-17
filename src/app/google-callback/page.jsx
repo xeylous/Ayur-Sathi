@@ -25,7 +25,19 @@ export default function GoogleCallbackPage() {
         const data = await res.json();
 
         if (res.ok && data.success) {
-            // Force verify-token update via AuthContext if possible, or just rely on the redirect.
+            // Set user in AuthContext before redirecting
+            if (data.user) {
+              setUser({
+                name: data.user.name,
+                email: data.user.email,
+                type: data.user.type,
+                uniqueId: data.user.uniqueId || null,
+                labId: data.user.labId || null,
+                manuId: data.user.manuId || null,
+              });
+            }
+            
+            // Redirect to dashboard
             window.location.href = data.redirectUrl; 
         } else {
           console.error("Sync failed:", data.error);
