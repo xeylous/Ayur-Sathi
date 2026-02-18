@@ -44,9 +44,6 @@ export default function ImplementationModel() {
                 {phases.map((phase, index) => (
                     <div key={index} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
                         <div className="flex items-start gap-4 mb-4">
-                            <div className="p-3 bg-gray-50 rounded-xl">
-                                {phase.icon}
-                            </div>
                             <div>
                                 <h3 className="text-xl font-bold text-gray-900">{phase.title}</h3>
                                 <p className="text-gray-600">{phase.description}</p>
