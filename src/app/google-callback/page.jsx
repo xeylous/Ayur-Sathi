@@ -9,7 +9,7 @@ import LandingSkeleton from "@/components/LandingSkeleton";
 
 export default function GoogleCallbackPage() {
   const router = useRouter();
-  const { setUser } = useAuth();
+  const { refreshUser } = useAuth();
   const processedRef = useRef(false);
 
   useEffect(() => {
@@ -25,12 +25,17 @@ export default function GoogleCallbackPage() {
         const data = await res.json();
 
         if (res.ok && data.success) {
-            // Force verify-token update via AuthContext if possible, or just rely on the redirect.
-            window.location.href = data.redirectUrl; 
+            // Re-verify the token from the cookie that google-sync just set
+            // This updates AuthContext's user state from the server-side cookie,
+            // so the protection guard in AuthContext won't redirect to /login
+            await refreshUser();
+            
+            // Now redirect — AuthContext has the user set
+            router.push(data.redirectUrl);
         } else {
           console.error("Sync failed:", data.error);
           toast.error(data.error || "Failed to sync Google account.");
-          setTimeout(() => router.push("/login"), 1500); // Allow toast to be seen
+          setTimeout(() => router.push("/login"), 1500);
         }
       } catch (err) {
         console.error("Sync error:", err);

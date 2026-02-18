@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
+import { jwtVerify } from "jose";
 
-export function middleware(req) {
+export async function middleware(req) {
   const { pathname, searchParams } = req.nextUrl;
   const token = req.cookies.get("auth_token")?.value;
 
@@ -17,6 +17,7 @@ export function middleware(req) {
     "/marketplace",
     "/explore",
     "/admin-login",
+    "/google-callback",
   ];
 
   // Allow dynamic public routes (batchid and public API paths)
@@ -34,7 +35,8 @@ export function middleware(req) {
       return NextResponse.redirect(new URL(`/admin-login${queryString}`, req.url));
 
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+      const { payload: decoded } = await jwtVerify(token, secret);
 
       if (decoded.role !== "admin") {
         return NextResponse.redirect(new URL(`/admin-login${queryString}`, req.url));
@@ -56,7 +58,8 @@ export function middleware(req) {
   }
 
   try {
-    jwt.verify(token, process.env.JWT_SECRET);
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    await jwtVerify(token, secret);
     return NextResponse.next();
   } catch (err) {
     const response = NextResponse.redirect(
