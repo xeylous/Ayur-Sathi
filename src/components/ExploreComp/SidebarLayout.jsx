@@ -10,6 +10,7 @@ import AyurSaathiOrganizationalModel from "./AyurSaathiOrganizationalModel";
 import ApplyForLabs from "./ApplyForLabs";
 import PartnershipForm from "./PartnershipForm";
 import ApplyForManufacture from "./ApplyForManufacture";
+import AyurArchitecture from "./AyurArchitecture";
 
 const sections = [
   {
@@ -48,7 +49,7 @@ const sections = [
     title: "Implementation Model",
     component: <WhyAyurSathiCitizens />,
   },
-  { id: "arch", title: "Architecture", component: <WhyAyurSathiCitizens /> },
+  { id: "arch", title: "Architecture", component: <AyurArchitecture /> },
   {
     id: "security",
     title: "DigiLocker Security Architecture",
