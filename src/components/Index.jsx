@@ -15,7 +15,7 @@ import LandingSkeleton from "./LandingSkeleton";
 
 function IndexContent() {
   const searchParams = useSearchParams();
-  const [batch, setBatch] = useState("ASHW-2025-0001");
+  const [batch, setBatch] = useState("");
   const [batchData, setBatchData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
