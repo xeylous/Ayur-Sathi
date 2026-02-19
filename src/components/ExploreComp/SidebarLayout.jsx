@@ -51,7 +51,7 @@ const sections = [
     title: "Implementation Model",
     component: <ImplementationModel />,
   },
-  { id: "arch", title: "Architecture", component: <AyurArchitecture /> },
+  { id: "arch", title: "Ayursaathi Architecture", component: <AyurArchitecture /> },
   {
     id: "security",
     title: "Ayursaathi Security Architecture",
