@@ -11,6 +11,7 @@ import ApplyForLabs from "./ApplyForLabs";
 import PartnershipForm from "./PartnershipForm";
 import ApplyForManufacture from "./ApplyForManufacture";
 import AyurArchitecture from "./AyurArchitecture";
+import ImplementationModel from "./ImplementationModel";
 
 const sections = [
   {
@@ -47,12 +48,12 @@ const sections = [
   {
     id: "impl-model",
     title: "Implementation Model",
-    component: <WhyAyurSathiCitizens />,
+    component: <ImplementationModel />,
   },
   { id: "arch", title: "Architecture", component: <AyurArchitecture /> },
   {
     id: "security",
-    title: "DigiLocker Security Architecture",
+    title: "Ayursaathi Security Architecture",
     component: <WhyAyurSathiCitizens />,
   },
   {
@@ -86,18 +87,16 @@ export default function SidebarLayout() {
           setOpen(section.id);
         }
       }}
-      className={`w-full flex justify-between items-center px-3 py-2 rounded-xl transition cursor-pointer ${
-        active === section.id
-          ? "bg-[#90A955] text-white"
-          : "bg-white text-gray-800 hover:bg-[#90A955]/20"
-      }`}
+      className={`w-full flex justify-between items-center px-3 py-2 rounded-xl transition cursor-pointer ${active === section.id
+        ? "bg-[#90A955] text-white"
+        : "bg-white text-gray-800 hover:bg-[#90A955]/20"
+        }`}
     >
       {section.title}
       {section.children && (
         <ChevronDown
-          className={`w-4 h-4 transition-transform ${
-            open === section.id ? "rotate-180" : "rotate-0"
-          }`}
+          className={`w-4 h-4 transition-transform ${open === section.id ? "rotate-180" : "rotate-0"
+            }`}
         />
       )}
     </button>
@@ -119,19 +118,17 @@ export default function SidebarLayout() {
                 {renderButton(section)}
                 {section.children && (
                   <div
-                    className={`ml-4 mt-3 gap-2 ${
-                      open === section.id ? "block" : "hidden"
-                    }`}
+                    className={`ml-4 mt-3 gap-2 ${open === section.id ? "block" : "hidden"
+                      }`}
                   >
                     {section.children.map((child) => (
                       <button
                         key={child.id}
                         onClick={() => setActive(child.id)}
-                        className={`w-full text-left px-3 py-3 gap-2 rounded-lg block transition cursor-pointer ${
-                          active === child.id
-                            ? "bg-[#4F772D] text-white"
-                            : "bg-white text-gray-700 hover:bg-[#90A955]/20"
-                        }`}
+                        className={`w-full text-left px-3 py-3 gap-2 rounded-lg block transition cursor-pointer ${active === child.id
+                          ? "bg-[#4F772D] text-white"
+                          : "bg-white text-gray-700 hover:bg-[#90A955]/20"
+                          }`}
                       >
                         {child.title}
                       </button>
@@ -163,18 +160,16 @@ export default function SidebarLayout() {
                   }
                 }}
                 className={`w-full flex justify-between items-center px-4 py-3 text-sm md:text-base font-medium transition cursor-pointer
-                  ${
-                    active === section.id
-                      ? "bg-[#90A955] text-white"
-                      : "bg-white text-gray-800 hover:bg-[#90A955]/20"
+                  ${active === section.id
+                    ? "bg-[#90A955] text-white"
+                    : "bg-white text-gray-800 hover:bg-[#90A955]/20"
                   }`}
               >
                 {section.title}
                 {section.children && (
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform ${
-                      open === section.id ? "rotate-180" : "rotate-0"
-                    }`}
+                    className={`w-4 h-4 transition-transform ${open === section.id ? "rotate-180" : "rotate-0"
+                      }`}
                   />
                 )}
               </button>
@@ -187,10 +182,9 @@ export default function SidebarLayout() {
                       key={child.id}
                       onClick={() => setActive(child.id)}
                       className={`block w-full text-left px-6 py-3 text-sm transition cursor-pointer
-                        ${
-                          active === child.id
-                            ? "bg-[#4F772D] text-white"
-                            : "text-gray-700 hover:bg-[#90A955]/20"
+                        ${active === child.id
+                          ? "bg-[#4F772D] text-white"
+                          : "text-gray-700 hover:bg-[#90A955]/20"
                         }`}
                     >
                       {child.title}

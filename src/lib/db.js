@@ -1,19 +1,27 @@
 import mongoose from "mongoose";
 
-let isConnected = false;
-
 export const connectDB = async () => {
-  if (isConnected) return;
+  // Check if already connected using Mongoose's connection state
+  // readyState: 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
+  if (mongoose.connection.readyState === 1) {
+    console.log("Using existing database connection");
+    return;
+  }
+
+  // If currently connecting, wait for it to complete
+  if (mongoose.connection.readyState === 2) {
+    console.log("Database connection in progress, waiting...");
+    return;
+  }
 
   try {
-    // console.log("MONGO_URI:", process.env.MONGO_URI); 
+    console.log("Establishing new database connection...");
     await mongoose.connect(process.env.MONGO_URI, {
       dbName: "ayursathi",
     });
-    isConnected = true;
-    console.log("Database connected");
+    console.log("✅ Database connected successfully");
   } catch (error) {
-    console.error("Database connection error:", error);
+    console.error("❌ Database connection error:", error);
     throw new Error("Database connection failed");
   }
 };

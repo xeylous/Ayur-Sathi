@@ -164,10 +164,10 @@ POST /api/login
 ##  `/api/logout/`
 GET /api/logout
 
-## 📁 `/api/manu-approve/`
+##  `/api/manu-approve/`
 POST /api/manu-approve
 
-## 📁 `/api/manufacture/`
+##  `/api/manufacture/`
 ### Pending Batches
 GET /api/manufacture/pending
 
@@ -180,7 +180,7 @@ GET /api/manufacture/manufactured
 ### Partnerships
 POST /api/manufacturePartnership
 
-## 📁 `/api/mobile/`
+##  `/api/mobile/`
 ### Login
 POST /api/mobile/login
 
@@ -192,17 +192,17 @@ POST /api/mobile/send-otp/:uniqueId
 ### Verify OTP
 POST /api/mobile/verify-otp/:uniqueId
 
-## 📁 `/api/partnership/`
+##  `/api/partnership/`
 POST /api/partnership
 
-## 📁 `/api/profile/`
+## `/api/profile/`
 GET /api/profile
 
-## 📁 `/api/public/batch/`
+##  `/api/public/batch/`
 ### Batch Status
 GET /api/public/batch/batchStatus/:batchId
 
-## 📁 `/api/register/`
+##  `/api/register/`
 ### User Registration
 POST /api/register
 
@@ -224,7 +224,7 @@ POST /api/register/verify-otp/:uniqueId
 ### Verify Token
 POST /api/register/verify-token
 
-# 🔐 6. Authentication Flow
+#  6. Authentication Flow
 
 User → Login/OTP
 ↓
@@ -237,7 +237,7 @@ Protected routes (Farmer, Lab, Manufacturer dashboards)
 
 ---
 
-# 🧪 8. Testing
+#  8. Testing
 
 Recommended testing workflow:
 
@@ -248,7 +248,7 @@ Recommended testing workflow:
 
 ---
 
-# 🚀 9. Deployment Architecture
+#  9. Deployment Architecture
 
 | Layer | Deployment |
 |-------|------------|

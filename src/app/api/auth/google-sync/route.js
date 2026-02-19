@@ -20,50 +20,58 @@ export async function POST(req) {
     await connectDB();
     const { email, name, image } = session.user;
     const normalizedEmail = email.toLowerCase();
-    
+
     let user = null;
     let userType = "user";
-    
+
     // 1. Search across all collections
     const farmer = await Farmer.findOne({ email: normalizedEmail });
     if (farmer) {
       user = farmer;
       userType = "farmer";
     }
-    
+
     // Check Lab if not found
     if (!user) {
-        const lab = await LabCredential.findOne({ email: normalizedEmail });
-        if (lab) {
-            user = lab;
-            userType = "lab";
-        }
+      const lab = await LabCredential.findOne({ email: normalizedEmail });
+      if (lab) {
+        user = lab;
+        userType = "lab";
+      }
     }
 
     // Check Manufacturer if not found
     if (!user) {
-        const manu = await ManufacturerCredential.findOne({ email: normalizedEmail });
-        if (manu) {
-            user = manu;
-            userType = "manu";
-        }
-    }
-    
-    // Check User if not found
-    if (!user) {
-        const normalUser = await User.findOne({ email: normalizedEmail });
-        if (normalUser) {
-            user = normalUser;
-            userType = "user";
-        }
+      const manu = await ManufacturerCredential.findOne({ email: normalizedEmail });
+      if (manu) {
+        user = manu;
+        userType = "manu";
+      }
     }
 
-    // 2. If NO account found, return error
+    // Check User if not found
     if (!user) {
-      return NextResponse.json({ 
-        success: false, 
-        error: "No account found with this email. Please sign up first." 
-      }, { status: 404 });
+      const normalUser = await User.findOne({ email: normalizedEmail });
+      if (normalUser) {
+        user = normalUser;
+        userType = "user";
+      }
+    }
+
+    // 2. If NO account found, create a new user
+    if (!user) {
+      console.log("No existing account found, creating new user with Google OAuth");
+
+      const newUser = await User.create({
+        name,
+        email: normalizedEmail,
+        type: "user",
+        isVerified: true,
+        password: null, // No password for OAuth users
+      });
+
+      user = newUser;
+      userType = "user";
     }
 
     // 3. Create Custom Token Payload
@@ -75,11 +83,11 @@ export async function POST(req) {
 
     // Add type-specific fields
     if (userType === "lab") {
-        tokenPayload.labId = user.labId;
+      tokenPayload.labId = user.labId;
     } else if (userType === "manu") {
-        tokenPayload.manuId = user.ManuId; // Note: Schema uses ManuId
+      tokenPayload.manuId = user.ManuId; // Note: Schema uses ManuId
     } else {
-        tokenPayload.uniqueId = user.uniqueId;
+      tokenPayload.uniqueId = user.uniqueId;
     }
 
     const token = jwt.sign(
@@ -91,17 +99,25 @@ export async function POST(req) {
     // 4. Determine Redirect URL
     let redirectUrl;
     if (userType === "lab") {
-        redirectUrl = `/labId/${user.labId}`;
+      redirectUrl = `/labId/${user.labId}`;
     } else if (userType === "manu") {
-        redirectUrl = `/manuId/${user.ManuId}`;
+      redirectUrl = `/manuId/${user.ManuId}`;
     } else {
-        redirectUrl = `/id/${user.uniqueId || user._id}`;
+      redirectUrl = `/id/${user.uniqueId || user._id}`;
     }
 
     // 5. Create Response
     const response = NextResponse.json({
       success: true,
       redirectUrl,
+      user: {
+        name: user.name,
+        email: user.email,
+        type: userType,
+        uniqueId: userType === "farmer" ? user.uniqueId : undefined,
+        labId: userType === "lab" ? user.labId : undefined,
+        manuId: userType === "manu" ? user.ManuId : undefined,
+      },
     });
 
     // 6. Set Auth Cookie
