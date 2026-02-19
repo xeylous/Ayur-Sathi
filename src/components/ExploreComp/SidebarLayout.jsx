@@ -12,6 +12,7 @@ import PartnershipForm from "./PartnershipForm";
 import ApplyForManufacture from "./ApplyForManufacture";
 import AyurArchitecture from "./AyurArchitecture";
 import ImplementationModel from "./ImplementationModel";
+import AyurSaathiSecurityArchitecture from "./AyurSaathiSecurityArchitecture";
 
 const sections = [
   {
@@ -54,7 +55,7 @@ const sections = [
   {
     id: "security",
     title: "Ayursaathi Security Architecture",
-    component: <WhyAyurSathiCitizens />,
+    component: <AyurSaathiSecurityArchitecture />,
   },
   {
     id: "roadmap",
