@@ -174,7 +174,7 @@ export default function PartnershipForm() {
               ${
                 isSubmitting
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-indigo-600 text-white hover:bg-indigo-700"
+                  : "bg-[#90A955] text-white hover:bg-[#90A955]/80"
               }`}
           >
             {isSubmitting ? "Submitting..." : "Submit Partnership Request"}
