@@ -167,7 +167,7 @@ const sendMessageToAPI = async (msg) => {
       {/* Floating Button */}
       <button
         onClick={handleToggle}
-        className="fixed bottom-5 right-5 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-xl"
+        className="fixed bottom-5 right-5 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-xl z-[100000]"
       >
         {open ? <X size={28} /> : <MessageCircle size={28} />}
       </button>
