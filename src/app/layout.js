@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ChatbotAssistant from "@/components/ChatbotAssistant";
+// import ChatbotAssistant from "@/components/ChatbotAssistant";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from "@/context/AuthContext";
@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
 
             
         {children}
-        <ChatbotAssistant />
+        // <ChatbotAssistant />
         <ToastContainer
           position="top-right"
           hideProgressBar={true}
