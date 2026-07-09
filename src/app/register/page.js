@@ -11,7 +11,7 @@ const page = () => {
       <Navbar />
 
       {/* Main content (pushes footer down) */}
-      <main className="flex-grow items-start  bg-[#f5f8cc]/50 py-6">
+      <main className="flex-1 bg-[#f5f8cc]/50">
         <RegisterPage />
       </main>
 

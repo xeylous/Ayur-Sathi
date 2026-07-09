@@ -97,7 +97,7 @@ export default function RegisterPage() {
   return (
     <div className="relative flex justify-center bg-[#f5f8cc]/50 px-4 py-6 md:mb-0">
       {/* Register Form */}
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg border p-8 h-[850px] overflow-y-auto relative z-10">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-lg border p-8 relative z-10">
         {/* Logo + Title */}
         <div className="flex flex-col items-center mb-6">
           <Image
