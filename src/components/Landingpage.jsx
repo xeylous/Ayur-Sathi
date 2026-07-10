@@ -1,13 +1,14 @@
 "use client";
 
 import React, { Suspense } from "react";
-import Home_1 from "@/components/Home_1";
-import Home_2 from "@/components/Home_2";
+import dynamic from "next/dynamic";
 import Index from "@/components/Index"; 
 import LandingSkeleton from "@/components/LandingSkeleton";
-import Home_d from "@/components/Home_d";
-import { N } from "ethers";
 
+// Dynamic imports — Home_2 has heavy modals (QRScanner, APIDocs) and Home_d is below fold + desktop-only
+const Home_1 = dynamic(() => import("@/components/Home_1"), { ssr: false });
+const Home_2 = dynamic(() => import("@/components/Home_2"), { ssr: false });
+const Home_d = dynamic(() => import("@/components/Home_d"), { ssr: false });
 
 function Landingpage() {
   return (
