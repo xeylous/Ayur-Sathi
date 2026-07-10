@@ -152,7 +152,7 @@ export default function Fooer() {
                 />
                 <button
                   type="submit"
-                  className="w-full lg:w-auto px-4 py-2 rounded-md bg-[#90A955] text-white font-medium hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-[#90A955] flex items-center justify-center"
+                  className="w-full lg:w-auto px-4 py-2 rounded-md bg-[#31572C] text-white font-medium hover:bg-[#4F772D] focus:outline-none focus:ring-2 focus:ring-[#90A955] flex items-center justify-center"
                 >
                   Subscribe
                 </button>
