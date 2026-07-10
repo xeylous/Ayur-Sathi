@@ -235,9 +235,14 @@ export const AuthProvider = ({ children }) => {
   //  LOGOUT HANDLER
   // ----------------------------
   const logout = async () => {
+    const isAdmin = user?.role === "admin" || user?.type === "admin";
     await fetch("/api/logout", { method: "GET" });
     setUser(null);
-    router.replace("/login");
+    if (isAdmin) {
+      router.replace("/admin-login");
+    } else {
+      router.replace("/login");
+    }
   };
 
   // ----------------------------
