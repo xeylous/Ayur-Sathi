@@ -5,9 +5,6 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext"; // import your context
 
-// Mock Admin Credentials
-const ADMIN_EMAIL = "admin@ayursaathi.com";
-const ADMIN_PASSWORD = "admin123";
 const REDIRECT_PATH = "/admin";
 
 const AdminLoginPage = () => {
@@ -36,17 +33,13 @@ const AdminLoginPage = () => {
     setIsSubmitting(true);
     setLoginStatus({ success: false, message: "Verifying credentials..." });
 
-    // Simulate small delay
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    const result = await adminLogin(email, password);
 
-    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+    if (result.success) {
       setLoginStatus({
         success: true,
         message: "Login successful! Redirecting...",
       });
-
-      // ✅ Set admin token in context
-      adminLogin("mock-admin-token"); // you can replace this with a real token if needed
 
       // Redirect to /admin after short delay
       setTimeout(() => {
@@ -55,7 +48,7 @@ const AdminLoginPage = () => {
     } else {
       setLoginStatus({
         success: false,
-        message: "Invalid Admin Email or Password.",
+        message: result.error || "Invalid Admin Email or Password.",
       });
       setIsSubmitting(false);
     }
@@ -128,10 +121,6 @@ const AdminLoginPage = () => {
             {isSubmitting ? "Authenticating..." : "Login"}
           </button>
         </form>
-
-        <p className="mt-6 text-center text-xs text-gray-400">
-          Hint: {ADMIN_EMAIL} / {ADMIN_PASSWORD}
-        </p>
       </div>
     </div>
   );
