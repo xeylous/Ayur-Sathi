@@ -132,7 +132,7 @@ useEffect(() => {
   // ------------------------------------------------------------
 
   return (
-    <div className="min-h-screen flex justify-center bg-[#ECF39E]/10 py-10 px-4">
+    <div className="flex justify-center bg-[#ECF39E]/10 py-10 px-4">
       <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl border border-green-100 p-8">
         {/* TITLE */}
         <h1 className="text-3xl font-extrabold text-center text-green-800 mb-8">

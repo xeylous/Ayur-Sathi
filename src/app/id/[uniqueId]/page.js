@@ -42,7 +42,7 @@ export default function Page() {
       <Navbar />
 
       {/* Main content */}
-      <main className="flex-grow items-start  ">
+      <main className="flex-1">
         {user.type === "farmer" ? (
           <FarmerDashboard />
         ) : (
