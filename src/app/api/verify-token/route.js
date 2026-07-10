@@ -119,7 +119,6 @@ export async function GET(req) {
         { status: 200 }
       );
     }
-
     const userType = decoded.type;
     let userData = null;
 

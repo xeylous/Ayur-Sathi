@@ -239,7 +239,7 @@ export const AuthProvider = ({ children }) => {
     await fetch("/api/logout", { method: "POST" });
     setUser(null);
     if (isAdmin) {
-      router.replace("/");
+      router.replace("/admin-login");
     } else {
       router.replace("/login");
     }
