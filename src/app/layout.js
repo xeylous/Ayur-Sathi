@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Ayur Sathi",
-  description: "A platform to know details of the Ayurvedic Herbs",
+  title: "Ayur Sathi — Transparent Ayurvedic Herb Traceability Platform",
+  description: "AyurSaathi provides blockchain-powered traceability for Ayurvedic herbs — from geo-tagged harvests to lab-certified quality testing, processing, and QR-verified consumer provenance. Built for farmers, labs, and manufacturers.",
 };
 
 export default function RootLayout({ children }) {

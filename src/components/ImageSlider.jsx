@@ -4,14 +4,13 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 const images = [
-  { src: "/Image_1.jpeg", alt: "image" },
-  { src: "/Image_2.jpeg", alt: "image" },
-  { src: "/Image_3.jpeg", alt: "image" },
-  { src: "/Image_4.jpeg", alt: "image" },
-  { src: "/Image_5.jpeg", alt: "image" },
-  { src: "/Image_6.jpeg", alt: "image" },
-  { src: "/Image_7.jpeg", alt: "image" },
-  // { src: "/Image_8.jpeg", alt: "image" },
+  { src: "/Image_1.jpeg", alt: "Ayurvedic herbs being harvested in a field" },
+  { src: "/Image_2.jpeg", alt: "Traditional herbal medicine preparation" },
+  { src: "/Image_3.jpeg", alt: "Quality testing of Ayurvedic herbs in a lab" },
+  { src: "/Image_4.jpeg", alt: "Dried medicinal herbs ready for processing" },
+  { src: "/Image_5.jpeg", alt: "Sustainable herb cultivation practices" },
+  { src: "/Image_6.jpeg", alt: "Packaged Ayurvedic herbal products" },
+  { src: "/Image_7.jpeg", alt: "Farmer collecting medicinal plants" },
 ];
 
 export default function ImageSlider() {
@@ -41,11 +40,13 @@ export default function ImageSlider() {
             src={img.src}
             alt={img.alt}
             fill
+            quality={60}
             sizes="(max-width: 768px) 100vw, 
          (max-width: 1200px) 50vw, 
          33vw"
             className="object-cover rounded-xl"
             priority={index === 0}
+            loading={index === 0 ? "eager" : "lazy"}
           />
         </div>
       ))}
