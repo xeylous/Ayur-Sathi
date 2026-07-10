@@ -168,7 +168,7 @@ export default function FarmerDashboard() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row max-h-screen bg-[#ECF39E] overflow-auto hide-scrollbar">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[#ECF39E]">
       {/* Sidebar */}
       <aside className="md:w-64 w-full border-r shadow-md flex flex-col bg-[#90A955]">
         <div className="p-4 text-lg font-bold text-green-700">
@@ -184,7 +184,15 @@ export default function FarmerDashboard() {
                 <div key={item.key} className="border-b relative">
                   {/* Button */}
                   <button
-                    onClick={() => setActive(isActive ? "" : item.key)}
+                    onClick={() => {
+                      // On mobile: toggle (collapse if already active)
+                      // On desktop: always select (never deselect)
+                      if (window.innerWidth < 768) {
+                        setActive(isActive ? "" : item.key);
+                      } else {
+                        setActive(item.key);
+                      }
+                    }}
                     className={`flex items-center gap-3 w-full px-4 py-3 text-left transition ${
                       isActive
                         ? "bg-[#90A955] text-white font-semibold"
@@ -214,7 +222,7 @@ export default function FarmerDashboard() {
       </aside>
 
       {/* Desktop / Tablet content */}
-      <main className="hidden md:block flex-1 p-6">{renderContent(active)}</main>
+      <main className="hidden md:block flex-1 p-6 overflow-y-auto">{renderContent(active)}</main>
     </div>
   );
 }
