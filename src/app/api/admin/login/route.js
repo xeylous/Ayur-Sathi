@@ -9,31 +9,38 @@ export async function POST(req) {
     const envAdminPass = process.env.ADMIN_PASSWORD;
     const envAltEmail = process.env.ADMIN_ALT_EMAIL;
     const envAltPass = process.env.ADMIN_ALT_PASSWORD;
+    const envStoreEmail = process.env.STORE_ADMIN_EMAIL;
+    const envStorePass = process.env.STORE_ADMIN_PASSWORD;
 
-    const isAdmin1 = email === envAdminEmail && password === envAdminPass;
-    const isAdmin2 = email === envAltEmail && password === envAltPass;
+    const isCentralAdmin = (email === envAdminEmail && password === envAdminPass) || 
+                           (email === envAltEmail && password === envAltPass);
+    const isStoreAdmin = email === envStoreEmail && password === envStorePass;
 
-    if (!isAdmin1 && !isAdmin2) {
+    if (!isCentralAdmin && !isStoreAdmin) {
       return NextResponse.json({ error: "Invalid admin credentials" }, { status: 401 });
     }
+
+    const role = isCentralAdmin ? "admin" : "store_admin";
+    const type = isCentralAdmin ? "admin" : "store_admin";
+    const name = isCentralAdmin ? "Central Admin" : "Store Admin";
 
     const token = jwt.sign(
       {
         email,
-        role: "admin",
-        type: "admin",
+        role,
+        type,
       },
       process.env.JWT_SECRET,
       { expiresIn: "9h" }
     );
 
     const response = NextResponse.json({
-      message: "Admin login successful",
+      message: `${name} login successful`,
       user: {
-        type: "admin",
+        type,
         email,
-        name: "Central Admin",
-        role: "admin",
+        name,
+        role,
       },
     }, { status: 200 });
 

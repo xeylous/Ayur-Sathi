@@ -42,6 +42,37 @@ export default function Navbar() {
   const handleLogout = async () => {
     await logout();
   };
+
+  const getDashboardLink = () => {
+    if (!user) return "/";
+    if (user.type === "lab") return `/labId/${user.labId}`;
+    if (user.type === "manu") return `/manuId/${user.manuId}`;
+    if (user.type === "admin" || user.type === "store_admin") return "/admin";
+    return `/id/${user.uniqueId}`;
+  };
+
+  const getProfileLink = () => {
+    if (!user) return "/";
+    if (user.type === "lab") return `/labId/${user.labId}`;
+    if (user.type === "manu") return `/manuId/${user.manuId}`;
+    if (user.type === "admin" || user.type === "store_admin") return "/admin";
+    return `/id/${user.uniqueId}`;
+  };
+
+  const getMobileProfileLink = () => {
+    if (!user) return "/";
+    if (user.type === "lab") return `/labId/${user.labId}`;
+    if (user.type === "manu") return `/manuId/${user.manuId}`;
+    if (user.type === "admin" || user.type === "store_admin") return "/admin";
+    return `/id/${user.uniqueId}/profile`;
+  };
+
+  const getProfileName = () => {
+    if (!user) return "";
+    if (user.type === "lab") return user.labId;
+    if (user.type === "manu") return user.manuId;
+    return user.name;
+  };
   // console.log("user nav",user);
   if (loading) {
     return (
@@ -79,13 +110,7 @@ export default function Navbar() {
           <NavItem to="/marketplace" label="Marketplace" />
           {user && (
             <NavItem
-              to={
-                user.type === "lab"
-                  ? `/labId/${user.labId}`
-                  : user.type === "manu"
-                  ? `/manuId/${user.manuId}`
-                  : `/id/${user.uniqueId}`
-              }
+              to={getDashboardLink()}
               label="Dashboard"
             />
           )}
@@ -96,11 +121,7 @@ export default function Navbar() {
           {user ? (
             <div className="hidden sm:flex items-center gap-4">
               <Link
-                href={
-                  user.type === "lab"
-                    ? `/labId/${user.labId}`
-                    : `/id/${user.uniqueId}`
-                }
+                href={getProfileLink()}
                 className="flex items-center gap-2 text-sm font-medium text-brand-700 hover:text-brand-900"
               >
                 <Image
@@ -111,11 +132,7 @@ export default function Navbar() {
                   className="rounded-full border object-cover"
                 />
                 <span className="hidden sm:inline">
-                  {user.type === "lab"
-                    ? user.labId
-                    : user.type === "manu"
-                    ? user.manuId
-                    : user.name}
+                  {getProfileName()}
                 </span>
               </Link>
 
@@ -197,27 +214,21 @@ export default function Navbar() {
                   label="Marketplace"
                   closeMenu={() => setOpen(false)}
                 />
-                {user && (
+                 {user && (
                   <NavItem
-                    to={
-                      user.type === "lab"
-                        ? `/labId/${user.labId}`
-                        : user.type === "manu"
-                        ? `/manuId/${user.manuId}`
-                        : `/id/${user.uniqueId}`
-                    }
+                    to={getDashboardLink()}
                     label="Dashboard"
                   />
                 )}
 
                 {user ? (
                   <>
-                    <Link
-                      href={`/id/${user.uniqueId}/profile`}
+                     <Link
+                      href={getMobileProfileLink()}
                       className="mt-4 text-lg font-medium text-black bg-[#ECF39E] rounded-lg px-5 py-2.5 text-center"
                       onClick={() => setOpen(false)}
                     >
-                      {user.type === "lab" ? user.labId : user.name} (Profile)
+                      {getProfileName()} (Profile)
                     </Link>
                     <button
                       onClick={handleLogout}

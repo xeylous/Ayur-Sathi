@@ -105,6 +105,21 @@ export async function GET(req) {
       );
     }
 
+    if (decoded.role === "store_admin" || decoded.type === "store_admin") {
+      return NextResponse.json(
+        {
+          success: true,
+          user: {
+            type: "store_admin",
+            email: decoded.email,
+            name: "Store Admin",
+            role: "store_admin",
+          },
+        },
+        { status: 200 }
+      );
+    }
+
     const userType = decoded.type;
     let userData = null;
 

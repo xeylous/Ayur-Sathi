@@ -9,9 +9,15 @@ import LabMarketplaceControl from "@/components/Admin/LabMarketplaceControl";
 import { mockBatches, mockUsers } from "@/lib/mockData";
 import AdminLabApplications from "@/components/Admin/AdminLabApplications";
 import AdminManufactureApplications from "@/components/Admin/AdminManufactureApplications";
+import { useAuth } from "@/context/AuthContext";
 
 const AdminPage = () => {
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState(
+    user?.role === "store_admin" || user?.type === "store_admin"
+      ? "laboratory"
+      : "dashboard"
+  );
   const [batches, setBatches] = useState(mockBatches);
   const [users, setUsers] = useState(mockUsers);
   const [statusMessage, setStatusMessage] = useState(null);

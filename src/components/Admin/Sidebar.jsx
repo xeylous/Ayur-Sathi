@@ -3,7 +3,19 @@ import { LayoutDashboard, Users, DollarSign, FlaskConical, LogOut } from "lucide
 import { useAuth } from "@/context/AuthContext";
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+
+  const allTabs = [
+    { id: "dashboard", icon: LayoutDashboard, label: "Overview" },
+    { id: "user", icon: Users, label: "Lab Approvals" },
+    { id: "farmerPayment", icon: DollarSign, label: "Farmer Payments" },
+    { id: "laboratory", icon: FlaskConical, label: "Marketplace Listing" },
+    { id: "manufacturer", icon: FlaskConical, label: "Manufacturer Approvals" }
+  ];
+
+  const allowedTabs = user?.role === "store_admin" || user?.type === "store_admin"
+    ? allTabs.filter(tab => tab.id === "laboratory")
+    : allTabs;
 
   return (
     <aside className="w-64 bg-indigo-900 text-white p-6 shadow-2xl h-full fixed top-0 left-0 flex flex-col justify-between">
@@ -12,13 +24,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           <LayoutDashboard size={24} /> AyurSaathi Admin
         </div>
         <nav className="space-y-3">
-          {[
-            { id: "dashboard", icon: LayoutDashboard, label: "Overview" },
-            { id: "user", icon: Users, label: "Lab Approvals" },
-            { id: "farmerPayment", icon: DollarSign, label: "Farmer Payments" },
-            { id: "laboratory", icon: FlaskConical, label: "Marketplace Listing" },
-            { id: "manufacturer", icon: FlaskConical, label: "Manufacturer Approvals" }
-          ].map(({ id, icon: Icon, label }) => (
+          {allowedTabs.map(({ id, icon: Icon, label }) => (
             <button
               key={id}
               onClick={() => setActiveTab(id)}

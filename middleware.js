@@ -38,7 +38,7 @@ export async function middleware(req) {
       const secret = new TextEncoder().encode(process.env.JWT_SECRET);
       const { payload: decoded } = await jwtVerify(token, secret);
 
-      if (decoded.role !== "admin") {
+      if (decoded.role !== "admin" && decoded.role !== "store_admin") {
         return NextResponse.redirect(new URL(`/admin-login${queryString}`, req.url));
       }
 
