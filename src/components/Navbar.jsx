@@ -33,25 +33,14 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { user, setUser, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
 
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
 
   const handleLogout = async () => {
-    try {
-      const res = await fetch("/api/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-      if (res.ok) {
-        setUser(null);
-        router.push("/login");
-      }
-    } catch (err) {
-      console.error(err);
-    }
+    await logout();
   };
   // console.log("user nav",user);
   if (loading) {
