@@ -36,7 +36,11 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
       </div>
 
       <button
-        onClick={logout}
+        onClick={() => {
+          if (confirm("Are you sure you want to logout?")) {
+            logout();
+          }
+        }}
         className="flex items-center w-full px-4 py-3 rounded-lg text-red-300 hover:bg-indigo-800 hover:text-red-200 transition-colors mt-auto"
       >
         <LogOut size={20} className="mr-3" />

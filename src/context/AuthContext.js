@@ -236,7 +236,7 @@ export const AuthProvider = ({ children }) => {
   // ----------------------------
   const logout = async () => {
     const isAdmin = user?.role === "admin" || user?.type === "admin";
-    await fetch("/api/logout", { method: "GET" });
+    await fetch("/api/logout", { method: "POST" });
     setUser(null);
     if (isAdmin) {
       router.replace("/admin-login");
