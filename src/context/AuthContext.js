@@ -154,7 +154,8 @@ export const AuthProvider = ({ children }) => {
   const isPublicRoute =
     publicRoutes.includes(pathname) ||
     pathname.startsWith("/batchid") ||
-    pathname.startsWith("/api/public");
+    pathname.startsWith("/api/public") ||
+    pathname.startsWith("/admin");
 
   // ----------------------------
   //  VERIFY TOKEN — RUNS ONCE
@@ -240,6 +241,32 @@ export const AuthProvider = ({ children }) => {
   };
 
   // ----------------------------
+  //  ADMIN LOGIN HANDLER
+  // ----------------------------
+  const adminLogin = async (email, password) => {
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setUser(data.user);
+        return { success: true };
+      } else {
+        return { success: false, error: data.error || "Login failed" };
+      }
+    } catch (err) {
+      console.error("Admin login error in context:", err);
+      return { success: false, error: "Something went wrong" };
+    }
+  };
+
+  // ----------------------------
   // MEMOIZED VALUE (prevents rerenders)
   // ----------------------------
   const value = useMemo(
@@ -249,6 +276,7 @@ export const AuthProvider = ({ children }) => {
       loading,
       refreshUser,
       logout,
+      adminLogin,
     }),
     [user, loading]
   );

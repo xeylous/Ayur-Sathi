@@ -87,6 +87,24 @@ export async function GET(req) {
       );
     }
 
+    // ---------------------------------------------------
+    // 0️⃣ ADMIN
+    // ---------------------------------------------------
+    if (decoded.role === "admin" || decoded.type === "admin") {
+      return NextResponse.json(
+        {
+          success: true,
+          user: {
+            type: "admin",
+            email: decoded.email,
+            name: "Central Admin",
+            role: "admin",
+          },
+        },
+        { status: 200 }
+      );
+    }
+
     const userType = decoded.type;
     let userData = null;
 

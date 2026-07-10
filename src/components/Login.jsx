@@ -10,7 +10,7 @@ import { useAuth } from "@/context/AuthContext";
 import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
-  const { setUser } = useAuth();
+  const { setUser, adminLogin } = useAuth();
   const router = useRouter();
   const [mode, setMode] = useState("user");
   const [email, setEmail] = useState("");
@@ -55,13 +55,14 @@ export default function LoginPage() {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    // 🧩 Admin Login (local validation)
+    // 🧩 Admin Login (API call)
     if (mode === "admin") {
-      if (email === "risuraj162@gmail.com" && password === "1234") {
+      const res = await adminLogin(email, password);
+      if (res.success) {
         toast.success("Admin login successful", { autoClose: 1500 });
-        setTimeout(() => router.push("http://localhost:3000/admin"), 800);
+        setTimeout(() => router.push("/admin"), 800);
       } else {
-        toast.error("Invalid admin credentials", { autoClose: 1500 });
+        toast.error(res.error || "Invalid admin credentials", { autoClose: 1500 });
         setTimeout(() => setIsSubmitting(false), 1500);
       }
       return;

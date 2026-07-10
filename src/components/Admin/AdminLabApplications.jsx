@@ -186,18 +186,22 @@ export default function AdminLabApplications() {
                         >
                           View
                         </button>
-                        <button
-                          onClick={() => handleApprove(app)}
-                          className="px-3 py-1 rounded-md border text-sm bg-green-50 hover:bg-green-100"
-                        >
-                          Approve
-                        </button>
-                        <button
-                          onClick={() => handleReject(app)}
-                          className="px-3 py-1 rounded-md border text-sm bg-red-50 hover:bg-red-100"
-                        >
-                          Reject
-                        </button>
+                        {app.status !== "Approved" && app.status !== "Rejected" && (
+                          <>
+                            <button
+                              onClick={() => handleApprove(app)}
+                              className="px-3 py-1 rounded-md border text-sm bg-green-50 hover:bg-green-100"
+                            >
+                              Approve
+                            </button>
+                            <button
+                              onClick={() => handleReject(app)}
+                              className="px-3 py-1 rounded-md border text-sm bg-red-50 hover:bg-red-100"
+                            >
+                              Reject
+                            </button>
+                          </>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -258,20 +262,24 @@ export default function AdminLabApplications() {
             </div>
 
             <div className="mt-4 flex gap-2">
-              <button
-                onClick={() => handleApprove(selected)}
-                className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
-                disabled={actionLoading}
-              >
-                {actionLoading ? "Working..." : "Approve"}
-              </button>
-              <button
-                onClick={() => handleReject(selected)}
-                className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
-                disabled={actionLoading}
-              >
-                {actionLoading ? "Working..." : "Reject"}
-              </button>
+              {selected.status !== "Approved" && selected.status !== "Rejected" && (
+                <>
+                  <button
+                    onClick={() => handleApprove(selected)}
+                    className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
+                    disabled={actionLoading}
+                  >
+                    {actionLoading ? "Working..." : "Approve"}
+                  </button>
+                  <button
+                    onClick={() => handleReject(selected)}
+                    className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+                    disabled={actionLoading}
+                  >
+                    {actionLoading ? "Working..." : "Reject"}
+                  </button>
+                </>
+              )}
               <button
                 onClick={() => {
                   setSelected(null);
