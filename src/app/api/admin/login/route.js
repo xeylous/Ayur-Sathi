@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 export async function POST(req) {
   try {
-    const { email, password } = await req.json();
+    const { email, password, adminType } = await req.json();
 
     const envAdminEmail = process.env.ADMIN_EMAIL;
     const envAdminPass = process.env.ADMIN_PASSWORD;
@@ -12,14 +12,21 @@ export async function POST(req) {
     const envStoreEmail = process.env.STORE_ADMIN_EMAIL;
     const envStorePass = process.env.STORE_ADMIN_PASSWORD;
 
-    const isCentralAdmin = (email === envAdminEmail && password === envAdminPass) || 
+    const matchesCentral = (email === envAdminEmail && password === envAdminPass) || 
                            (email === envAltEmail && password === envAltPass);
-    const isStoreAdmin = email === envStoreEmail && password === envStorePass;
+    const matchesStore = email === envStoreEmail && password === envStorePass;
 
-    if (!isCentralAdmin && !isStoreAdmin) {
-      return NextResponse.json({ error: "Invalid admin credentials" }, { status: 401 });
+    if (adminType === "store") {
+      if (!matchesStore) {
+        return NextResponse.json({ error: "Invalid Store Admin credentials" }, { status: 401 });
+      }
+    } else {
+      if (!matchesCentral) {
+        return NextResponse.json({ error: "Invalid Central Admin credentials" }, { status: 401 });
+      }
     }
 
+    const isCentralAdmin = adminType !== "store";
     const role = isCentralAdmin ? "admin" : "store_admin";
     const type = isCentralAdmin ? "admin" : "store_admin";
     const name = isCentralAdmin ? "Central Admin" : "Store Admin";

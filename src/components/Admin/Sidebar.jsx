@@ -1,5 +1,5 @@
 "use client";
-import { LayoutDashboard, Users, DollarSign, FlaskConical, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, DollarSign, FlaskConical, LogOut, FileText } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
@@ -10,11 +10,12 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     { id: "user", icon: Users, label: "Lab Approvals" },
     { id: "farmerPayment", icon: DollarSign, label: "Farmer Payments" },
     { id: "laboratory", icon: FlaskConical, label: "Marketplace Listing" },
-    { id: "manufacturer", icon: FlaskConical, label: "Manufacturer Approvals" }
+    { id: "manufacturer", icon: FlaskConical, label: "Manufacturer Approvals" },
+    { id: "manufacturingLogs", icon: FileText, label: "Manufacturing Logs" }
   ];
 
   const allowedTabs = user?.role === "store_admin" || user?.type === "store_admin"
-    ? allTabs.filter(tab => tab.id === "laboratory")
+    ? allTabs.filter(tab => tab.id === "laboratory" || tab.id === "manufacturingLogs")
     : allTabs;
 
   return (
