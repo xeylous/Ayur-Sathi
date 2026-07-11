@@ -17,7 +17,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
 
 
   return (
-    <div className="bg-sidebar w-64 flex-shrink-0 text-white p-4 h-full">
+    <div className="bg-sidebar w-64 flex-shrink-0 text-white p-4 h-full fixed">
       <h1 className="text-2xl font-bold py-4 mb-6 tracking-wide">
         <span className="text-green-300">Manu</span>Dash
       </h1>

@@ -217,7 +217,13 @@ export default function ManufacturedBatches({ showToast }) {
                   <strong>Species:</strong> {selectedBatch.speciesId}
                 </p>
                 <p>
-                  <strong>Quantity:</strong> {selectedBatch.quantity} units
+                  <strong>Quantity:</strong> {selectedBatch.productQunatity || selectedBatch.quantity} units
+                </p>
+                <p>
+                  <strong>Unit Weight:</strong> {selectedBatch.unitWeight || "N/A"}
+                </p>
+                <p>
+                  <strong>Expiry Date:</strong> {selectedBatch.productExpiryDate ? new Date(selectedBatch.productExpiryDate).toLocaleDateString() : "N/A"}
                 </p>
                 <p>
                   <strong>Status:</strong>{" "}
@@ -242,6 +248,14 @@ export default function ManufacturedBatches({ showToast }) {
                   <strong>Uploaded At:</strong>{" "}
                   {new Date(selectedBatch.createdAt).toLocaleString()}
                 </p>
+                {selectedBatch.productKnowledge && (
+                  <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 mt-2">
+                    <p className="font-semibold mb-1">Product Knowledge:</p>
+                    <p className="text-gray-600 whitespace-pre-wrap">
+                      {selectedBatch.productKnowledge}
+                    </p>
+                  </div>
+                )}
 
                 <hr className="my-4" />
 

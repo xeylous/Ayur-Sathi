@@ -41,7 +41,7 @@ export async function POST(req) {
 
     // 4️⃣ Read request body
     const body = await req.json();
-    const { batchId, processes, operator, notes } = body;
+    const { batchId, processes, operator, notes, productQuantity, productExpiryDate, unitWeight, productKnowledge } = body;
 
     if (!batchId || !Array.isArray(processes) || processes.length === 0) {
       return NextResponse.json(
@@ -116,6 +116,11 @@ export async function POST(req) {
       publicId: uploadRes.public_id,
     };
     
+    // Save product details
+    if (productQuantity) batch.productQunatity = Number(productQuantity);
+    if (productExpiryDate) batch.productExpiryDate = new Date(productExpiryDate);
+    if (unitWeight) batch.unitWeight = `${unitWeight} gm`;
+    if (productKnowledge) batch.productKnowledge = productKnowledge;
     batch.isManufactured = true;
 
     await batch.save();
