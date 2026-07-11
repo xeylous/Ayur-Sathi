@@ -248,12 +248,12 @@ export const AuthProvider = ({ children }) => {
   // ----------------------------
   //  ADMIN LOGIN HANDLER
   // ----------------------------
-  const adminLogin = async (email, password) => {
+  const adminLogin = async (email, password, adminType = "central") => {
     try {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, adminType }),
         credentials: "include",
       });
 

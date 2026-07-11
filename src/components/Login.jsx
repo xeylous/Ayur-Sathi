@@ -27,7 +27,7 @@ export default function LoginPage() {
     farmer: "Farmer Login",
     lab: "Lab Login",
     manu: "Manufacturer Login",
-    admin: "Admin Login",
+    admin: "Store Admin Login",
   };
 
   // Close dropdown when clicking outside
@@ -57,7 +57,7 @@ export default function LoginPage() {
 
     // 🧩 Admin Login (API call)
     if (mode === "admin") {
-      const res = await adminLogin(email, password);
+      const res = await adminLogin(email, password, "store");
       if (res.success) {
         toast.success("Admin login successful", { autoClose: 1500 });
         setTimeout(() => router.push("/admin"), 800);
