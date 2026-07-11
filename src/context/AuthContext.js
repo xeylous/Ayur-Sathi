@@ -235,10 +235,10 @@ export const AuthProvider = ({ children }) => {
   //  LOGOUT HANDLER
   // ----------------------------
   const logout = async () => {
-    const isAdmin = user?.role === "admin" || user?.type === "admin" || user?.role === "store_admin" || user?.type === "store_admin";
+    const isCentralAdmin = user?.role === "admin" || user?.type === "admin";
     await fetch("/api/logout", { method: "POST" });
     setUser(null);
-    if (isAdmin) {
+    if (isCentralAdmin) {
       router.replace("/admin-login");
     } else {
       router.replace("/login");
