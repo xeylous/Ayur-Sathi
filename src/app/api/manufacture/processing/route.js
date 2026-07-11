@@ -115,6 +115,8 @@ export async function POST(req) {
       url: uploadRes.secure_url,
       publicId: uploadRes.public_id,
     };
+    
+    batch.isManufactured = true;
 
     await batch.save();
 

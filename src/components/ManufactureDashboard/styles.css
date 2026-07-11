@@ -1,16 +1,10 @@
-:root {
-  --sidebar-bg: #04321a;
-  --sidebar-active: #004d2b;
-}
+/* ManufactureDashboard — minimal overrides */
 
-.bg-sidebar {
-  background-color: var(--sidebar-bg);
+/* Smooth scrollbar for the sidebar on webkit browsers */
+aside::-webkit-scrollbar {
+  width: 4px;
 }
-
-.bg-sidebar-active {
-  background-color: var(--sidebar-active);
-}
-
-html {
-  font-family: 'Inter', sans-serif;
+aside::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
 }

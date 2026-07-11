@@ -212,51 +212,39 @@ export default function ManufacturedBatches({ showToast }) {
                 Batch Details — <span className="text-blue-600">{selectedBatch.batchId}</span>
               </h3>
 
-              <div className="space-y-6 text-gray-700">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100 text-sm">
-                  <div>
-                    <span className="block text-xs font-semibold text-gray-400 uppercase">Species / Herb</span>
-                    <span className="font-semibold text-indigo-900">{selectedBatch.speciesId}</span>
-                  </div>
-                  <div>
-                    <span className="block text-xs font-semibold text-gray-400 uppercase">Quantity</span>
-                    <span className="font-semibold text-indigo-900">{selectedBatch.quantity || 0} units</span>
-                  </div>
-                  <div>
-                    <span className="block text-xs font-semibold text-gray-400 uppercase">Status</span>
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-800 mt-0.5">
-                      {selectedBatch.status || "Completed"}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="block text-xs font-semibold text-gray-400 uppercase">Manufacturer Operator</span>
-                    <span className="font-semibold text-indigo-900">{selectedBatch.manuOperatorName || "N/A"}</span>
-                  </div>
-                  <div>
-                    <span className="block text-xs font-semibold text-gray-400 uppercase">Accepted By Lab</span>
-                    <span className="font-mono text-xs">{selectedBatch.acceptedBy || "N/A"}</span>
-                  </div>
-                  <div>
-                    <span className="block text-xs font-semibold text-gray-400 uppercase">Accepted By Manufacturer</span>
-                    <span className="font-mono text-xs">{selectedBatch.acceptedByManu || "N/A"}</span>
-                  </div>
-                  <div>
-                    <span className="block text-xs font-semibold text-gray-400 uppercase">Manufactured Date</span>
-                    <span>
-                      {selectedBatch.manufacturedAt
-                        ? new Date(selectedBatch.manufacturedAt).toLocaleString()
-                        : "N/A"}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="block text-xs font-semibold text-gray-400 uppercase">Uploaded At</span>
-                    <span>
-                      {selectedBatch.createdAt
-                        ? new Date(selectedBatch.createdAt).toLocaleString()
-                        : "N/A"}
-                    </span>
-                  </div>
-                </div>
+              <div className="space-y-3 text-gray-700 text-sm">
+                <p>
+                  <strong>Species:</strong> {selectedBatch.speciesId}
+                </p>
+                <p>
+                  <strong>Quantity:</strong> {selectedBatch.quantity} units
+                </p>
+                <p>
+                  <strong>Status:</strong>{" "}
+                  {selectedBatch.isManufactured ? "Manufactured" : "Not Manufactured"}
+                </p>
+                <p>
+                  <strong>Manufacturer Operator:</strong>{" "}
+                  {selectedBatch.manuOperatorName}
+                </p>
+                <p>
+                  <strong>Accepted By Lab:</strong> {selectedBatch.acceptedBy}
+                </p>
+                <p>
+                  <strong>Accepted By Manufacturer:</strong>{" "}
+                  {selectedBatch.acceptedByManu}
+                </p>
+                <p>
+                  <strong>Manufactured Date:</strong>{" "}
+                  {new Date(selectedBatch.manufacturedAt).toLocaleString()}
+                </p>
+                <p>
+                  <strong>Uploaded At:</strong>{" "}
+                  {new Date(selectedBatch.createdAt).toLocaleString()}
+                </p>
+
+                <hr className="my-4" />
+
 
                 {/* QR Code */}
                 {selectedBatch.qrCode?.url && (

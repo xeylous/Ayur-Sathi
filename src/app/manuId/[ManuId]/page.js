@@ -5,12 +5,12 @@ import ManufactureDashboard from "@/components/ManufactureDashboard/page";
 
 export default function Page() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#f8fae3]/50">
+    <div className="flex flex-col min-h-screen bg-[#ECF39E]">
       {/* Navbar */}
       <Navbar />
 
       {/* Main content */}
-      <main className="flex-grow items-start bg-[#f8fae3]/50 py-6">
+      <main className="flex-1">
        <ManufactureDashboard />
       </main>
 
