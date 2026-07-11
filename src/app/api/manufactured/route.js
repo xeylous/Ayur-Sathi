@@ -50,8 +50,9 @@ export async function GET(req) {
 
     // 4️⃣ Only completed batches with QR
     const query = {
+      acceptedByManu: { $ne: null },
       manufacturedAt: { $exists: true },
-      qrCode: { $exists: true }
+      "qrCode.url": { $ne: null }
     };
 
     if (startDate || endDate) {

@@ -23,13 +23,15 @@ const AdminPage = () => {
   const [users, setUsers] = useState(mockUsers);
   const [statusMessage, setStatusMessage] = useState(null);
 
+  const isStoreAdmin = user?.role === "store_admin" || user?.type === "store_admin";
+
   return (
     <div className="flex h-screen bg-gray-50 font-sans">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="flex-grow ml-64 p-8 overflow-y-auto">
         <header className="mb-8">
           <h1 className="text-3xl font-extrabold text-indigo-900 border-b pb-3">
-            AyurSaathi Central Admin Panel
+            {isStoreAdmin ? "AyurSaathi Store Admin Panel" : "AyurSaathi Central Admin Panel"}
           </h1>
         </header>
 
