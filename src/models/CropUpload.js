@@ -101,6 +101,11 @@ const CropUploadSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    //Manufactured true or false
+    isManufactured: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

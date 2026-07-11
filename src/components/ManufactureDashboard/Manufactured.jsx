@@ -220,7 +220,8 @@ export default function ManufacturedBatches({ showToast }) {
                   <strong>Quantity:</strong> {selectedBatch.quantity} units
                 </p>
                 <p>
-                  <strong>Status:</strong> {selectedBatch.status}
+                  <strong>Status:</strong>{" "}
+                  {selectedBatch.isManufactured ? "Manufactured" : "Not Manufactured"}
                 </p>
                 <p>
                   <strong>Manufacturer Operator:</strong>{" "}

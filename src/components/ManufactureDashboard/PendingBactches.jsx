@@ -109,11 +109,11 @@ export default function PendingBatchManager({ showToast }) {
   };
   const getStatusClass = (status) => {
   switch (status?.toLowerCase()) {
-    case "Approved":
+    case "approved":
       return "bg-green-100 text-green-700 border border-green-300";
-    case "Pending":
+    case "pending":
       return "bg-yellow-100 text-yellow-700 border border-yellow-300";
-    case "Rejected":
+    case "rejected":
       return "bg-red-100 text-red-700 border border-red-300";
     default:
       return "bg-gray-200 text-gray-600 border border-gray-300";
