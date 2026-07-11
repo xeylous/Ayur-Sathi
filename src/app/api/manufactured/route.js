@@ -27,21 +27,26 @@ export async function GET(req) {
       );
     }
 
-    // restrict only manufacturers
-    if (decoded.type !== "manu") {
+    const isAdmin = decoded.role === "admin" || decoded.type === "admin" || 
+                    decoded.role === "store_admin" || decoded.type === "store_admin";
+
+    // restrict only manufacturers and admins
+    if (decoded.type !== "manu" && !isAdmin) {
       return NextResponse.json(
-        { success: false, message: "Access denied. Only manufacturers allowed." },
+        { success: false, message: "Access denied." },
         { status: 403 }
       );
     }
 
     await connectDB();
 
-    // 3️⃣ Pagination
+    // 3️⃣ Pagination & Date Filters
     const { searchParams } = new URL(req.url);
     const page = Number(searchParams.get("page")) || 1;
     const limit = Number(searchParams.get("limit")) || 10;
     const skip = (page - 1) * limit;
+    const startDate = searchParams.get("startDate");
+    const endDate = searchParams.get("endDate");
 
     // 4️⃣ Only completed batches with QR
     const query = {
@@ -49,8 +54,22 @@ export async function GET(req) {
       qrCode: { $exists: true }
     };
 
-    // show only manufacturer-owned batches
-    query.acceptedByManu = decoded.manuId;
+    if (startDate || endDate) {
+      query.manufacturedAt = { $exists: true };
+      if (startDate) {
+        query.manufacturedAt.$gte = new Date(startDate);
+      }
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        query.manufacturedAt.$lte = end;
+      }
+    }
+
+    // show only manufacturer-owned batches if not admin
+    if (!isAdmin) {
+      query.acceptedByManu = decoded.manuId;
+    }
 
     // 5️⃣ Fetch sorted latest first
     const records = await CropUpload.find(query)

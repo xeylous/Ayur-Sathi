@@ -10,6 +10,7 @@ import { mockBatches, mockUsers } from "@/lib/mockData";
 import AdminLabApplications from "@/components/Admin/AdminLabApplications";
 import AdminManufactureApplications from "@/components/Admin/AdminManufactureApplications";
 import { useAuth } from "@/context/AuthContext";
+import ManufacturingLogs from "@/components/Admin/ManufacturingLogs";
 
 const AdminPage = () => {
   const { user } = useAuth();
@@ -25,7 +26,7 @@ const AdminPage = () => {
   return (
     <div className="flex h-screen bg-gray-50 font-sans">
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <div className="flex-1 ml-64 p-8 overflow-y-auto">
+      <div className="flex-grow ml-64 p-8 overflow-y-auto">
         <header className="mb-8">
           <h1 className="text-3xl font-extrabold text-indigo-900 border-b pb-3">
             AyurSaathi Central Admin Panel
@@ -60,6 +61,9 @@ const AdminPage = () => {
           )}
           {activeTab === "manufacturer" && (
             <AdminManufactureApplications/>
+          )}
+          {activeTab === "manufacturingLogs" && (
+            <ManufacturingLogs />
           )}
         </div>
 
