@@ -101,6 +101,25 @@ const CropUploadSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+
+    //Product Qunatity
+    productQunatity: {
+      type: Number,
+      default: 0,
+    },
+
+    // Product Knowledge
+    productKnowledge: {
+      type: String,
+      default: null,
+    },
+
+    // Unit weight
+    unitWeight: {
+      type: String,
+      default: null,
+    },
+
     //Manufactured true or false
     isManufactured: {
       type: Boolean,
