@@ -1,20 +1,21 @@
+"use client";
 import { useState, useEffect } from "react";
 import {
   Search,
-  Package,
   Calendar,
   ChevronLeft,
   ChevronRight,
   Loader2,
-  MoreHorizontal,
   FileText,
 } from "lucide-react";
 
-export default function ManufacturedBatches({ showToast }) {
+export default function ManufacturingLogs() {
   const [batches, setBatches] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [selectedBatch, setSelectedBatch] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
 
@@ -33,50 +34,42 @@ export default function ManufacturedBatches({ showToast }) {
     link.click();
     document.body.removeChild(link);
   };
-  // Pagination limit as requested
+
   const LIMIT = 10;
 
-  // 🔄 Fetch Data
   const fetchManufactured = async () => {
     setLoading(true);
     try {
-      // Using the route you provided
-      const res = await fetch(`/api/manufactured?page=${page}&limit=${LIMIT}`, {
+      let queryUrl = `/api/manufactured?page=${page}&limit=${LIMIT}`;
+      if (startDate) queryUrl += `&startDate=${startDate}`;
+      if (endDate) queryUrl += `&endDate=${endDate}`;
+
+      const res = await fetch(queryUrl, {
         method: "GET",
         credentials: "include",
       });
 
       const data = await res.json();
-      console.log(data);
-
       if (data.success) {
         setBatches(data.data || []);
-      } else {
-        // Only show toast on error, not on empty list
-        if (data.message) showToast(data.message, "error");
       }
     } catch (error) {
-      console.error("Error fetching manufactured batches:", error);
-      showToast("Failed to load history.", "error");
+      console.error("Error fetching manufactured logs:", error);
     }
     setLoading(false);
   };
 
-  // Fetch on page change
   useEffect(() => {
     fetchManufactured();
-  }, [page]);
+  }, [page, startDate, endDate]);
 
-  // 🔍 Local Filter Logic
-  // Since the API snippet provided doesn't have a ?search= param,
-  // we filter the 10 results currently on screen.
   const filteredBatches = batches.filter(
     (batch) =>
       batch.batchId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      batch.speciesId?.toLowerCase().includes(searchTerm.toLowerCase())
+      batch.speciesId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      batch.acceptedByManu?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // 📄 Date Formatter
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -87,57 +80,93 @@ export default function ManufacturedBatches({ showToast }) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-4">
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-          <h2 className="text-3xl font-bold text-gray-800 flex items-center">
-            <Package className="w-8 h-8 mr-3 text-blue-600" />
-            Manufactured History
-          </h2>
-          <p className="text-gray-500 text-sm mt-1">
-            Archive of all fully manufactured and processed batches.
-          </p>
-        </div>
-      </div>
+    <>
+      <h2 className="text-3xl font-extrabold text-indigo-800 mb-6">
+        Manufacturing Logs
+      </h2>
+      
+      <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+        {/* Toolbar: Search & Date Filters */}
+        <div className="p-5 border-b border-gray-100 bg-indigo-50/30 flex flex-col xl:flex-row justify-between items-stretch xl:items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-grow max-w-4xl">
+            {/* Search */}
+            <div className="relative flex-grow">
+              <Search className="absolute left-3 top-3 text-indigo-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search by Batch ID, Herb, or Manufacturer..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
+              />
+            </div>
 
-      {/* Main Content Card */}
-      <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-        {/* Toolbar: Search & Refresh */}
-        <div className="p-5 border-b border-gray-100 bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-4">
-          {/* Search Input */}
-          <div className="relative w-full sm:w-96">
-            <Search className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search by Batch ID or Species..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-            />
+            {/* Date Filters */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-gray-300">
+                <span className="text-xs font-semibold text-gray-400 uppercase">From</span>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => {
+                    setStartDate(e.target.value);
+                    setPage(1);
+                  }}
+                  className="text-xs text-gray-700 outline-none font-medium bg-transparent"
+                />
+              </div>
+
+              <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-gray-300">
+                <span className="text-xs font-semibold text-gray-400 uppercase">To</span>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => {
+                    setEndDate(e.target.value);
+                    setPage(1);
+                  }}
+                  className="text-xs text-gray-700 outline-none font-medium bg-transparent"
+                />
+              </div>
+
+              {(startDate || endDate) && (
+                <button
+                  onClick={() => {
+                    setStartDate("");
+                    setEndDate("");
+                    setPage(1);
+                  }}
+                  className="text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-2 rounded-xl transition-all cursor-pointer"
+                >
+                  Reset
+                </button>
+              )}
+            </div>
           </div>
 
-          <div className="text-sm text-gray-500 font-medium">Page {page}</div>
+          <div className="text-sm text-indigo-600 font-semibold bg-indigo-50 px-3 py-1.5 rounded-lg self-end xl:self-auto">
+            Page {page}
+          </div>
         </div>
 
         {/* Table View */}
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-100 text-gray-600 text-xs uppercase tracking-wider">
-                <th className="p-4 font-bold border-b">Batch ID</th>
-                <th className="p-4 font-bold border-b">Species</th>
-                <th className="p-4 font-bold border-b">Quantity</th>
-                <th className="p-4 font-bold border-b">Manufactured Date</th>
-                <th className="p-4 font-bold border-b">Status</th>
-                <th className="p-4 font-bold border-b text-right">Actions</th>
+              <tr className="bg-indigo-900 text-white text-xs uppercase tracking-wider">
+                <th className="p-4 font-bold border-b border-indigo-800">Batch ID</th>
+                <th className="p-4 font-bold border-b border-indigo-800">Herb / Species</th>
+                <th className="p-4 font-bold border-b border-indigo-800">Quantity</th>
+                <th className="p-4 font-bold border-b border-indigo-800">Manufacturer ID</th>
+                <th className="p-4 font-bold border-b border-indigo-800">Manufactured Date</th>
+                <th className="p-4 font-bold border-b border-indigo-800 text-right">Details</th>
               </tr>
             </thead>
             <tbody className="text-sm text-gray-700">
               {loading ? (
                 <tr>
                   <td colSpan="6" className="p-8 text-center">
-                    <div className="flex justify-center items-center space-x-2 text-gray-400">
+                    <div className="flex justify-center items-center space-x-2 text-indigo-600">
                       <Loader2 className="w-6 h-6 animate-spin" />
                       <span>Loading records...</span>
                     </div>
@@ -147,30 +176,25 @@ export default function ManufacturedBatches({ showToast }) {
                 filteredBatches.map((batch, index) => (
                   <tr
                     key={index}
-                    className="border-b border-gray-50 hover:bg-blue-50/50 transition-colors"
+                    className="border-b border-gray-100 hover:bg-indigo-50/30 transition-colors"
                   >
-                    <td className="p-4 font-medium text-blue-900">
+                    <td className="p-4 font-semibold text-indigo-900">
                       {batch.batchId}
                     </td>
                     <td className="p-4">
-                      <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-bold border border-gray-200">
+                      <span className="bg-indigo-50 text-indigo-700 px-2 py-1 rounded text-xs font-bold border border-indigo-100">
                         {batch.speciesId}
                       </span>
                     </td>
-                    <td className="p-4 font-mono">{batch.quantity} units</td>
-                    <td className="p-4 text-gray-500 flex items-center">
-                      <Calendar className="w-4 h-4 mr-2 opacity-50" />
-                      {formatDate(batch.createdAt || batch.updatedAt)}
-                    </td>
-                    <td className="p-4">
-                      <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold flex w-fit items-center">
-                        {batch.status || "Completed"}
-                      </span>
+                    <td className="p-4 font-mono font-medium text-gray-600">{batch.quantity} units</td>
+                    <td className="p-4 font-mono text-xs text-gray-600">{batch.acceptedByManu || "N/A"}</td>
+                    <td className="p-4 text-gray-500 flex items-center mt-1">
+                      <Calendar className="w-4 h-4 mr-2 opacity-50 text-indigo-600" />
+                      {formatDate(batch.manufacturedAt || batch.createdAt)}
                     </td>
                     <td className="p-4 text-right">
-                      {/* Example Action: View Details or Certificate */}
                       <button
-                        className="text-gray-400 hover:text-blue-600 transition-colors"
+                        className="p-1.5 text-indigo-600 hover:text-indigo-900 hover:bg-indigo-50 rounded-lg transition-all"
                         onClick={() => {
                           setSelectedBatch(batch);
                           setShowDetails(true);
@@ -188,8 +212,8 @@ export default function ManufacturedBatches({ showToast }) {
                     className="p-8 text-center text-gray-400 italic"
                   >
                     {searchTerm
-                      ? "No matching batches found."
-                      : "No manufactured batches found."}
+                      ? "No matching logs found."
+                      : "No completed manufactured batches logged yet."}
                   </td>
                 </tr>
               )}
@@ -197,10 +221,10 @@ export default function ManufacturedBatches({ showToast }) {
           </table>
         </div>
 
+        {/* Details Drawer/Modal */}
         {showDetails && selectedBatch && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl p-6 relative">
-              {/* Close Button */}
               <button
                 className="absolute top-4 right-4 text-gray-400 hover:text-red-600 transition-colors text-xl"
                 onClick={() => setShowDetails(false)}
@@ -208,37 +232,37 @@ export default function ManufacturedBatches({ showToast }) {
                 ✖
               </button>
 
-              <h3 className="text-2xl font-extrabold text-gray-800 mb-6 pr-6">
-                Batch Details — <span className="text-blue-600">{selectedBatch.batchId}</span>
+              <h3 className="text-2xl font-extrabold text-indigo-900 mb-6 pr-6">
+                Manufactured Batch — <span className="text-teal-600">{selectedBatch.batchId}</span>
               </h3>
 
               <div className="space-y-6 text-gray-700">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100 text-sm">
                   <div>
-                    <span className="block text-xs font-semibold text-gray-400 uppercase">Species / Herb</span>
-                    <span className="font-semibold text-indigo-900">{selectedBatch.speciesId}</span>
+                    <span className="block text-xs font-semibold text-gray-400 uppercase">Herb / Species</span>
+                    <span className="font-semibold text-indigo-955">{selectedBatch.speciesId}</span>
                   </div>
                   <div>
                     <span className="block text-xs font-semibold text-gray-400 uppercase">Quantity</span>
-                    <span className="font-semibold text-indigo-900">{selectedBatch.quantity || 0} units</span>
+                    <span className="font-semibold text-indigo-955">{selectedBatch.quantity || 0} units</span>
                   </div>
                   <div>
                     <span className="block text-xs font-semibold text-gray-400 uppercase">Status</span>
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-800 mt-0.5">
-                      {selectedBatch.status || "Completed"}
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-100 text-teal-800 mt-0.5 border border-teal-200">
+                      Completed & QR Generated
                     </span>
                   </div>
                   <div>
                     <span className="block text-xs font-semibold text-gray-400 uppercase">Manufacturer Operator</span>
-                    <span className="font-semibold text-indigo-900">{selectedBatch.manuOperatorName || "N/A"}</span>
+                    <span className="font-semibold text-indigo-955">{selectedBatch.manuOperatorName || "N/A"}</span>
                   </div>
                   <div>
-                    <span className="block text-xs font-semibold text-gray-400 uppercase">Accepted By Lab</span>
-                    <span className="font-mono text-xs">{selectedBatch.acceptedBy || "N/A"}</span>
+                    <span className="block text-xs font-semibold text-gray-400 uppercase">Verified Lab ID</span>
+                    <span className="font-mono text-xs text-gray-600">{selectedBatch.acceptedBy || "N/A"}</span>
                   </div>
                   <div>
-                    <span className="block text-xs font-semibold text-gray-400 uppercase">Accepted By Manufacturer</span>
-                    <span className="font-mono text-xs">{selectedBatch.acceptedByManu || "N/A"}</span>
+                    <span className="block text-xs font-semibold text-gray-400 uppercase">Manufacturer ID</span>
+                    <span className="font-mono text-xs text-gray-600">{selectedBatch.acceptedByManu || "N/A"}</span>
                   </div>
                   <div>
                     <span className="block text-xs font-semibold text-gray-400 uppercase">Manufactured Date</span>
@@ -249,7 +273,7 @@ export default function ManufacturedBatches({ showToast }) {
                     </span>
                   </div>
                   <div>
-                    <span className="block text-xs font-semibold text-gray-400 uppercase">Uploaded At</span>
+                    <span className="block text-xs font-semibold text-gray-400 uppercase">Record Logged At</span>
                     <span>
                       {selectedBatch.createdAt
                         ? new Date(selectedBatch.createdAt).toLocaleString()
@@ -260,12 +284,12 @@ export default function ManufacturedBatches({ showToast }) {
 
                 {/* QR Code */}
                 {selectedBatch.qrCode?.url && (
-                  <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-100 flex flex-col items-center">
+                  <div className="bg-indigo-50/20 p-4 rounded-xl border border-indigo-100 flex flex-col items-center">
                     <p className="font-semibold text-indigo-900 text-sm mb-3">Product QR Code</p>
                     <img
                       src={selectedBatch.qrCode.url}
                       alt="Product QR Code"
-                      className="w-44 h-44 border rounded-lg bg-white p-2 shadow-sm"
+                      className="w-44 h-44 border border-indigo-100 rounded-lg bg-white p-2 shadow-sm"
                     />
                   </div>
                 )}
@@ -281,7 +305,7 @@ export default function ManufacturedBatches({ showToast }) {
                           `${selectedBatch.batchId}_QR.png`
                         )
                       }
-                      className="w-full sm:w-auto bg-blue-600 text-white px-5 py-2.5 rounded-xl shadow hover:bg-blue-700 transition-all font-semibold flex items-center justify-center gap-2 hover:shadow-lg"
+                      className="w-full sm:w-auto bg-indigo-700 text-white px-5 py-2.5 rounded-xl shadow hover:bg-indigo-800 transition-all font-semibold flex items-center justify-center gap-2 hover:shadow-lg"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path>
@@ -299,7 +323,7 @@ export default function ManufacturedBatches({ showToast }) {
                           `${selectedBatch.batchId}_certificate.pdf`
                         )
                       }
-                      className="w-full sm:w-auto bg-green-600 text-white px-5 py-2.5 rounded-xl shadow hover:bg-green-700 transition-all font-semibold flex items-center justify-center gap-2 hover:shadow-lg"
+                      className="w-full sm:w-auto bg-teal-600 text-white px-5 py-2.5 rounded-xl shadow hover:bg-teal-700 transition-all font-semibold flex items-center justify-center gap-2 hover:shadow-lg"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path>
@@ -360,29 +384,28 @@ export default function ManufacturedBatches({ showToast }) {
         )}
 
         {/* Pagination Footer */}
-        <div className="p-4 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
+        <div className="p-4 bg-indigo-50/30 border-t border-gray-200 flex justify-between items-center">
           <button
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
             disabled={page === 1 || loading}
-            className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium"
           >
             <ChevronLeft className="w-4 h-4 mr-1" /> Previous
           </button>
 
-          <span className="text-sm font-medium text-gray-600">
-            Showing results for Page {page}
+          <span className="text-sm font-semibold text-indigo-900">
+            Showing Page {page}
           </span>
 
           <button
             onClick={() => setPage((prev) => prev + 1)}
-            // Disable if less than limit, assuming end of data
             disabled={batches.length < LIMIT || loading}
-            className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium"
           >
             Next <ChevronRight className="w-4 h-4 ml-1" />
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }

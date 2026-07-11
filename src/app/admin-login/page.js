@@ -33,7 +33,7 @@ const AdminLoginPage = () => {
     setIsSubmitting(true);
     setLoginStatus({ success: false, message: "Verifying credentials..." });
 
-    const result = await adminLogin(email, password);
+    const result = await adminLogin(email, password, "central");
 
     if (result.success) {
       setLoginStatus({
@@ -57,7 +57,7 @@ const AdminLoginPage = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#f5f8cc]/50 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-gray-100 p-8">
-        <div className="flex flex-col items-center mb-8">
+        <div className="flex flex-col items-center mb-6">
           <Image
             src="/logo.jpg"
             alt="AyurSaathi Logo"
@@ -65,8 +65,8 @@ const AdminLoginPage = () => {
             height={50}
             className="h-12 w-12 rounded-lg"
           />
-          <h1 className="mt-4 text-2xl font-extrabold text-[#4F772D]">Admin Login</h1>
-          <p className="text-sm text-gray-500 mt-1">Access the Control Panel</p>
+          <h1 className="mt-4 text-2xl font-extrabold text-[#4F772D]">Central Admin Login</h1>
+          <p className="text-sm text-gray-500 mt-1">Access the Central Control Panel</p>
         </div>
 
         {loginStatus.message && (
