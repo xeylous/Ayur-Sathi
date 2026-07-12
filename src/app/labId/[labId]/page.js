@@ -1,6 +1,5 @@
 "use client";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import LabDashboard from "@/components/labDashboard/LabDashboard";
 
 export default function Page() {
@@ -14,8 +13,6 @@ export default function Page() {
        <LabDashboard />
       </main>
 
-      {/* Footer sticks at bottom */}
-      <Footer />
     </div>
   );
 }
