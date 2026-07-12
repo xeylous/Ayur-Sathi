@@ -22,6 +22,7 @@ const AdminPage = () => {
   const [batches, setBatches] = useState(mockBatches);
   const [users, setUsers] = useState(mockUsers);
   const [statusMessage, setStatusMessage] = useState(null);
+  const [selectedListingBatch, setSelectedListingBatch] = useState(null);
 
   const isStoreAdmin = user?.role === "store_admin" || user?.type === "store_admin";
 
@@ -59,13 +60,20 @@ const AdminPage = () => {
               batches={batches}
               setBatches={setBatches}
               setStatusMessage={setStatusMessage}
+              selectedListingBatch={selectedListingBatch}
+              setSelectedListingBatch={setSelectedListingBatch}
             />
           )}
           {activeTab === "manufacturer" && (
             <AdminManufactureApplications/>
           )}
           {activeTab === "manufacturingLogs" && (
-            <ManufacturingLogs />
+            <ManufacturingLogs 
+              onAddToListing={(batch) => {
+                setSelectedListingBatch(batch);
+                setActiveTab("laboratory");
+              }}
+            />
           )}
         </div>
 
