@@ -32,6 +32,7 @@ export default function ManufactureDashboard() {
   const [activeTab, setActiveTab] = useState("pending");
   const [toast, setToast] = useState({ message: "", type: "" });
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [prefillBatchId, setPrefillBatchId] = useState("");
 
   const showToast = (message, type = "info") => {
     setToast({ message, type });
@@ -40,7 +41,14 @@ export default function ManufactureDashboard() {
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
-    setSidebarOpen(false); // Close mobile sidebar on selection
+    setSidebarOpen(false);
+    if (tabId !== "log") setPrefillBatchId(""); // clear prefill when switching away
+  };
+
+  // Called from PendingBatches to jump to Log Processing with batch ID
+  const navigateToLog = (batchId) => {
+    setPrefillBatchId(batchId);
+    setActiveTab("log");
   };
 
   const renderContent = () => {
@@ -48,9 +56,9 @@ export default function ManufactureDashboard() {
       case "batch":
         return <BatchVerification showToast={showToast} />;
       case "log":
-        return <LogProcessing showToast={showToast} />;
+        return <LogProcessing showToast={showToast} initialBatchId={prefillBatchId} />;
       case "pending":
-        return <PendingBatchManager showToast={showToast} />;
+        return <PendingBatchManager showToast={showToast} navigateToLog={navigateToLog} />;
       case "analytics":
         return <Analytics />;
       case "payment":
