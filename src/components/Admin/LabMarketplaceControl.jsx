@@ -472,37 +472,60 @@ const LabMarketplaceControl = ({
                 Marketplace Card Preview
               </h3>
 
-              {/* Exact Marketplace Card Simulation */}
-              <div className="bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 flex flex-col h-[520px] relative">
-                {/* Visual Header card */}
-                <div className="p-6 bg-gradient-to-br from-indigo-900 to-indigo-950 text-white flex flex-col justify-between h-40 relative group/preview">
-                  {listingImages.length > 0 && (
+              {/* Exact Marketplace Card Simulation (matching new site style) */}
+              <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-lg transition-all h-[580px] p-4 bg-white relative">
+                {/* Product Image Area (occupies ~55% height) */}
+                <div className="relative h-[310px] bg-gray-50/50 rounded-xl overflow-hidden flex items-center justify-center border border-gray-100/60 mb-3 group/preview">
+                  {listingImages.length > 0 ? (
                     <img 
                       src={listingImages[activePreviewIndex]?.url} 
                       alt="Product" 
-                      className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-overlay"
+                      className="w-full h-full object-cover transition-transform duration-500"
                     />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-indigo-950 text-indigo-200">
+                      <ShoppingBag size={48} className="opacity-40 mb-2" />
+                      <span className="text-xs font-semibold">No product photo</span>
+                    </div>
                   )}
+
+                  {/* Badges on top of image */}
+                  <span className="bg-[#4F772D] text-white text-[9px] font-black px-2.5 py-1 absolute top-3 left-3 rounded-md z-10 shadow-sm uppercase tracking-wider">
+                    Ayur Choice
+                  </span>
+                  <span className="bg-gray-800/85 backdrop-blur text-white text-[9px] font-mono font-bold px-2 py-1 rounded-md absolute top-3 right-3 z-10 shadow-sm">
+                    #{selectedListingBatch.batchId}
+                  </span>
+
+                  {/* Left/Right controls */}
                   {listingImages.length > 1 && (
-                    <>
+                    <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex justify-between z-20">
                       <button
                         type="button"
-                        onClick={() => setActivePreviewIndex(prev => (prev === 0 ? listingImages.length - 1 : prev - 1))}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-gray-800 text-[10px] flex items-center justify-center shadow-md z-20 cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActivePreviewIndex(prev => (prev === 0 ? listingImages.length - 1 : prev - 1));
+                        }}
+                        className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-800 text-xs flex items-center justify-center shadow-lg transition-colors cursor-pointer"
                       >
                         ◀
                       </button>
                       <button
                         type="button"
-                        onClick={() => setActivePreviewIndex(prev => (prev === listingImages.length - 1 ? 0 : prev + 1))}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-gray-800 text-[10px] flex items-center justify-center shadow-md z-20 cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActivePreviewIndex(prev => (prev === listingImages.length - 1 ? 0 : prev + 1));
+                        }}
+                        className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-800 text-xs flex items-center justify-center shadow-lg transition-colors cursor-pointer"
                       >
                         ▶
                       </button>
-                    </>
+                    </div>
                   )}
+
+                  {/* Dot indicators in card visual area */}
                   {listingImages.length > 1 && (
-                    <div className="absolute right-3 bottom-3 z-20 flex gap-1">
+                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-1 bg-black/35 px-2 py-1 rounded-full backdrop-blur-sm">
                       {listingImages.map((_, idx) => (
                         <span 
                           key={idx}
@@ -513,66 +536,64 @@ const LabMarketplaceControl = ({
                       ))}
                     </div>
                   )}
-
-                  <div className="flex justify-between items-start relative z-10">
-                    <span className="bg-white/20 backdrop-blur text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-white/10 uppercase tracking-wide">
-                      Batch #{selectedListingBatch.batchId}
-                    </span>
-                    <span className="bg-emerald-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">
-                      Verified
-                    </span>
-                  </div>
-                  <div className="relative z-10">
-                    <h3 className="text-xl font-extrabold truncate">
-                      {getHerbName(selectedListingBatch.speciesId)}
-                    </h3>
-                    <p className="text-[10px] text-indigo-200 mt-0.5 flex items-center gap-1 font-mono">
-                      <Tag size={10} /> Species: {selectedListingBatch.speciesId}
-                    </p>
-                  </div>
                 </div>
 
-                {/* Info Fields */}
-                <div className="p-5 flex-grow flex flex-col justify-between">
-                  <div className="space-y-4">
-                    {/* Specs Grid */}
-                    <div className="grid grid-cols-3 gap-2">
-                      <div className="bg-gray-50 p-2 rounded-xl border border-gray-100 text-center">
-                        <DollarSign className="w-3.5 h-3.5 text-indigo-650 mx-auto mb-0.5" />
-                        <span className="block text-[8px] text-gray-400 font-bold uppercase">Price</span>
-                        <span className="text-[11px] font-black text-gray-700">₹{price}</span>
-                      </div>
-                      <div className="bg-gray-50 p-2 rounded-xl border border-gray-100 text-center">
-                        <Package className="w-3.5 h-3.5 text-[#90A955] mx-auto mb-0.5" />
-                        <span className="block text-[8px] text-gray-400 font-bold uppercase">Stock</span>
-                        <span className="text-[11px] font-black text-gray-700">{quantity} units</span>
-                      </div>
-                      <div className="bg-gray-50 p-2 rounded-xl border border-gray-100 text-center">
-                        <Scale className="w-3.5 h-3.5 text-teal-600 mx-auto mb-0.5" />
-                        <span className="block text-[8px] text-gray-400 font-bold uppercase">Weight</span>
-                        <span className="text-[11px] font-black text-gray-700">{weightGm}g</span>
-                      </div>
+                {/* Amazon Product Card Text Area (occupies ~45% height) */}
+                <div className="flex-grow flex flex-col justify-between px-1">
+                  <div>
+                    {/* Category & Species */}
+                    <span className="text-[10px] text-gray-500 uppercase tracking-widest block font-bold">
+                      Category: {selectedListingBatch.speciesId} Herb
+                    </span>
+
+                    {/* Product Title */}
+                    <h3 className="text-sm font-bold text-gray-900 leading-snug line-clamp-2 h-10 mt-0.5 transition-colors">
+                      {getHerbName(selectedListingBatch.speciesId)} (Traceable Natural Harvest Batch)
+                    </h3>
+
+                    {/* Ratings */}
+                    <div className="flex items-center gap-0.5 text-amber-500 mt-1">
+                      {[...Array(5)].map((_, i) => (
+                        <svg key={i} className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
+                      ))}
+                      <span className="text-xs text-indigo-900 font-semibold ml-1.5">
+                        4.8 (142 reviews)
+                      </span>
                     </div>
 
-                    {/* Description */}
-                    <div>
-                      <span className="block text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">
-                        Product Description
+                    {/* Price block */}
+                    <div className="flex items-baseline gap-2 mt-1.5">
+                      <span className="text-2xl font-extrabold text-gray-900">
+                        ₹{price || "0"}
                       </span>
-                      <p className="text-[11px] text-gray-600 line-clamp-3 leading-relaxed">
-                        {description || "No description provided."}
-                      </p>
+                      <span className="text-xs text-gray-500 line-through">
+                        ₹{Math.round((Number(price) || 0) * 1.25)}
+                      </span>
+                      <span className="text-xs text-green-700 font-bold">
+                        (20% off)
+                      </span>
                     </div>
+
+                    {/* Delivery & Stock status */}
+                    <span className="text-xs text-green-700 font-bold block mt-1">
+                      In Stock ({quantity || "0"} left)
+                    </span>
+                    
+                    <span className="text-[11px] text-gray-500 block">
+                      Size: {weightGm || "0"}g • Pack of 1
+                    </span>
                   </div>
 
-                  {/* Actions */}
-                  <div className="pt-3 border-t border-gray-100 mt-3">
+                  {/* Golden / Indigo button */}
+                  <div className="pt-3">
                     <button
                       type="button"
                       disabled
-                      className="w-full bg-indigo-900 text-white font-bold text-[10px] py-2.5 rounded-lg flex items-center justify-center gap-1.5 opacity-80 cursor-not-allowed"
+                      className="w-full bg-indigo-900 text-white font-bold text-xs py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-not-allowed opacity-90"
                     >
-                      View Details & Trace
+                      View Traceability & Details
                     </button>
                   </div>
                 </div>

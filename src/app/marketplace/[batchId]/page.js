@@ -91,40 +91,90 @@ export default function ProductDetailPage() {
               {/* COLUMN 1: Image Gallery (Span 5) */}
               <div className="md:col-span-5 flex flex-col sm:flex-row-reverse gap-4">
                 {/* Big Active Image Box */}
-                <div className="flex-grow aspect-square bg-[#F7F7F7] border border-gray-100 rounded-xl overflow-hidden flex items-center justify-center relative shadow-inner">
-                  {product.marketplaceImages && product.marketplaceImages.length > 0 ? (
-                    <img 
-                      src={product.marketplaceImages[modalActiveImageIndex]?.url || product.marketplaceImages[0].url} 
-                      alt="Product Primary" 
-                      className="w-full h-full object-contain p-2"
-                    />
-                  ) : product.marketplaceImage?.url ? (
-                    <img 
-                      src={product.marketplaceImage.url} 
-                      alt="Product Primary" 
-                      className="w-full h-full object-contain p-2"
-                    />
-                  ) : (
-                    <div className="text-gray-400 text-xs">No image available</div>
-                  )}
-                </div>
+                {(() => {
+                  const productImages = product.marketplaceImages && product.marketplaceImages.length > 0
+                    ? product.marketplaceImages
+                    : product.marketplaceImage?.url
+                      ? [product.marketplaceImage]
+                      : [];
 
-                {/* Thumbnail Selector Column */}
-                {product.marketplaceImages && product.marketplaceImages.length > 0 && (
-                  <div className="flex sm:flex-col gap-2 flex-wrap items-center justify-start overflow-y-auto max-h-[400px]">
-                    {product.marketplaceImages.map((img, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setModalActiveImageIndex(idx)}
-                        className={`w-14 h-14 rounded-lg overflow-hidden border-2 bg-white transition-all cursor-pointer ${
-                          idx === modalActiveImageIndex ? "border-indigo-600 ring-1 ring-indigo-500 shadow-sm" : "border-gray-200 hover:border-gray-400"
-                        }`}
-                      >
-                        <img src={img.url} alt="thumbnail" className="w-full h-full object-cover" />
-                      </button>
-                    ))}
-                  </div>
-                )}
+                  return (
+                    <>
+                      <div className="flex-grow aspect-square bg-[#F7F7F7] border border-gray-100 rounded-xl overflow-hidden flex items-center justify-center relative shadow-inner group/bigimg">
+                        {productImages.length > 0 ? (
+                          <img 
+                            src={productImages[modalActiveImageIndex]?.url || productImages[0].url} 
+                            alt="Product Primary" 
+                            className="w-full h-full object-contain p-2"
+                          />
+                        ) : (
+                          <div className="text-gray-400 text-xs">No image available</div>
+                        )}
+
+                        {/* Dynamic Chevron Sliders for dynamic route details view */}
+                        {productImages.length > 1 && (
+                          <div className="absolute inset-x-3 top-1/2 -translate-y-1/2 flex justify-between z-20">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const len = productImages.length;
+                                const nextIdx = modalActiveImageIndex === 0 ? len - 1 : modalActiveImageIndex - 1;
+                                setModalActiveImageIndex(nextIdx);
+                              }}
+                              className="w-9 h-9 rounded-full bg-white/90 hover:bg-white text-gray-800 text-xs flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-150"
+                            >
+                              ◀
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const len = productImages.length;
+                                const nextIdx = modalActiveImageIndex === len - 1 ? 0 : modalActiveImageIndex + 1;
+                                setModalActiveImageIndex(nextIdx);
+                              }}
+                              className="w-9 h-9 rounded-full bg-white/90 hover:bg-white text-gray-800 text-xs flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-150"
+                            >
+                              ▶
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Clickable Dot Indicators in big image box */}
+                        {productImages.length > 1 && (
+                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-1.5 bg-black/30 px-2.5 py-1 rounded-full backdrop-blur-sm">
+                            {productImages.map((_, idx) => (
+                              <button
+                                key={idx}
+                                type="button"
+                                onClick={() => setModalActiveImageIndex(idx)}
+                                className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
+                                  idx === modalActiveImageIndex ? "bg-white scale-125 font-bold" : "bg-white/40"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Thumbnail Selector Column */}
+                      {productImages.length > 1 && (
+                        <div className="flex sm:flex-col gap-2 flex-wrap items-center justify-start overflow-y-auto max-h-[400px]">
+                          {productImages.map((img, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => setModalActiveImageIndex(idx)}
+                              className={`w-14 h-14 rounded-lg overflow-hidden border-2 bg-white transition-all cursor-pointer ${
+                                idx === modalActiveImageIndex ? "border-indigo-600 ring-1 ring-indigo-500 shadow-sm" : "border-gray-200 hover:border-gray-400"
+                              }`}
+                            >
+                              <img src={img.url} alt="thumbnail" className="w-full h-full object-cover" />
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
 
               {/* COLUMN 2: Product Specifications & Info (Span 4) */}
@@ -191,7 +241,6 @@ export default function ProductDetailPage() {
                   <ul className="list-disc pl-4 space-y-2 leading-relaxed">
                     <li><strong>Natural Heritage:</strong> Premium quality {getHerbName(product.speciesId)} harvested from pesticide-free agricultural sites.</li>
                     <li><strong>Verified Quality Checks:</strong> Fully screened and approved by laboratory checks showing standard moisture, purity, and organic content.</li>
-                    <li><strong>Blockchain Traceable:</strong> Includes a cryptographic QR log to trace step-by-step from farming, laboratory, and factory.</li>
                     <li><strong>Safety & Usage:</strong> {product.marketplaceDetails || "For pharmaceutical, organic wellness extracts, or dietary supplement use."}</li>
                   </ul>
                 </div>
