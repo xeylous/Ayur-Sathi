@@ -227,14 +227,25 @@ export async function PUT(req) {
     let uploadedImages = existingListing?.images || [];
 
     const imageFilesOrUrls = formData.getAll("images");
-    if (imageFilesOrUrls && imageFilesOrUrls.length > 0) {
+
+    // Filter out empty strings and zero-size files
+    const validImageEntries = imageFilesOrUrls.filter(img => {
+      if (typeof img === "string") return img.trim().length > 0;
+      if (img && img.size > 0) return true;
+      return false;
+    });
+
+
+    if (validImageEntries.length > 0) {
       try {
-        const uploadPromises = imageFilesOrUrls.map(async (img) => {
+        const uploadPromises = validImageEntries.map(async (img) => {
           if (typeof img === "string") {
+            // Re-use already-uploaded image by URL
             const found = uploadedImages.find(existing => existing.url === img);
             if (found) return found;
             return { url: img, publicId: null };
-          } else if (img && img.size > 0) {
+          } else {
+            // New file upload to Cloudinary
             const buffer = Buffer.from(await img.arrayBuffer());
             const uploadRes = await new Promise((resolve, reject) => {
               cloudinary.uploader.upload_stream(
@@ -253,7 +264,6 @@ export async function PUT(req) {
             });
             return uploadRes;
           }
-          return null;
         });
 
         const resolvedImages = await Promise.all(uploadPromises);
@@ -265,53 +275,28 @@ export async function PUT(req) {
           { status: 500 }
         );
       }
-    } else {
-      // Fallback support for single file upload key
-      const singleImage = formData.get("image");
-      if (singleImage && typeof singleImage !== "string" && singleImage.size > 0) {
-        try {
-          const buffer = Buffer.from(await singleImage.arrayBuffer());
-          const uploadRes = await new Promise((resolve, reject) => {
-            cloudinary.uploader.upload_stream(
-              {
-                folder: "marketplaceProducts",
-                resource_type: "image",
-              },
-              (error, result) => {
-                if (error) reject(error);
-                else resolve({
-                  url: result.secure_url,
-                  publicId: result.public_id
-                });
-              }
-            ).end(buffer);
-          });
-          uploadedImages = [uploadRes];
-        } catch (err) {
-          console.error("Cloudinary marketplace product image upload failed:", err);
-          return NextResponse.json(
-            { success: false, message: "Failed to upload product image." },
-            { status: 500 }
-          );
-        }
-      }
     }
 
+
     // Save marketplace listing using MarketplaceListing model
+    // Use $set to explicitly force-write the images array
     const listing = await MarketplaceListing.findOneAndUpdate(
       { batchId },
       {
-        cropUpload: batch._id,
-        price: Number(priceStr),
-        quantity: Number(quantityStr),
-        weightGm: Number(weightGmStr),
-        description,
-        details,
-        image: uploadedImages[0] || { url: null, publicId: null },
-        images: uploadedImages
+        $set: {
+          cropUpload: batch._id,
+          price: Number(priceStr),
+          quantity: Number(quantityStr),
+          weightGm: Number(weightGmStr),
+          description,
+          details,
+          image: uploadedImages[0] || { url: null, publicId: null },
+          images: uploadedImages
+        }
       },
       { new: true, upsert: true }
     ).lean();
+
 
     // Reconstruct the response data format that frontend expects
     const responseData = {

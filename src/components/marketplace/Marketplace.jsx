@@ -121,88 +121,88 @@ export default function Marketplace() {
           </div>
         ) : filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProducts.map((item) => (
-              <div 
-                key={item.batchId}
-                className="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-lg transition-all h-[580px] p-4 bg-white"
-              >
-                {/* Product Image Area (occupies ~55% height) */}
+            {filteredProducts.map((item) => {
+              const itemImages = item.marketplaceImages && item.marketplaceImages.length > 0
+                ? item.marketplaceImages
+                : item.marketplaceImage?.url
+                  ? [item.marketplaceImage]
+                  : [];
+              return (
                 <div 
-                  onClick={() => router.push("/marketplace/" + item.batchId)}
-                  className="relative h-[310px] bg-gray-50/50 rounded-xl overflow-hidden flex items-center justify-center border border-gray-100/60 mb-3 group/card cursor-pointer"
+                  key={item.batchId}
+                  className="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-lg transition-all h-[580px] p-4 bg-white"
                 >
-                  {item.marketplaceImages && item.marketplaceImages.length > 0 ? (
-                    <img 
-                      src={item.marketplaceImages[cardActiveIndexes[item.batchId] || 0]?.url} 
-                      alt="Product" 
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
-                    />
-                  ) : item.marketplaceImage?.url ? (
-                    <img 
-                      src={item.marketplaceImage.url} 
-                      alt="Product" 
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center bg-indigo-950 text-indigo-200">
-                      <ShoppingBag size={48} className="opacity-40 mb-2" />
-                      <span className="text-xs font-semibold">No product photo</span>
-                    </div>
-                  )}
+                  {/* Product Image Area (occupies ~55% height) */}
+                  <div 
+                    onClick={() => router.push("/marketplace/" + item.batchId)}
+                    className="relative h-[310px] bg-gray-50/50 rounded-xl overflow-hidden flex items-center justify-center border border-gray-100/60 mb-3 group/card cursor-pointer"
+                  >
+                    {itemImages.length > 0 ? (
+                      <img 
+                        src={itemImages[cardActiveIndexes[item.batchId] || 0]?.url} 
+                        alt="Product" 
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center bg-indigo-950 text-indigo-200">
+                        <ShoppingBag size={48} className="opacity-40 mb-2" />
+                        <span className="text-xs font-semibold">No product photo</span>
+                      </div>
+                    )}
 
-                  {/* Amazon-style Badges on top of image */}
-                  <span className="bg-[#4F772D] text-white text-[9px] font-black px-2.5 py-1 absolute top-3 left-3 rounded-md z-10 shadow-sm uppercase tracking-wider">
-                    Ayur Choice
-                  </span>
-                  <span className="bg-gray-800/85 backdrop-blur text-white text-[9px] font-mono font-bold px-2 py-1 rounded-md absolute top-3 right-3 z-10 shadow-sm">
-                    #{item.batchId}
-                  </span>
+                    {/* Badges on top of image */}
+                    <span className="bg-[#4F772D] text-white text-[9px] font-black px-2.5 py-1 absolute top-3 left-3 rounded-md z-10 shadow-sm uppercase tracking-wider">
+                      Ayur Choice
+                    </span>
+                    <span className="bg-gray-800/85 backdrop-blur text-white text-[9px] font-mono font-bold px-2 py-1 rounded-md absolute top-3 right-3 z-10 shadow-sm">
+                      #{item.batchId}
+                    </span>
 
-                  {/* Left/Right controls on card hover */}
-                  {item.marketplaceImages && item.marketplaceImages.length > 1 && (
-                    <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex justify-between opacity-0 group-hover/card:opacity-100 transition-opacity z-20">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          const len = item.marketplaceImages.length;
-                          const currentIdx = cardActiveIndexes[item.batchId] || 0;
-                          const nextIdx = currentIdx === 0 ? len - 1 : currentIdx - 1;
-                          setCardActiveIndexes(prev => ({ ...prev, [item.batchId]: nextIdx }));
-                        }}
-                        className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-800 text-xs flex items-center justify-center shadow-lg transition-colors cursor-pointer"
-                      >
-                        ◀
-                      </button>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          const len = item.marketplaceImages.length;
-                          const currentIdx = cardActiveIndexes[item.batchId] || 0;
-                          const nextIdx = currentIdx === len - 1 ? 0 : currentIdx + 1;
-                          setCardActiveIndexes(prev => ({ ...prev, [item.batchId]: nextIdx }));
-                        }}
-                        className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-800 text-xs flex items-center justify-center shadow-lg transition-colors cursor-pointer"
-                      >
-                        ▶
-                      </button>
-                    </div>
-                  )}
+                    {/* Left/Right controls on card */}
+                    {itemImages.length > 1 && (
+                      <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex justify-between z-20">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const len = itemImages.length;
+                            const currentIdx = cardActiveIndexes[item.batchId] || 0;
+                            const nextIdx = currentIdx === 0 ? len - 1 : currentIdx - 1;
+                            setCardActiveIndexes(prev => ({ ...prev, [item.batchId]: nextIdx }));
+                          }}
+                          className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-800 text-xs flex items-center justify-center shadow-lg transition-colors cursor-pointer"
+                        >
+                          ◀
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const len = itemImages.length;
+                            const currentIdx = cardActiveIndexes[item.batchId] || 0;
+                            const nextIdx = currentIdx === len - 1 ? 0 : currentIdx + 1;
+                            setCardActiveIndexes(prev => ({ ...prev, [item.batchId]: nextIdx }));
+                          }}
+                          className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-800 text-xs flex items-center justify-center shadow-lg transition-colors cursor-pointer"
+                        >
+                          ▶
+                        </button>
+                      </div>
+                    )}
 
-                  {/* Dot indicators in card visual area */}
-                  {item.marketplaceImages && item.marketplaceImages.length > 1 && (
-                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-1 bg-black/35 px-2 py-1 rounded-full backdrop-blur-sm">
-                      {item.marketplaceImages.map((_, idx) => (
-                        <span 
-                          key={idx}
-                          className={`w-1.5 h-1.5 rounded-full transition-all ${
-                            idx === (cardActiveIndexes[item.batchId] || 0) ? "bg-white scale-125" : "bg-white/40"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  )}
+                    {/* Dot indicators in card visual area */}
+                    {itemImages.length > 1 && (
+                      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-1 bg-black/35 px-2 py-1 rounded-full backdrop-blur-sm">
+                        {itemImages.map((_, idx) => (
+                          <span 
+                            key={idx}
+                            className={`w-1.5 h-1.5 rounded-full transition-all ${
+                              idx === (cardActiveIndexes[item.batchId] || 0) ? "bg-white scale-125" : "bg-white/40"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    )}
                 </div>
 
                 {/* Amazon Product Card Text Area (occupies ~45% height) */}
@@ -268,7 +268,8 @@ export default function Marketplace() {
                   </div>
                 </div>
               </div>
-            ))}
+            );
+          })}
           </div>
         ) : (
           <div className="bg-white max-w-md mx-auto p-10 rounded-3xl border border-gray-100 shadow-md text-center">
