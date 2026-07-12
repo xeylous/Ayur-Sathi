@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Search, CheckCircle, XCircle } from "lucide-react";
+import { Search, CheckCircle, XCircle, Play, Award } from "lucide-react";
 import StatusDisplay from "./StatusDisplay";
 import { speciesList } from "@/lib/cropdetails"; // ✅ Import your species list
 
-const BatchVerification = () => {
+const BatchVerification = ({ navigateToTab }) => {
   const [currentBatchId, setCurrentBatchId] = useState("");
   const [batchDetails, setBatchDetails] = useState(null);
   const [verificationStatus, setVerificationStatus] = useState(null);
@@ -210,21 +210,23 @@ const BatchVerification = () => {
           </div>
         )}
 
-        {/* ✅ Action Buttons */}
-        <div className="flex gap-4">
-          <button
-            onClick={() => handleAcceptDecline("accept")}
-            className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 flex justify-center items-center cursor-pointer"
-          >
-            <CheckCircle size={18} className="mr-2" /> Accept
-          </button>
-          <button
-            onClick={() => handleAcceptDecline("decline")}
-            className="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 flex justify-center items-center cursor-pointer"
-          >
-            <XCircle size={18} className="mr-2" /> Decline
-          </button>
-        </div>
+        {/* ✅ Action Buttons — only show after fetching */}
+        {batchDetails && (
+          <div className="flex gap-4">
+            <button
+              onClick={() => handleAcceptDecline("accept")}
+              className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 flex justify-center items-center cursor-pointer"
+            >
+              <CheckCircle size={18} className="mr-2" /> Accept
+            </button>
+            <button
+              onClick={() => handleAcceptDecline("decline")}
+              className="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 flex justify-center items-center cursor-pointer"
+            >
+              <XCircle size={18} className="mr-2" /> Decline
+            </button>
+          </div>
+        )}
 
         <StatusDisplay status={verificationStatus} />
 
@@ -258,6 +260,19 @@ const BatchVerification = () => {
                   <p>
                     <strong>AcceptedAt:</strong> {batch.acceptedAt}
                   </p>
+
+                  {/* Action Button */}
+                  {navigateToTab && (
+                    <div className="flex justify-end mt-3 pt-3 border-t border-gray-200">
+                      <button
+                        onClick={() => navigateToTab('logProcessing', batch.batchId)}
+                        className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                      >
+                        <Play className="w-3.5 h-3.5" />
+                        Process Log
+                      </button>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>

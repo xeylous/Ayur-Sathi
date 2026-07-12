@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   QrCode,
   Upload,
@@ -10,8 +10,16 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const LogProcessing = () => {
+const LogProcessing = ({ initialBatchId = "" }) => {
   const [certificationStatus, setCertificationStatus] = useState(null);
+  const batchIdInputRef = useRef(null);
+
+  // Pre-fill batch ID when navigating from BatchVerification
+  useEffect(() => {
+    if (initialBatchId && batchIdInputRef.current) {
+      batchIdInputRef.current.value = initialBatchId;
+    }
+  }, [initialBatchId]);
 
   const showToast = (message, type = "info") => {
     if (type === "success") toast.success(message);
@@ -96,6 +104,7 @@ const LogProcessing = () => {
           <input
             type="text"
             id="processBatchId"
+            ref={batchIdInputRef}
             required
             className="w-full p-3 border border-gray-300 rounded-lg"
           />

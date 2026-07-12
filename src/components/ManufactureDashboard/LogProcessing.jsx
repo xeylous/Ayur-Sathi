@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { PlusCircle, Trash2, CheckCircle, CalendarDays, Package } from "lucide-react";
 
 const PROCESS_OPTIONS = [
@@ -28,7 +28,7 @@ const PROCESS_OPTIONS = [
   "Final Quality Check",
 ];
 
-export default function LogProcessing({ showToast }) {
+export default function LogProcessing({ showToast, initialBatchId = "" }) {
   const [logBatchId, setLogBatchId] = useState("");
   const [operator, setOperator] = useState("");
   const [productQuantity, setProductQuantity] = useState("");
@@ -42,6 +42,13 @@ export default function LogProcessing({ showToast }) {
 
   const dateInputRef = useRef(null);
   const isLocked = Boolean(qrData);
+
+  // Pre-fill batch ID when navigating from Pending Batches
+  useEffect(() => {
+    if (initialBatchId) {
+      setLogBatchId(initialBatchId);
+    }
+  }, [initialBatchId]);
 
   // Helper: format date for display
   const formatDisplayDate = (dateStr) => {
