@@ -15,7 +15,9 @@ import {
   Tag, 
   ArrowRight,
   User,
-  ExternalLink
+  ExternalLink,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import { speciesList } from "@/lib/cropdetails";
 
@@ -130,19 +132,26 @@ export default function Marketplace() {
               return (
                 <div 
                   key={item.batchId}
-                  className="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-lg transition-all h-[580px] p-4 bg-white"
+                  className="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-lg transition-all h-[490px] p-4 bg-white"
                 >
                   {/* Product Image Area (occupies ~55% height) */}
                   <div 
                     onClick={() => router.push("/marketplace/" + item.batchId)}
-                    className="relative h-[310px] bg-gray-50/50 rounded-xl overflow-hidden flex items-center justify-center border border-gray-100/60 mb-3 group/card cursor-pointer"
+                    className="relative h-[220px] bg-gray-50/50 rounded-xl overflow-hidden flex items-center justify-center border border-gray-100/60 mb-3 group/card cursor-pointer"
                   >
                     {itemImages.length > 0 ? (
-                      <img 
-                        src={itemImages[cardActiveIndexes[item.batchId] || 0]?.url} 
-                        alt="Product" 
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
-                      />
+                      <div className="w-full h-full relative flex items-center justify-center overflow-hidden">
+                        <img 
+                          src={itemImages[cardActiveIndexes[item.batchId] || 0]?.url} 
+                          alt="Backdrop" 
+                          className="absolute inset-0 w-full h-full object-cover blur-sm opacity-20 scale-110"
+                        />
+                        <img 
+                          src={itemImages[cardActiveIndexes[item.batchId] || 0]?.url} 
+                          alt="Product" 
+                          className="relative z-10 max-w-full max-h-full object-contain p-1 transition-all duration-500 group-hover/card:scale-103"
+                        />
+                      </div>
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center bg-indigo-950 text-indigo-200">
                         <ShoppingBag size={48} className="opacity-40 mb-2" />
@@ -170,9 +179,9 @@ export default function Marketplace() {
                             const nextIdx = currentIdx === 0 ? len - 1 : currentIdx - 1;
                             setCardActiveIndexes(prev => ({ ...prev, [item.batchId]: nextIdx }));
                           }}
-                          className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-800 text-xs flex items-center justify-center shadow-lg transition-colors cursor-pointer"
+                          className="w-7 h-7 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-100"
                         >
-                          ◀
+                          <ChevronLeft size={14} className="text-gray-700" />
                         </button>
                         <button
                           type="button"
@@ -183,9 +192,9 @@ export default function Marketplace() {
                             const nextIdx = currentIdx === len - 1 ? 0 : currentIdx + 1;
                             setCardActiveIndexes(prev => ({ ...prev, [item.batchId]: nextIdx }));
                           }}
-                          className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-800 text-xs flex items-center justify-center shadow-lg transition-colors cursor-pointer"
+                          className="w-7 h-7 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-100"
                         >
-                          ▶
+                          <ChevronRight size={14} className="text-gray-700" />
                         </button>
                       </div>
                     )}
@@ -262,7 +271,7 @@ export default function Marketplace() {
                       onClick={() => router.push("/marketplace/" + item.batchId)}
                       className="w-full bg-indigo-900 hover:bg-indigo-950 text-white font-bold text-xs py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
                     >
-                      View Traceability & Details
+                      View Details
                       <ArrowRight size={13} className="text-indigo-200" />
                     </button>
                   </div>
