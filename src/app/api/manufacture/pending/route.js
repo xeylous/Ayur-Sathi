@@ -42,7 +42,8 @@ export async function GET(req) {
 
     // 🔍 Query conditions
     const query = {
-      acceptedByManu: decoded.id,
+      acceptedByManu: decoded.manuId,
+      isManufactured: false,
       manufacturingProcesses: { $size: 0 },
     };
 
