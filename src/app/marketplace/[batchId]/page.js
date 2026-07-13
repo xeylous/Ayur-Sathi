@@ -88,10 +88,10 @@ export default function ProductDetailPage() {
         ) : product ? (
           <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8 animate-in fade-in duration-300">
             {/* Amazon Product Page Columns */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
               
               {/* COLUMN 1: Image Gallery (Span 5) */}
-              <div className="md:col-span-5">
+              <div className="md:col-span-5 flex flex-col items-center justify-center w-full">
                 {/* Big Active Image Box */}
                 {(() => {
                   const productImages = product.marketplaceImages && product.marketplaceImages.length > 0
@@ -101,15 +101,15 @@ export default function ProductDetailPage() {
                       : [];
 
                   return (
-                    <div className="w-full aspect-square bg-[#F7F7F7] border border-gray-100 rounded-xl overflow-hidden flex items-center justify-center relative shadow-inner group/bigimg">
+                    <div className="w-full max-w-md mx-auto relative rounded-xl overflow-hidden bg-[#F7F7F7] border border-gray-100 shadow-inner group/bigimg flex items-center justify-center">
                       {productImages.length > 0 ? (
                         <img 
                           src={productImages[modalActiveImageIndex]?.url || productImages[0].url} 
                           alt="Product Primary" 
-                          className="w-full h-full object-contain p-2"
+                          className="w-full h-auto block object-contain mx-auto"
                         />
                       ) : (
-                        <div className="text-gray-400 text-xs">No image available</div>
+                        <div className="text-gray-400 text-xs py-20">No image available</div>
                       )}
 
                       {/* Dynamic Chevron Sliders for dynamic route details view */}
