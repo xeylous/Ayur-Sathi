@@ -100,7 +100,7 @@ export default function ManufactureDashboard() {
       {/* ── Sidebar ── */}
       <aside
         className={`
-          fixed md:sticky md:top-0 md:h-screen inset-y-0 left-0 z-50
+          fixed md:sticky md:top-16 md:h-[calc(100vh-4rem)] inset-y-0 left-0 z-50 md:z-30
           w-64 flex-shrink-0
           bg-[#31572C] text-white
           flex flex-col

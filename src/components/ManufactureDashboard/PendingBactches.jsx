@@ -170,8 +170,8 @@ export default function PendingBatchManager({ showToast, navigateToLog }) {
                   <div className="flex justify-between items-center">
                     <div>
                       <div className="flex items-center space-x-2">
-                        <span className="text-xs font-bold px-2 py-0.5 rounded-full ${getStatusClass(result.status)}">
-                            {result.status || "Pending"}
+                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${getStatusClass(item.status)}`}>
+                            {item.status || "Pending"}
                         </span>
                       </div>
                       <h4 className="text-sm font-bold text-gray-800 mt-2">ID: {item.batchId}</h4>
@@ -179,6 +179,19 @@ export default function PendingBatchManager({ showToast, navigateToLog }) {
                     </div>
                     <ChevronRight className={`w-5 h-5 text-gray-300 group-hover:text-green-500 transition-colors ${result?.id === item.batchId ? "text-green-600" : ""}`} />
                   </div>
+                  {/* Proceed Button */}
+                  {navigateToLog && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigateToLog(item.batchId);
+                      }}
+                      className="mt-3 w-full flex items-center justify-center gap-1.5 bg-[#31572C] hover:bg-[#4F772D] text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+                    >
+                      <Play className="w-3.5 h-3.5" />
+                      Proceed
+                    </button>
+                  )}
                 </div>
               ))
             ) : (

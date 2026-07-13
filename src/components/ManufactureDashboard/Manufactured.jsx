@@ -163,8 +163,12 @@ export default function ManufacturedBatches({ showToast }) {
                       {formatDate(batch.createdAt || batch.updatedAt)}
                     </td>
                     <td className="p-4">
-                      <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold flex w-fit items-center">
-                        {batch.status || "Completed"}
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold flex w-fit items-center ${
+                        batch.isManufactured
+                          ? "bg-purple-100 text-purple-700"
+                          : "bg-green-100 text-green-700"
+                      }`}>
+                        {batch.isManufactured ? "Manufactured" : (batch.status || "Completed")}
                       </span>
                     </td>
                     <td className="p-4 text-right">
