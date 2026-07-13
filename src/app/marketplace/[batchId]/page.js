@@ -11,7 +11,9 @@ import {
   QrCode, 
   ExternalLink,
   User,
-  ArrowLeft
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import { speciesList } from "@/lib/cropdetails";
 
@@ -121,9 +123,9 @@ export default function ProductDetailPage() {
                                 const nextIdx = modalActiveImageIndex === 0 ? len - 1 : modalActiveImageIndex - 1;
                                 setModalActiveImageIndex(nextIdx);
                               }}
-                              className="w-9 h-9 rounded-full bg-white/90 hover:bg-white text-gray-800 text-xs flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-150"
+                              className="w-9 h-9 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-150"
                             >
-                              ◀
+                              <ChevronLeft size={16} className="text-gray-700" />
                             </button>
                             <button
                               type="button"
@@ -132,9 +134,9 @@ export default function ProductDetailPage() {
                                 const nextIdx = modalActiveImageIndex === len - 1 ? 0 : modalActiveImageIndex + 1;
                                 setModalActiveImageIndex(nextIdx);
                               }}
-                              className="w-9 h-9 rounded-full bg-white/90 hover:bg-white text-gray-800 text-xs flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-150"
+                              className="w-9 h-9 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-150"
                             >
-                              ▶
+                              <ChevronRight size={16} className="text-gray-700" />
                             </button>
                           </div>
                         )}

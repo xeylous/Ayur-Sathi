@@ -14,7 +14,9 @@ import {
   Tag,
   Search,
   Sparkles,
-  Info
+  Info,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import { speciesList } from "@/lib/cropdetails";
 
@@ -338,27 +340,34 @@ const LabMarketplaceControl = ({
 
               {/* Active Image Preview */}
               {listingImages.length > 0 ? (
-                <div className="relative group w-full aspect-square rounded-2xl overflow-hidden border border-gray-200 bg-gray-50 mb-4">
-                  <img
-                    src={listingImages[activePreviewIndex]?.url}
-                    alt="Active Product"
-                    className="w-full h-full object-cover"
-                  />
+                <div className="relative group w-full aspect-square rounded-2xl overflow-hidden border border-gray-200 bg-gray-50 mb-4 flex items-center justify-center">
+                  <div className="w-full h-full relative flex items-center justify-center overflow-hidden">
+                    <img
+                      src={listingImages[activePreviewIndex]?.url}
+                      alt="Backdrop"
+                      className="absolute inset-0 w-full h-full object-cover blur-sm opacity-20 scale-110"
+                    />
+                    <img
+                      src={listingImages[activePreviewIndex]?.url}
+                      alt="Active Product"
+                      className="relative z-10 max-w-full max-h-full object-contain p-2"
+                    />
+                  </div>
                   {listingImages.length > 1 && (
                     <>
                       <button
                         type="button"
                         onClick={() => setActivePreviewIndex(prev => (prev === 0 ? listingImages.length - 1 : prev - 1))}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-gray-800 flex items-center justify-center shadow-md transition-colors cursor-pointer text-xs font-bold"
+                        className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-gray-800 flex items-center justify-center shadow-md transition-colors cursor-pointer border border-gray-100"
                       >
-                        ◀
+                        <ChevronLeft size={14} className="text-gray-700" />
                       </button>
                       <button
                         type="button"
                         onClick={() => setActivePreviewIndex(prev => (prev === listingImages.length - 1 ? 0 : prev + 1))}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-gray-800 flex items-center justify-center shadow-md transition-colors cursor-pointer text-xs font-bold"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white text-gray-800 flex items-center justify-center shadow-md transition-colors cursor-pointer border border-gray-100"
                       >
-                        ▶
+                        <ChevronRight size={14} className="text-gray-700" />
                       </button>
                     </>
                   )}
@@ -473,15 +482,22 @@ const LabMarketplaceControl = ({
               </h3>
 
               {/* Exact Marketplace Card Simulation (matching new site style) */}
-              <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-lg transition-all h-[580px] p-4 bg-white relative">
+              <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-lg transition-all h-[490px] p-4 bg-white relative">
                 {/* Product Image Area (occupies ~55% height) */}
-                <div className="relative h-[310px] bg-gray-50/50 rounded-xl overflow-hidden flex items-center justify-center border border-gray-100/60 mb-3 group/preview">
+                <div className="relative h-[220px] bg-gray-50/50 rounded-xl overflow-hidden flex items-center justify-center border border-gray-100/60 mb-3 group/preview">
                   {listingImages.length > 0 ? (
-                    <img 
-                      src={listingImages[activePreviewIndex]?.url} 
-                      alt="Product" 
-                      className="w-full h-full object-cover transition-transform duration-500"
-                    />
+                    <div className="w-full h-full relative flex items-center justify-center overflow-hidden">
+                      <img 
+                        src={listingImages[activePreviewIndex]?.url} 
+                        alt="Backdrop" 
+                        className="absolute inset-0 w-full h-full object-cover blur-sm opacity-20 scale-110"
+                      />
+                      <img 
+                        src={listingImages[activePreviewIndex]?.url} 
+                        alt="Product" 
+                        className="relative z-10 max-w-full max-h-full object-contain p-1 transition-transform duration-500"
+                      />
+                    </div>
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center bg-indigo-950 text-indigo-200">
                       <ShoppingBag size={48} className="opacity-40 mb-2" />
@@ -506,9 +522,9 @@ const LabMarketplaceControl = ({
                           e.stopPropagation();
                           setActivePreviewIndex(prev => (prev === 0 ? listingImages.length - 1 : prev - 1));
                         }}
-                        className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-800 text-xs flex items-center justify-center shadow-lg transition-colors cursor-pointer"
+                        className="w-7 h-7 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-100"
                       >
-                        ◀
+                        <ChevronLeft size={14} className="text-gray-700" />
                       </button>
                       <button
                         type="button"
@@ -516,9 +532,9 @@ const LabMarketplaceControl = ({
                           e.stopPropagation();
                           setActivePreviewIndex(prev => (prev === listingImages.length - 1 ? 0 : prev + 1));
                         }}
-                        className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-800 text-xs flex items-center justify-center shadow-lg transition-colors cursor-pointer"
+                        className="w-7 h-7 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-100"
                       >
-                        ▶
+                        <ChevronRight size={14} className="text-gray-700" />
                       </button>
                     </div>
                   )}
@@ -593,7 +609,7 @@ const LabMarketplaceControl = ({
                       disabled
                       className="w-full bg-indigo-900 text-white font-bold text-xs py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-not-allowed opacity-90"
                     >
-                      View Traceability & Details
+                      View Details
                     </button>
                   </div>
                 </div>
