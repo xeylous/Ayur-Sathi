@@ -308,9 +308,9 @@ export default function Marketplace() {
               <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pt-4">
                 
                 {/* COLUMN 1: Image Gallery (Span 5) */}
-                <div className="md:col-span-5 flex flex-col sm:flex-row-reverse gap-4">
+                <div className="md:col-span-5">
                   {/* Big Active Image Box */}
-                  <div className="flex-grow aspect-square bg-[#F7F7F7] border border-gray-100 rounded-xl overflow-hidden flex items-center justify-center relative shadow-inner">
+                  <div className="w-full aspect-square bg-[#F7F7F7] border border-gray-100 rounded-xl overflow-hidden flex items-center justify-center relative shadow-inner">
                     {selectedProduct.marketplaceImages && selectedProduct.marketplaceImages.length > 0 ? (
                       <img 
                         src={selectedProduct.marketplaceImages[modalActiveImageIndex]?.url || selectedProduct.marketplaceImages[0].url} 
@@ -327,23 +327,6 @@ export default function Marketplace() {
                       <div className="text-gray-400 text-xs">No image available</div>
                     )}
                   </div>
-
-                  {/* Thumbnail Selector Column */}
-                  {selectedProduct.marketplaceImages && selectedProduct.marketplaceImages.length > 0 && (
-                    <div className="flex sm:flex-col gap-2 flex-wrap items-center justify-start overflow-y-auto max-h-[400px]">
-                      {selectedProduct.marketplaceImages.map((img, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setModalActiveImageIndex(idx)}
-                          className={`w-14 h-14 rounded-lg overflow-hidden border-2 bg-white transition-all cursor-pointer ${
-                            idx === modalActiveImageIndex ? "border-[#E47911] shadow-sm" : "border-gray-200 hover:border-gray-400"
-                          }`}
-                        >
-                          <img src={img.url} alt="thumbnail" className="w-full h-full object-cover" />
-                        </button>
-                      ))}
-                    </div>
-                  )}
                 </div>
 
                 {/* COLUMN 2: Product Specifications & Info (Span 4) */}

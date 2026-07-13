@@ -91,7 +91,7 @@ export default function ProductDetailPage() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
               
               {/* COLUMN 1: Image Gallery (Span 5) */}
-              <div className="md:col-span-5 flex flex-col sm:flex-row-reverse gap-4">
+              <div className="md:col-span-5">
                 {/* Big Active Image Box */}
                 {(() => {
                   const productImages = product.marketplaceImages && product.marketplaceImages.length > 0
@@ -101,80 +101,61 @@ export default function ProductDetailPage() {
                       : [];
 
                   return (
-                    <>
-                      <div className="flex-grow aspect-square bg-[#F7F7F7] border border-gray-100 rounded-xl overflow-hidden flex items-center justify-center relative shadow-inner group/bigimg">
-                        {productImages.length > 0 ? (
-                          <img 
-                            src={productImages[modalActiveImageIndex]?.url || productImages[0].url} 
-                            alt="Product Primary" 
-                            className="w-full h-full object-contain p-2"
-                          />
-                        ) : (
-                          <div className="text-gray-400 text-xs">No image available</div>
-                        )}
+                    <div className="w-full aspect-square bg-[#F7F7F7] border border-gray-100 rounded-xl overflow-hidden flex items-center justify-center relative shadow-inner group/bigimg">
+                      {productImages.length > 0 ? (
+                        <img 
+                          src={productImages[modalActiveImageIndex]?.url || productImages[0].url} 
+                          alt="Product Primary" 
+                          className="w-full h-full object-contain p-2"
+                        />
+                      ) : (
+                        <div className="text-gray-400 text-xs">No image available</div>
+                      )}
 
-                        {/* Dynamic Chevron Sliders for dynamic route details view */}
-                        {productImages.length > 1 && (
-                          <div className="absolute inset-x-3 top-1/2 -translate-y-1/2 flex justify-between z-20">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const len = productImages.length;
-                                const nextIdx = modalActiveImageIndex === 0 ? len - 1 : modalActiveImageIndex - 1;
-                                setModalActiveImageIndex(nextIdx);
-                              }}
-                              className="w-9 h-9 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-150"
-                            >
-                              <ChevronLeft size={16} className="text-gray-700" />
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const len = productImages.length;
-                                const nextIdx = modalActiveImageIndex === len - 1 ? 0 : modalActiveImageIndex + 1;
-                                setModalActiveImageIndex(nextIdx);
-                              }}
-                              className="w-9 h-9 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-150"
-                            >
-                              <ChevronRight size={16} className="text-gray-700" />
-                            </button>
-                          </div>
-                        )}
-
-                        {/* Clickable Dot Indicators in big image box */}
-                        {productImages.length > 1 && (
-                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-1.5 bg-black/30 px-2.5 py-1 rounded-full backdrop-blur-sm">
-                            {productImages.map((_, idx) => (
-                              <button
-                                key={idx}
-                                type="button"
-                                onClick={() => setModalActiveImageIndex(idx)}
-                                className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
-                                  idx === modalActiveImageIndex ? "bg-white scale-125 font-bold" : "bg-white/40"
-                                }`}
-                              />
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Thumbnail Selector Column */}
+                      {/* Dynamic Chevron Sliders for dynamic route details view */}
                       {productImages.length > 1 && (
-                        <div className="flex sm:flex-col gap-2 flex-wrap items-center justify-start overflow-y-auto max-h-[400px]">
-                          {productImages.map((img, idx) => (
+                        <div className="absolute inset-x-3 top-1/2 -translate-y-1/2 flex justify-between z-20">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const len = productImages.length;
+                              const nextIdx = modalActiveImageIndex === 0 ? len - 1 : modalActiveImageIndex - 1;
+                              setModalActiveImageIndex(nextIdx);
+                            }}
+                            className="w-9 h-9 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-150"
+                          >
+                            <ChevronLeft size={16} className="text-gray-700" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const len = productImages.length;
+                              const nextIdx = modalActiveImageIndex === len - 1 ? 0 : modalActiveImageIndex + 1;
+                              setModalActiveImageIndex(nextIdx);
+                            }}
+                            className="w-9 h-9 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-150"
+                          >
+                            <ChevronRight size={16} className="text-gray-700" />
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Clickable Dot Indicators in big image box */}
+                      {productImages.length > 1 && (
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-1.5 bg-black/30 px-2.5 py-1 rounded-full backdrop-blur-sm">
+                          {productImages.map((_, idx) => (
                             <button
                               key={idx}
+                              type="button"
                               onClick={() => setModalActiveImageIndex(idx)}
-                              className={`w-14 h-14 rounded-lg overflow-hidden border-2 bg-white transition-all cursor-pointer ${
-                                idx === modalActiveImageIndex ? "border-indigo-600 ring-1 ring-indigo-500 shadow-sm" : "border-gray-200 hover:border-gray-400"
+                              className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
+                                idx === modalActiveImageIndex ? "bg-white scale-125 font-bold" : "bg-white/40"
                               }`}
-                            >
-                              <img src={img.url} alt="thumbnail" className="w-full h-full object-cover" />
-                            </button>
+                            />
                           ))}
                         </div>
                       )}
-                    </>
+                    </div>
                   );
                 })()}
               </div>
