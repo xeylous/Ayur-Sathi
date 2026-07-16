@@ -27,6 +27,7 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [modalActiveImageIndex, setModalActiveImageIndex] = useState(0);
+  const [isQRModalOpen, setIsQRModalOpen] = useState(false);
 
   const fetchProduct = async () => {
     if (!batchId) return;
@@ -430,6 +431,48 @@ export default function ProductDetailPage() {
 
       {/* Footer */}
       <Footer />
+
+      {/* QR Modal Overlay */}
+      {isQRModalOpen && product?.qrCode?.url && (
+        <div className="fixed inset-0 bg-black/65 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+          <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl p-6 relative animate-in zoom-in-95 duration-200 text-center">
+            {/* Close button */}
+            <button
+              className="absolute top-4 right-4 bg-gray-100 hover:bg-red-50 hover:text-red-600 text-gray-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer text-sm font-bold shadow-sm z-30"
+              onClick={() => setIsQRModalOpen(false)}
+            >
+              ✕
+            </button>
+
+            {/* Header */}
+            <div className="mb-4">
+              <h3 className="text-lg font-bold text-gray-950">Supply Chain QR Code</h3>
+              <p className="text-xs text-gray-500 mt-1">Scan the QR code below using your mobile device to view instant blockchain traceability details.</p>
+            </div>
+
+            {/* QR Image */}
+            <div className="flex justify-center bg-gray-50 p-4 rounded-xl border border-gray-100 mb-4 max-w-[200px] mx-auto shadow-inner">
+              <img 
+                src={product.qrCode.url} 
+                alt="QR Code" 
+                className="w-40 h-40 bg-white p-1 rounded-lg border border-gray-200 shadow-sm"
+              />
+            </div>
+
+            {/* Action Links */}
+            <div className="space-y-2">
+              <a 
+                href={`/batchid/${product.batchId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center gap-1.5 bg-[#4F772D] hover:bg-[#31572C] text-white font-bold text-xs py-2.5 rounded-xl transition-all shadow-sm cursor-pointer"
+              >
+                Verify Details Instantly <ExternalLink size={12} />
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
