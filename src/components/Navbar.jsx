@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
@@ -34,6 +34,35 @@ export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, loading, logout } = useAuth();
+  const [cartCount, setCartCount] = useState(0);
+
+  const updateCartCount = () => {
+    try {
+      const savedCart = localStorage.getItem("userCart");
+      if (savedCart) {
+        const cartItems = JSON.parse(savedCart);
+        const count = cartItems.reduce((total, item) => total + (item.quantity || 0), 0);
+        setCartCount(count);
+      } else {
+        setCartCount(0);
+      }
+    } catch (e) {
+      console.error(e);
+      setCartCount(0);
+    }
+  };
+
+  useEffect(() => {
+    updateCartCount();
+
+    window.addEventListener("cartUpdated", updateCartCount);
+    window.addEventListener("storage", updateCartCount);
+
+    return () => {
+      window.removeEventListener("cartUpdated", updateCartCount);
+      window.removeEventListener("storage", updateCartCount);
+    };
+  }, []);
 
   useEffect(() => {
     setOpen(false);
@@ -118,6 +147,21 @@ export default function Navbar() {
 
         {/* Right Buttons */}
         <div className="flex items-center gap-3">
+          {(!user || user.type === "user") && (
+            <Link
+              href="/cart"
+              className="relative p-2 text-brand-700 hover:text-[#4F772D] transition-colors mr-1 sm:mr-2"
+              title="My Cart"
+            >
+              <ShoppingCart className="w-6 h-6" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-white animate-pulse">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+          )}
+
           {user ? (
             <div className="hidden sm:flex items-center gap-4">
               <Link
@@ -219,6 +263,24 @@ export default function Navbar() {
                     to={getDashboardLink()}
                     label="Dashboard"
                   />
+                )}
+
+                {(!user || user.type === "user") && (
+                  <Link
+                    href="/cart"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-brand-700 hover:bg-[#ECF39E] hover:text-brand-900"
+                  >
+                    <span className="flex items-center gap-2">
+                      <ShoppingCart className="w-5 h-5" />
+                      My Cart
+                    </span>
+                    {cartCount > 0 && (
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                        {cartCount}
+                      </span>
+                    )}
+                  </Link>
                 )}
 
                 {user ? (

@@ -13,21 +13,82 @@ import {
   User,
   ArrowLeft,
   ChevronLeft,
+
+ 
   ChevronRight,
   Shield,
   Leaf
+
 } from "lucide-react";
 import { speciesList } from "@/lib/cropdetails";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const { user } = useAuth();
   const batchId = params?.batchId;
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [modalActiveImageIndex, setModalActiveImageIndex] = useState(0);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+
+  const [qtyToAdd, setQtyToAdd] = useState(1);
+  const [cartSuccessMsg, setCartSuccessMsg] = useState("");
+
+  useEffect(() => {
+    if (product) {
+      setQtyToAdd(1);
+      setCartSuccessMsg("");
+    }
+  }, [product]);
+
+  const handleAddToCart = () => {
+    if (!product) return;
+    try {
+      const savedCart = localStorage.getItem("userCart");
+      let cart = savedCart ? JSON.parse(savedCart) : [];
+      
+      const existingIdx = cart.findIndex(item => item.batchId === product.batchId);
+      
+      if (existingIdx > -1) {
+        const newQty = cart[existingIdx].quantity + qtyToAdd;
+        if (product.marketplaceQuantity && newQty > product.marketplaceQuantity) {
+          cart[existingIdx].quantity = product.marketplaceQuantity;
+          alert(`Only ${product.marketplaceQuantity} units available. Cart updated to maximum available stock.`);
+        } else {
+          cart[existingIdx].quantity = newQty;
+        }
+      } else {
+        cart.push({
+          batchId: product.batchId,
+          cropName: getHerbName(product.speciesId),
+          speciesId: product.speciesId,
+          quantity: qtyToAdd,
+          price: product.marketplacePrice,
+          weightGm: product.marketplaceWeightGm,
+          description: product.marketplaceDescription,
+          image: product.marketplaceImage?.url || product.marketplaceImages?.[0]?.url || null,
+          maxQuantity: product.marketplaceQuantity
+        });
+      }
+      
+      localStorage.setItem("userCart", JSON.stringify(cart));
+      window.dispatchEvent(new Event("cartUpdated"));
+      setCartSuccessMsg("Added to cart successfully!");
+      setTimeout(() => setCartSuccessMsg(""), 3000);
+    } catch (e) {
+      console.error(e);
+      alert("Failed to add item to cart.");
+    }
+  };
+
+  const handleBuyNow = () => {
+    handleAddToCart();
+    router.push("/cart");
+  };
+
 
   const fetchProduct = async () => {
     if (!batchId) return;
@@ -89,8 +150,10 @@ export default function ProductDetailPage() {
             <span className="font-semibold text-sm">Loading product details...</span>
           </div>
         ) : product ? (
-          <div className="bg-white rounded-2xl shadow-md border border-[#90A955]/15 p-6 sm:p-8 animate-in fade-in duration-300">
-            {/* Product Page Columns */}
+
+          <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 sm:p-8 animate-in fade-in duration-300">
+            {/* Amazon Product Page Columns */}
+
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
               
               {/* COLUMN 1: Image Gallery (Span 5) */}
@@ -104,7 +167,9 @@ export default function ProductDetailPage() {
                       : [];
 
                   return (
-                    <div className="w-full max-w-md mx-auto relative rounded-xl overflow-hidden bg-[#f8fae3]/40 border border-[#ECF39E]/60 shadow-inner group/bigimg flex items-center justify-center">
+
+                    <div className="w-full max-w-md mx-auto relative rounded-xl overflow-hidden bg-[#F7F7F7] border border-gray-100 shadow-inner group/bigimg flex items-center justify-center">
+
                       {productImages.length > 0 ? (
                         <img 
                           src={productImages[modalActiveImageIndex]?.url || productImages[0].url} 
@@ -112,7 +177,9 @@ export default function ProductDetailPage() {
                           className="w-full h-auto block object-contain mx-auto"
                         />
                       ) : (
-                        <div className="text-[#90A955] text-xs py-20">No image available</div>
+
+                        <div className="text-gray-400 text-xs py-20">No image available</div>
+
                       )}
 
                       {/* Dynamic Chevron Sliders for dynamic route details view */}
@@ -125,9 +192,11 @@ export default function ProductDetailPage() {
                               const nextIdx = modalActiveImageIndex === 0 ? len - 1 : modalActiveImageIndex - 1;
                               setModalActiveImageIndex(nextIdx);
                             }}
-                            className="w-9 h-9 rounded-full bg-white/90 hover:bg-white text-[#31572C] flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-[#90A955]/30"
+
+                            className="w-9 h-9 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-150"
                           >
-                            <ChevronLeft size={16} />
+                            <ChevronLeft size={16} className="text-gray-700" />
+
                           </button>
                           <button
                             type="button"
@@ -136,23 +205,29 @@ export default function ProductDetailPage() {
                               const nextIdx = modalActiveImageIndex === len - 1 ? 0 : modalActiveImageIndex + 1;
                               setModalActiveImageIndex(nextIdx);
                             }}
-                            className="w-9 h-9 rounded-full bg-white/90 hover:bg-white text-[#31572C] flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-[#90A955]/30"
+
+                            className="w-9 h-9 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-150"
                           >
-                            <ChevronRight size={16} />
+                            <ChevronRight size={16} className="text-gray-700" />
+
                           </button>
                         </div>
                       )}
 
                       {/* Clickable Dot Indicators in big image box */}
                       {productImages.length > 1 && (
-                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-1.5 bg-[#31572C]/40 px-2.5 py-1 rounded-full backdrop-blur-sm">
+
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-1.5 bg-black/30 px-2.5 py-1 rounded-full backdrop-blur-sm">
+
                           {productImages.map((_, idx) => (
                             <button
                               key={idx}
                               type="button"
                               onClick={() => setModalActiveImageIndex(idx)}
                               className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
-                                idx === modalActiveImageIndex ? "bg-[#ECF39E] scale-125 font-bold" : "bg-white/40"
+
+                                idx === modalActiveImageIndex ? "bg-white scale-125 font-bold" : "bg-white/40"
+
                               }`}
                             />
                           ))}
@@ -253,15 +328,58 @@ export default function ProductDetailPage() {
                   <span className="text-xs text-[#4F772D]/50 mt-1 block">Sold by Ayur-Saathi & Fulfilled by Store</span>
                 </div>
 
+                {/* Quantity Selector */}
+                {product.marketplaceQuantity > 0 && (
+                  <div className="flex items-center gap-3 text-xs pt-1">
+                    <span className="font-bold text-gray-700">Quantity:</span>
+                    <select
+                      value={qtyToAdd}
+                      onChange={(e) => setQtyToAdd(Number(e.target.value))}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-1.5 focus:ring-[#90A955] focus:border-[#90A955] font-semibold"
+                    >
+                      {[...Array(Math.min(10, product.marketplaceQuantity))].map((_, i) => (
+                        <option key={i + 1} value={i + 1}>
+                          {i + 1}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
                 {/* Actions buttons */}
                 <div className="space-y-2 pt-2">
-                  <button className="w-full bg-[#ECF39E] hover:bg-[#dce88a] text-[#31572C] border border-[#90A955]/30 font-bold text-xs py-3 rounded-2xl transition-all shadow-sm cursor-pointer">
-                    Add to Cart
-                  </button>
-                  <button className="w-full bg-gradient-to-r from-[#4F772D] to-[#31572C] hover:from-[#31572C] hover:to-[#4F772D] text-white border border-[#31572C] font-bold text-xs py-3 rounded-2xl transition-all shadow-sm cursor-pointer">
-                    Buy Now
-                  </button>
+
+                  {product.marketplaceQuantity > 0 ? (
+                    <>
+                      <button
+                        onClick={handleAddToCart}
+                        className="w-full bg-[#4F772D] hover:bg-[#31572C] text-white font-bold text-xs py-3 rounded-2xl transition-all shadow-sm cursor-pointer"
+                      >
+                        Add to Cart
+                      </button>
+                      <button
+                        onClick={handleBuyNow}
+                        className="w-full bg-indigo-900 hover:bg-indigo-950 text-white font-bold text-xs py-3 rounded-2xl transition-all shadow-sm cursor-pointer"
+                      >
+                        Buy Now
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      disabled
+                      className="w-full bg-gray-200 text-gray-400 border border-gray-300 font-bold text-xs py-3 rounded-2xl cursor-not-allowed"
+                    >
+                      Out of Stock
+                    </button>
+                  )}
+
                 </div>
+
+                {cartSuccessMsg && (
+                  <div className="p-2 bg-green-50 text-green-700 border border-green-200 text-xs rounded-lg text-center font-semibold animate-pulse">
+                    ✅ {cartSuccessMsg}
+                  </div>
+                )}
 
                 {/* Trust Badge */}
                 <div className="border-t border-[#90A955]/20 pt-3 flex items-center gap-2.5 text-xs text-[#4F772D]/60">
@@ -279,14 +397,19 @@ export default function ProductDetailPage() {
                       <img 
                         src={product.qrCode.url} 
                         alt="QR code" 
-                        className="w-12 h-12 border border-[#ECF39E] bg-white p-0.5 rounded-lg"
+
+                        className="w-12 h-12 border bg-white p-0.5 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                        onClick={() => setIsQRModalOpen(true)}
                       />
-                      <button
-                        onClick={() => downloadFile(product.qrCode.url, `${product.batchId}_QR.png`)}
-                        className="text-[10px] font-bold bg-[#31572C] hover:bg-[#4F772D] text-white px-2 py-1.5 rounded-lg transition-colors cursor-pointer shadow-sm"
-                      >
-                        Get QR Code
-                      </button>
+                      <div className="flex flex-col gap-1 w-full">
+                        <button
+                          onClick={() => setIsQRModalOpen(true)}
+                          className="text-[10px] font-bold bg-[#4F772D] hover:bg-[#31572C] text-white px-2 py-2 rounded-lg transition-colors cursor-pointer shadow-sm text-center w-full"
+                        >
+                          View QR Code
+                        </button>
+                      </div>
+
                     </div>
                   </div>
                 )}
