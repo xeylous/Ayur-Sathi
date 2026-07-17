@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { User, ShoppingCart, History, Bell } from "lucide-react";
 import Profile from "./Profile";
 import UserOrder from "./User_Order";
@@ -16,6 +16,25 @@ const menuItems = [
 
 export default function UserDashboard() {
   const [active, setActive] = useState("profile");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get("tab");
+      if (tab && ["profile", "orders", "carts", "notifications"].includes(tab)) {
+        setActive(tab);
+      } else {
+        try {
+          const savedCart = localStorage.getItem("userCart");
+          if (savedCart && JSON.parse(savedCart).length > 0) {
+            setActive("carts");
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+  }, []);
 
   const renderContent = (key) => {
     switch (key) {

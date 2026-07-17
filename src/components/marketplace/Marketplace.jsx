@@ -20,9 +20,11 @@ import {
   ChevronRight
 } from "lucide-react";
 import { speciesList } from "@/lib/cropdetails";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Marketplace() {
   const router = useRouter();
+  const { user } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,12 +32,61 @@ export default function Marketplace() {
   const [cardActiveIndexes, setCardActiveIndexes] = useState({});
   const [modalActiveImageIndex, setModalActiveImageIndex] = useState(0);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+  const [qtyToAdd, setQtyToAdd] = useState(1);
+  const [cartSuccessMsg, setCartSuccessMsg] = useState("");
 
   useEffect(() => {
     if (selectedProduct) {
       setModalActiveImageIndex(0);
+      setQtyToAdd(1);
+      setCartSuccessMsg("");
     }
   }, [selectedProduct]);
+
+  const handleAddToCart = () => {
+    if (!selectedProduct) return;
+    try {
+      const savedCart = localStorage.getItem("userCart");
+      let cart = savedCart ? JSON.parse(savedCart) : [];
+      
+      const existingIdx = cart.findIndex(item => item.batchId === selectedProduct.batchId);
+      
+      if (existingIdx > -1) {
+        const newQty = cart[existingIdx].quantity + qtyToAdd;
+        if (selectedProduct.marketplaceQuantity && newQty > selectedProduct.marketplaceQuantity) {
+          cart[existingIdx].quantity = selectedProduct.marketplaceQuantity;
+          alert(`Only ${selectedProduct.marketplaceQuantity} units available. Cart updated to maximum available stock.`);
+        } else {
+          cart[existingIdx].quantity = newQty;
+        }
+      } else {
+        cart.push({
+          batchId: selectedProduct.batchId,
+          cropName: getHerbName(selectedProduct.speciesId),
+          speciesId: selectedProduct.speciesId,
+          quantity: qtyToAdd,
+          price: selectedProduct.marketplacePrice,
+          weightGm: selectedProduct.marketplaceWeightGm,
+          description: selectedProduct.marketplaceDescription,
+          image: selectedProduct.marketplaceImage?.url || selectedProduct.marketplaceImages?.[0]?.url || null,
+          maxQuantity: selectedProduct.marketplaceQuantity
+        });
+      }
+      
+      localStorage.setItem("userCart", JSON.stringify(cart));
+      window.dispatchEvent(new Event("cartUpdated"));
+      setCartSuccessMsg("Added to cart successfully!");
+      setTimeout(() => setCartSuccessMsg(""), 3000);
+    } catch (e) {
+      console.error(e);
+      alert("Failed to add item to cart.");
+    }
+  };
+
+  const handleBuyNow = () => {
+    handleAddToCart();
+    router.push("/cart");
+  };
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -421,15 +472,56 @@ export default function Marketplace() {
                     <span className="text-xs text-gray-500 mt-1 block">Sold by Ayur-Saathi & Fulfilled by Store</span>
                   </div>
 
+                  {/* Quantity Selector */}
+                  {selectedProduct.marketplaceQuantity > 0 && (
+                    <div className="flex items-center gap-3 text-xs pt-1">
+                      <span className="font-bold text-gray-700">Quantity:</span>
+                      <select
+                        value={qtyToAdd}
+                        onChange={(e) => setQtyToAdd(Number(e.target.value))}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-1.5 focus:ring-[#90A955] focus:border-[#90A955] font-semibold"
+                      >
+                        {[...Array(Math.min(10, selectedProduct.marketplaceQuantity))].map((_, i) => (
+                          <option key={i + 1} value={i + 1}>
+                            {i + 1}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
                   {/* Actions buttons */}
                   <div className="space-y-2 pt-2">
-                    <button className="w-full bg-[#FFD814] hover:bg-[#F7CA00] text-gray-900 border border-[#FCD200] font-bold text-xs py-3 rounded-2xl transition-all shadow-sm cursor-pointer">
-                      Add to Cart
-                    </button>
-                    <button className="w-full bg-[#FA8900] hover:bg-[#E47911] text-white border border-[#E47911] font-bold text-xs py-3 rounded-2xl transition-all shadow-sm cursor-pointer">
-                      Buy Now
-                    </button>
+                    {selectedProduct.marketplaceQuantity > 0 ? (
+                      <>
+                        <button
+                          onClick={handleAddToCart}
+                          className="w-full bg-[#FFD814] hover:bg-[#F7CA00] text-gray-900 border border-[#FCD200] font-bold text-xs py-3 rounded-2xl transition-all shadow-sm cursor-pointer"
+                        >
+                          Add to Cart
+                        </button>
+                        <button
+                          onClick={handleBuyNow}
+                          className="w-full bg-[#FA8900] hover:bg-[#E47911] text-white border border-[#E47911] font-bold text-xs py-3 rounded-2xl transition-all shadow-sm cursor-pointer"
+                        >
+                          Buy Now
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        disabled
+                        className="w-full bg-gray-200 text-gray-400 border border-gray-300 font-bold text-xs py-3 rounded-2xl cursor-not-allowed"
+                      >
+                        Out of Stock
+                      </button>
+                    )}
                   </div>
+
+                  {cartSuccessMsg && (
+                    <div className="p-2 bg-green-50 text-green-700 border border-green-200 text-xs rounded-lg text-center font-semibold animate-pulse">
+                      {cartSuccessMsg}
+                    </div>
+                  )}
 
                   {/* Trust Badge */}
                   <div className="border-t pt-3 flex items-center gap-2.5 text-xs text-gray-500">

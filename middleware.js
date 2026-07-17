@@ -18,6 +18,7 @@ export async function middleware(req) {
     "/explore",
     "/admin-login",
     "/google-callback",
+    "/cart",
   ];
 
   // Allow dynamic public routes (batchid and public API paths)

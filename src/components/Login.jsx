@@ -21,6 +21,14 @@ export default function LoginPage() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const dropdownRef = useRef(null);
+  const [redirectPath, setRedirectPath] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      setRedirectPath(params.get("redirect"));
+    }
+  }, []);
 
   const labelMap = {
     user: "User Login",
@@ -103,7 +111,13 @@ export default function LoginPage() {
       // console.log(User);
 
       toast.success("Login successful", { autoClose: 1500 });
-      setTimeout(() => router.push(data.redirectUrl), 500);
+      setTimeout(() => {
+        if (redirectPath === "cart") {
+          router.push("/cart");
+        } else {
+          router.push(data.redirectUrl);
+        }
+      }, 500);
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Something went wrong. Please try again", {

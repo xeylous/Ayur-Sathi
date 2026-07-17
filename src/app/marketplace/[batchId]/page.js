@@ -16,16 +16,72 @@ import {
   ChevronRight
 } from "lucide-react";
 import { speciesList } from "@/lib/cropdetails";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const { user } = useAuth();
   const batchId = params?.batchId;
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [modalActiveImageIndex, setModalActiveImageIndex] = useState(0);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+  const [qtyToAdd, setQtyToAdd] = useState(1);
+  const [cartSuccessMsg, setCartSuccessMsg] = useState("");
+
+  useEffect(() => {
+    if (product) {
+      setQtyToAdd(1);
+      setCartSuccessMsg("");
+    }
+  }, [product]);
+
+  const handleAddToCart = () => {
+    if (!product) return;
+    try {
+      const savedCart = localStorage.getItem("userCart");
+      let cart = savedCart ? JSON.parse(savedCart) : [];
+      
+      const existingIdx = cart.findIndex(item => item.batchId === product.batchId);
+      
+      if (existingIdx > -1) {
+        const newQty = cart[existingIdx].quantity + qtyToAdd;
+        if (product.marketplaceQuantity && newQty > product.marketplaceQuantity) {
+          cart[existingIdx].quantity = product.marketplaceQuantity;
+          alert(`Only ${product.marketplaceQuantity} units available. Cart updated to maximum available stock.`);
+        } else {
+          cart[existingIdx].quantity = newQty;
+        }
+      } else {
+        cart.push({
+          batchId: product.batchId,
+          cropName: getHerbName(product.speciesId),
+          speciesId: product.speciesId,
+          quantity: qtyToAdd,
+          price: product.marketplacePrice,
+          weightGm: product.marketplaceWeightGm,
+          description: product.marketplaceDescription,
+          image: product.marketplaceImage?.url || product.marketplaceImages?.[0]?.url || null,
+          maxQuantity: product.marketplaceQuantity
+        });
+      }
+      
+      localStorage.setItem("userCart", JSON.stringify(cart));
+      window.dispatchEvent(new Event("cartUpdated"));
+      setCartSuccessMsg("Added to cart successfully!");
+      setTimeout(() => setCartSuccessMsg(""), 3000);
+    } catch (e) {
+      console.error(e);
+      alert("Failed to add item to cart.");
+    }
+  };
+
+  const handleBuyNow = () => {
+    handleAddToCart();
+    router.push("/cart");
+  };
 
   const fetchProduct = async () => {
     if (!batchId) return;
@@ -251,15 +307,56 @@ export default function ProductDetailPage() {
                   <span className="text-xs text-gray-500 mt-1 block">Sold by Ayur-Saathi & Fulfilled by Store</span>
                 </div>
 
+                {/* Quantity Selector */}
+                {product.marketplaceQuantity > 0 && (
+                  <div className="flex items-center gap-3 text-xs pt-1">
+                    <span className="font-bold text-gray-700">Quantity:</span>
+                    <select
+                      value={qtyToAdd}
+                      onChange={(e) => setQtyToAdd(Number(e.target.value))}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-1.5 focus:ring-[#90A955] focus:border-[#90A955] font-semibold"
+                    >
+                      {[...Array(Math.min(10, product.marketplaceQuantity))].map((_, i) => (
+                        <option key={i + 1} value={i + 1}>
+                          {i + 1}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
                 {/* Actions buttons */}
                 <div className="space-y-2 pt-2">
-                  <button className="w-full bg-[#4F772D] hover:bg-[#31572C] text-white font-bold text-xs py-3 rounded-2xl transition-all shadow-sm cursor-pointer">
-                    Add to Cart
-                  </button>
-                  <button className="w-full bg-indigo-900 hover:bg-indigo-950 text-white font-bold text-xs py-3 rounded-2xl transition-all shadow-sm cursor-pointer">
-                    Buy Now
-                  </button>
+                  {product.marketplaceQuantity > 0 ? (
+                    <>
+                      <button
+                        onClick={handleAddToCart}
+                        className="w-full bg-[#4F772D] hover:bg-[#31572C] text-white font-bold text-xs py-3 rounded-2xl transition-all shadow-sm cursor-pointer"
+                      >
+                        Add to Cart
+                      </button>
+                      <button
+                        onClick={handleBuyNow}
+                        className="w-full bg-indigo-900 hover:bg-indigo-950 text-white font-bold text-xs py-3 rounded-2xl transition-all shadow-sm cursor-pointer"
+                      >
+                        Buy Now
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      disabled
+                      className="w-full bg-gray-200 text-gray-400 border border-gray-300 font-bold text-xs py-3 rounded-2xl cursor-not-allowed"
+                    >
+                      Out of Stock
+                    </button>
+                  )}
                 </div>
+
+                {cartSuccessMsg && (
+                  <div className="p-2 bg-green-50 text-green-700 border border-green-200 text-xs rounded-lg text-center font-semibold animate-pulse">
+                    ✅ {cartSuccessMsg}
+                  </div>
+                )}
 
                 {/* Trust Badge */}
                 <div className="border-t pt-3 flex items-center gap-2.5 text-xs text-gray-500">
