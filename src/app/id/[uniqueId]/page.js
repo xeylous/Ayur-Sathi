@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { useAuth } from "@/context/AuthContext";
 import FarmerDashboard from "@/components/FarmerDashboard/FarmerDashboard";
 import UserDashboard from "@/components/UserDashboard/UserDashboard";
@@ -50,8 +49,6 @@ export default function Page() {
         )}
       </main>
 
-      {/* Footer sticks at bottom */}
-      <Footer />
     </div>
   );
 }

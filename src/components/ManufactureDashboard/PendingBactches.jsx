@@ -7,10 +7,11 @@ import {
   ChevronLeft,
   RefreshCw,
   Info,
-  Search // Kept only for the empty state icon
+  Search,
+  Play
 } from "lucide-react";
 
-export default function PendingBatchManager({ showToast }) {
+export default function PendingBatchManager({ showToast, navigateToLog }) {
   // --- States for Pending List ---
   const [pendingList, setPendingList] = useState([]);
   const [listLoading, setListLoading] = useState(false);
@@ -109,11 +110,11 @@ export default function PendingBatchManager({ showToast }) {
   };
   const getStatusClass = (status) => {
   switch (status?.toLowerCase()) {
-    case "Approved":
+    case "approved":
       return "bg-green-100 text-green-700 border border-green-300";
-    case "Pending":
+    case "pending":
       return "bg-yellow-100 text-yellow-700 border border-yellow-300";
-    case "Rejected":
+    case "rejected":
       return "bg-red-100 text-red-700 border border-red-300";
     default:
       return "bg-gray-200 text-gray-600 border border-gray-300";
@@ -284,6 +285,19 @@ export default function PendingBatchManager({ showToast }) {
                        <span className="text-gray-400 italic">No certificate uploaded</span>
                     )}
                   </div>
+
+                  {/* Log & Processing Button */}
+                  {result.status?.toLowerCase() === "approved" && navigateToLog && (
+                    <div className="pt-4 border-t border-gray-200">
+                      <button
+                        onClick={() => navigateToLog(result.id)}
+                        className="w-full flex items-center justify-center gap-2 bg-[#31572C] hover:bg-[#4F772D] text-white px-5 py-3 rounded-xl font-semibold transition-colors shadow-md"
+                      >
+                        <Play className="w-4 h-4" />
+                        Go to Log & Processing
+                      </button>
+                    </div>
+                  )}
 
                   <div className="pt-4 mt-4 bg-blue-50 p-4 rounded-lg flex items-start space-x-3">
                     <Info className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
