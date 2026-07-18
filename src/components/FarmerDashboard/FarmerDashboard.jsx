@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { User, Upload, History, Bell } from "lucide-react";
+import { User, Upload, History, Bell, Leaf } from "lucide-react";
 import Profile from "./Profile";
 import UploadCrop from "./Upload";
 import CropHistory from "./CropHistory";
@@ -49,45 +49,20 @@ export default function FarmerDashboard() {
   useEffect(() => {
     if (!user?.uniqueId) return;
 
-    // console.log("FarmerDashboard mounting Pusher, uniqueId:", user.uniqueId);
-    // console.log("Client Pusher key:", process.env.NEXT_PUBLIC_PUSHER_KEY);
-    // console.log("Client Pusher cluster:", process.env.NEXT_PUBLIC_PUSHER_CLUSTER);
-
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
       forceTLS: true,
     });
 
-    // // connection diagnostics (optional but helpful during debugging)
-    // pusher.connection.bind("state_change", (states) => {
-    //   // console.log("Pusher state change:", states);
-    // });
-    // pusher.connection.bind("connected", () => {
-    //   // console.log("Pusher connected, socket id:", pusher.connection.socket_id);
-    // });
-    // pusher.connection.bind("disconnected", () => {
-    //   // console.warn("Pusher disconnected");
-    // });
-    // pusher.connection.bind("error", (err) => {
-    //   // console.error("Pusher connection error:", err);
-    // });
-
     const channelName = `farmer-${String(user.uniqueId)}`;
-    // console.log("Subscribing to channel:", channelName);
     const channel = pusher.subscribe(channelName);
 
-    channel.bind("pusher:subscription_succeeded", () => {
-      // console.log(`Subscribed to ${channelName} successfully`);
-    });
+    channel.bind("pusher:subscription_succeeded", () => {});
 
-    channel.bind("pusher:subscription_error", (status) => {
-      // console.error("Subscription error for", channelName, status);
-    });
+    channel.bind("pusher:subscription_error", (status) => {});
 
     // event name must match server side trigger (example: "crop-status")
     channel.bind("crop-status", (data) => {
-      // console.log("Received crop-status event:", data);
-      // normalize the payload with timestamp if not present
       const event = {
         timestamp: data.timestamp || new Date().toISOString(),
         type: data.type || "notification",
@@ -103,7 +78,6 @@ export default function FarmerDashboard() {
         channel.unbind_all();
         pusher.unsubscribe(channelName);
         pusher.disconnect();
-        // console.log("Pusher disconnected and unsubscribed:", channelName);
       } catch (e) {
         console.warn("Error during pusher cleanup:", e);
       }
@@ -116,31 +90,17 @@ export default function FarmerDashboard() {
     setNotifications((prev) => prev.filter((_, i) => i !== index));
 
     try {
-      // If the notification has an _id, delete it from DB
-      // Real-time pusher notifications might not have _id until refreshed, 
-      // but usually we care about persisting what's in DB.
-      // If it's a fresh pusher event, it might not be in DB yet? 
-      // Actually, the API saves it first then pushes. So it should be in DB. 
-      // But the pusher payload might not have the _id unless we include it. 
-      // In accepted-batch route, we didn't send the _id in pusher payload.
-      // So we might need to rely on refreshing or just accept that fresh ones might lack _id?
-      // Wait, if we want to delete, we need _id.
-      // If `id` is missing (fresh pusher event), we can't delete from DB easily.
-      
       if (id) {
         const res = await fetch(`/api/notifications?id=${id}`, {
           method: "DELETE",
         });
         const data = await res.json();
         if (!data.success) {
-            // Revert if failed (optional, but good UX)
              console.warn("Failed to delete notification from DB");
-             // setNotifications(previousNotifications); 
         }
       }
     } catch (err) {
       console.error("Error deleting notification:", err);
-      // setNotifications(previousNotifications);
     }
   };
 
@@ -155,7 +115,6 @@ export default function FarmerDashboard() {
       case "notifications":
         return (
           <div>
-            {/* Now presentational: receives notifications and removal handler */}
             <FarmerNotifications
               notifications={notifications}
               onRemove={handleRemoveNotification}
@@ -168,43 +127,49 @@ export default function FarmerDashboard() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-[#ECF39E]">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[#f8fae3]/50">
       {/* Sidebar */}
-      <aside className="md:w-64 w-full border-r shadow-md flex flex-col bg-[#90A955]">
-        <div className="p-4 text-lg font-bold text-green-700">
-          🌿 Farmer Dashboard
+      <aside className="md:w-64 w-full border-r border-[#90A955]/20 shadow-lg flex flex-col bg-[#31572C]">
+        {/* Brand header */}
+        <div className="p-5 border-b border-[#4F772D]/40">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-[#4F772D] flex items-center justify-center">
+              <Leaf className="w-4 h-4 text-[#ECF39E]" />
+            </div>
+            <span className="text-lg font-bold text-white tracking-tight">
+              Farmer Dashboard
+            </span>
+          </div>
         </div>
 
         {/* Scrollable nav + content */}
         <div className="flex-1 overflow-y-auto">
-          <nav className="flex flex-col">
+          <nav className="flex flex-col py-2">
             {menuItems.map((item) => {
               const isActive = active === item.key;
               return (
-                <div key={item.key} className="border-b relative">
+                <div key={item.key} className="relative">
                   {/* Button */}
                   <button
                     onClick={() => {
-                      // On mobile: toggle (collapse if already active)
-                      // On desktop: always select (never deselect)
                       if (window.innerWidth < 768) {
                         setActive(isActive ? "" : item.key);
                       } else {
                         setActive(item.key);
                       }
                     }}
-                    className={`flex items-center gap-3 w-full px-4 py-3 text-left transition ${
+                    className={`flex items-center gap-3 w-full px-5 py-3.5 text-left transition-all duration-200 cursor-pointer ${
                       isActive
-                        ? "bg-[#90A955] text-white font-semibold"
-                        : "text-gray-700 hover:bg-gray-100"
+                        ? "bg-[#4F772D] text-white font-semibold border-r-[3px] border-[#ECF39E]"
+                        : "text-white/70 hover:bg-[#4F772D]/40 hover:text-white"
                     }`}
                   >
-                    {item.icon}
-                    <span className="flex-1">{item.label}</span>
+                    <span className={isActive ? "text-[#ECF39E]" : "text-white/50"}>{item.icon}</span>
+                    <span className="flex-1 text-sm">{item.label}</span>
 
-                    {/* simple badge for notifications count */}
+                    {/* Notification badge */}
                     {item.key === "notifications" && notifications.length > 0 && (
-                      <span className="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-medium rounded-full bg-red-600 text-white">
+                      <span className="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-[10px] font-bold rounded-full bg-[#ECF39E] text-[#31572C]">
                         {notifications.length}
                       </span>
                     )}
@@ -212,17 +177,22 @@ export default function FarmerDashboard() {
 
                   {/* Inline content → only for phone */}
                   <div className="md:hidden">
-                    {isActive && <div>{renderContent(item.key)}</div>}
+                    {isActive && <div className="bg-[#f8fae3]/50">{renderContent(item.key)}</div>}
                   </div>
                 </div>
               );
             })}
           </nav>
         </div>
+
+        {/* Sidebar footer */}
+        <div className="p-4 border-t border-[#4F772D]/40">
+          <p className="text-[10px] text-white/30 text-center uppercase tracking-wider">Ayurसाथी Platform</p>
+        </div>
       </aside>
 
       {/* Desktop / Tablet content */}
-      <main className="hidden md:block flex-1 p-6 overflow-y-auto">{renderContent(active)}</main>
+      <main className="hidden md:block flex-1 p-6 overflow-y-auto bg-[#f8fae3]/30">{renderContent(active)}</main>
     </div>
   );
 }

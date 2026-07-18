@@ -147,7 +147,7 @@ export default function Marketplace() {
         {/* Header Block */}
         <div className="text-center max-w-2xl mx-auto mb-10">
           <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-[#90A955]/15 text-[#4F772D] font-bold text-xs uppercase tracking-wider mb-4 border border-[#90A955]/30">
-            <Leaf className="w-4 h-4" />
+            {/* <Leaf className="w-4 h-4" /> */}
             Verified Herb Trade
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#31572C] tracking-tight">
@@ -223,7 +223,7 @@ export default function Marketplace() {
                     {/* Badges on top of image */}
 
                     <span className="bg-gradient-to-r from-[#4F772D] to-[#31572C] text-white text-[9px] font-black px-2.5 py-1 absolute top-3 left-3 rounded-md z-10 shadow-sm uppercase tracking-wider flex items-center gap-1">
-                      <Sparkles size={10} />
+                      {/* <Sparkles size={10} /> */}
                       Ayur Choice
                     </span>
                     <span className="bg-[#31572C]/85 backdrop-blur text-[#ECF39E] text-[9px] font-mono font-bold px-2 py-1 rounded-md absolute top-3 right-3 z-10 shadow-sm">

@@ -1,7 +1,7 @@
 'use server';
 import CropUpload from "@/models/CropUpload";
 import { connectDB } from "@/lib/db";
-import cloudinary from "@/lib/cloudinary";
+import cloudinary, { uploadImageToCloudinary } from "@/lib/cloudinary";
 import bwipjs from "bwip-js"; 
 import jwt from "jsonwebtoken";
 
@@ -61,9 +61,19 @@ export async function POST(req) {
     // ✅ Extract user details from token
     const { uniqueId } = decoded;
 
+    // ✅ Parse FormData (supports both image file and text fields)
+    const formData = await req.formData();
+    const speciesId = formData.get("speciesId");
+    const quantity = formData.get("quantity");
+    const latitudeStr = formData.get("latitude");
+    const longitudeStr = formData.get("longitude");
+    const timestamp = formData.get("timestamp");
+    const cropImageFile = formData.get("cropImage"); // File or null
 
-    const body = await req.json();
-    const { gpsCoordinates, timestamp, speciesId, quantity } = body;
+    const gpsCoordinates = {
+      latitude: parseFloat(latitudeStr),
+      longitude: parseFloat(longitudeStr),
+    };
 
     // ✅ Validate required fields
     if (!gpsCoordinates || !speciesId ) {
@@ -91,7 +101,18 @@ export async function POST(req) {
       `${batchId}.png`,
       "batchBarCodes"
     );
-   
+
+    // ✅ Upload crop image to Cloudinary if provided
+    let cropImage = { url: null, publicId: null };
+    if (cropImageFile && typeof cropImageFile !== "string" && cropImageFile.size > 0) {
+      try {
+        const imageBuffer = Buffer.from(await cropImageFile.arrayBuffer());
+        cropImage = await uploadImageToCloudinary(imageBuffer, "cropImages");
+      } catch (imgErr) {
+        console.error("Crop image upload failed:", imgErr);
+        // Non-blocking — crop will still be saved without image
+      }
+    }
 
     // ✅ Save crop data to MongoDB
     const newCrop = new CropUpload({
@@ -100,8 +121,9 @@ export async function POST(req) {
       speciesId,
       gpsCoordinates,
       timestamp: timestamp || new Date(),
-      quantity,
+      quantity: quantity ? parseFloat(quantity) : undefined,
       batchBarCode: { publicId, url },
+      cropImage,
     });
     await newCrop.save();
 
