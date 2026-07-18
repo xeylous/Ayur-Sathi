@@ -34,6 +34,12 @@ const CropUploadSchema = new mongoose.Schema(
       publicId: { type: String, default: null },
     },
 
+    // Farmer-uploaded crop image
+    cropImage: {
+      url: { type: String, default: null },
+      publicId: { type: String, default: null },
+    },
+
     status: {
       type: String,
       enum: ["Pending", "Rejected", "Approved"],
