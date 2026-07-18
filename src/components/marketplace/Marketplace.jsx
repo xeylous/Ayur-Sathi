@@ -17,11 +17,9 @@ import {
   User,
   ExternalLink,
   ChevronLeft,
-// Shield,
   ChevronRight,
   Plus,
   Minus
-
 } from "lucide-react";
 import { speciesList } from "@/lib/cropdetails";
 import { useAuth } from "@/context/AuthContext";
