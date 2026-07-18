@@ -147,20 +147,18 @@ export default function Navbar() {
 
         {/* Right Buttons */}
         <div className="flex items-center gap-3">
-          {(!user || user.type === "user") && (
-            <Link
-              href="/cart"
-              className="relative p-2 text-brand-700 hover:text-[#4F772D] transition-colors mr-1 sm:mr-2"
-              title="My Cart"
-            >
-              <ShoppingCart className="w-6 h-6" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-white animate-pulse">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
-          )}
+          <Link
+            href="/cart"
+            className="relative p-2 text-brand-700 hover:text-[#4F772D] transition-colors mr-1 sm:mr-2"
+            title="My Cart"
+          >
+            <ShoppingCart className="w-6 h-6" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-white animate-pulse">
+                {cartCount}
+              </span>
+            )}
+          </Link>
 
           {user ? (
             <div className="hidden sm:flex items-center gap-4">
@@ -265,23 +263,21 @@ export default function Navbar() {
                   />
                 )}
 
-                {(!user || user.type === "user") && (
-                  <Link
-                    href="/cart"
-                    onClick={() => setOpen(false)}
-                    className="flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-brand-700 hover:bg-[#ECF39E] hover:text-brand-900"
-                  >
-                    <span className="flex items-center gap-2">
-                      <ShoppingCart className="w-5 h-5" />
-                      My Cart
+                <Link
+                  href="/cart"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-brand-700 hover:bg-[#ECF39E] hover:text-brand-900"
+                >
+                  <span className="flex items-center gap-2">
+                    <ShoppingCart className="w-5 h-5" />
+                    My Cart
+                  </span>
+                  {cartCount > 0 && (
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                      {cartCount}
                     </span>
-                    {cartCount > 0 && (
-                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
-                        {cartCount}
-                      </span>
-                    )}
-                  </Link>
-                )}
+                  )}
+                </Link>
 
                 {user ? (
                   <>
