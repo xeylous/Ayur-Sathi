@@ -564,7 +564,7 @@ export default function Marketplace() {
 
                   {/* Trust Badge */}
                   <div className="border-t border-[#90A955]/20 pt-3 flex items-center gap-2.5 text-xs text-[#4F772D]/60">
-                    <Shield className="w-5 h-5 text-[#90A955]" />
+                    {/* <Shield className="w-5 h-5 text-[#90A955]" /> */}
                     <span>Secure transaction</span>
                   </div>
 
