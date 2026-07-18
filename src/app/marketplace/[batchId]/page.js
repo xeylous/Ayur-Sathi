@@ -14,10 +14,9 @@ import {
   ArrowLeft,
   ChevronLeft,
 
- 
   ChevronRight,
-  Shield,
-  Leaf
+  Plus,
+  Minus
 
 } from "lucide-react";
 import { speciesList } from "@/lib/cropdetails";
@@ -332,17 +331,30 @@ export default function ProductDetailPage() {
                 {product.marketplaceQuantity > 0 && (
                   <div className="flex items-center gap-3 text-xs pt-1">
                     <span className="font-bold text-gray-700">Quantity:</span>
-                    <select
-                      value={qtyToAdd}
-                      onChange={(e) => setQtyToAdd(Number(e.target.value))}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg p-1.5 focus:ring-[#90A955] focus:border-[#90A955] font-semibold"
-                    >
-                      {[...Array(Math.min(10, product.marketplaceQuantity))].map((_, i) => (
-                        <option key={i + 1} value={i + 1}>
-                          {i + 1}
-                        </option>
-                      ))}
-                    </select>
+                    <div className="flex items-center border border-gray-300 bg-gray-50 rounded-lg p-1 shadow-sm">
+                      <button
+                        type="button"
+                        onClick={() => setQtyToAdd(prev => Math.max(1, prev - 1))}
+                        className="p-1 hover:bg-gray-200 rounded text-gray-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={qtyToAdd <= 1}
+                      >
+                        <Minus className="w-3.5 h-3.5" />
+                      </button>
+                      <span className="px-3 font-semibold text-gray-800 text-sm select-none">{qtyToAdd}</span>
+                      <button
+                        type="button"
+                        onClick={() => setQtyToAdd(prev => {
+                          if (product.marketplaceQuantity && prev >= product.marketplaceQuantity) {
+                            return prev;
+                          }
+                          return prev + 1;
+                        })}
+                        className="p-1 hover:bg-gray-200 rounded text-gray-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={product.marketplaceQuantity && qtyToAdd >= product.marketplaceQuantity}
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 )}
 
