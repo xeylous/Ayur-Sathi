@@ -34,8 +34,10 @@ export default function Marketplace() {
   const [cardActiveIndexes, setCardActiveIndexes] = useState({});
   const [modalActiveImageIndex, setModalActiveImageIndex] = useState(0);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+
   const [qtyToAdd, setQtyToAdd] = useState(1);
   const [cartSuccessMsg, setCartSuccessMsg] = useState("");
+
 
   useEffect(() => {
     if (selectedProduct) {
@@ -134,44 +136,45 @@ export default function Marketplace() {
   };
 
   return (
-    <section className="relative py-12 min-h-screen bg-gray-50/50">
-      {/* Background patterns */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-green-100/30 rounded-full blur-3xl -z-10"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-100/30 rounded-full blur-3xl -z-10"></div>
+    <section className="relative py-12 min-h-screen bg-[#f8fae3]/40">
+      {/* Background patterns — warm natural tones */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-[#90A955]/10 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#ECF39E]/20 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#4F772D]/5 rounded-full blur-3xl -z-10"></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
         {/* Header Block */}
         <div className="text-center max-w-2xl mx-auto mb-10">
           <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-[#90A955]/15 text-[#4F772D] font-bold text-xs uppercase tracking-wider mb-4 border border-[#90A955]/30">
-            <ShoppingBag className="w-4 h-4" />
+            <Leaf className="w-4 h-4" />
             Verified Herb Trade
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-indigo-950 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#31572C] tracking-tight">
             Ayurसाथी Marketplace
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-gray-500">
+          <p className="mt-3 text-sm sm:text-base text-[#4F772D]/70">
             Ethically sourced Ayurvedic herbs complete with verified laboratory credentials, manufacturing processing logs, and QR traceability.
           </p>
         </div>
 
         {/* Toolbar: Search */}
         <div className="max-w-xl mx-auto mb-12">
-          <div className="relative shadow-md rounded-2xl overflow-hidden">
-            <Search className="absolute left-4 top-3.5 text-indigo-400 w-5 h-5" />
+          <div className="relative shadow-md rounded-2xl overflow-hidden border border-[#90A955]/25">
+            <Search className="absolute left-4 top-3.5 text-[#90A955] w-5 h-5" />
             <input
               type="text"
               placeholder="Search marketplace by herb name or batch ID..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3.5 bg-white border-0 outline-none text-sm focus:ring-2 focus:ring-[#90A955]"
+              className="w-full pl-12 pr-4 py-3.5 bg-white border-0 outline-none text-sm focus:ring-2 focus:ring-[#90A955] text-[#31572C] placeholder-[#90A955]/50"
             />
           </div>
         </div>
 
         {/* Grid Content */}
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 text-indigo-600">
+          <div className="flex flex-col items-center justify-center py-20 text-[#4F772D]">
             <Loader2 className="w-10 h-10 animate-spin mb-3" />
             <span className="font-semibold text-sm">Loading listed herbs...</span>
           </div>
@@ -186,12 +189,14 @@ export default function Marketplace() {
               return (
                 <div 
                   key={item.batchId}
+
                   className="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-lg transition-all h-[490px] p-4 bg-white"
                 >
                   {/* Product Image Area (occupies ~55% height) */}
                   <div 
                     onClick={() => router.push("/marketplace/" + item.batchId)}
                     className="relative h-[220px] bg-gray-50/50 rounded-xl overflow-hidden flex items-center justify-center border border-gray-100/60 mb-3 group/card cursor-pointer"
+
                   >
                     {itemImages.length > 0 ? (
                       <div className="w-full h-full relative flex items-center justify-center overflow-hidden">
@@ -207,17 +212,22 @@ export default function Marketplace() {
                         />
                       </div>
                     ) : (
+
                       <div className="w-full h-full flex flex-col items-center justify-center bg-indigo-950 text-indigo-200">
+
                         <ShoppingBag size={48} className="opacity-40 mb-2" />
                         <span className="text-xs font-semibold">No product photo</span>
                       </div>
                     )}
 
                     {/* Badges on top of image */}
-                    <span className="bg-[#4F772D] text-white text-[9px] font-black px-2.5 py-1 absolute top-3 left-3 rounded-md z-10 shadow-sm uppercase tracking-wider">
+
+                    <span className="bg-gradient-to-r from-[#4F772D] to-[#31572C] text-white text-[9px] font-black px-2.5 py-1 absolute top-3 left-3 rounded-md z-10 shadow-sm uppercase tracking-wider flex items-center gap-1">
+                      <Sparkles size={10} />
                       Ayur Choice
                     </span>
-                    <span className="bg-gray-800/85 backdrop-blur text-white text-[9px] font-mono font-bold px-2 py-1 rounded-md absolute top-3 right-3 z-10 shadow-sm">
+                    <span className="bg-[#31572C]/85 backdrop-blur text-[#ECF39E] text-[9px] font-mono font-bold px-2 py-1 rounded-md absolute top-3 right-3 z-10 shadow-sm">
+
                       #{item.batchId}
                     </span>
 
@@ -233,9 +243,11 @@ export default function Marketplace() {
                             const nextIdx = currentIdx === 0 ? len - 1 : currentIdx - 1;
                             setCardActiveIndexes(prev => ({ ...prev, [item.batchId]: nextIdx }));
                           }}
-                          className="w-7 h-7 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-100"
+
+                          className="w-7 h-7 rounded-full bg-white/90 hover:bg-white text-[#31572C] flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-[#90A955]/30"
                         >
-                          <ChevronLeft size={14} className="text-gray-700" />
+                          <ChevronLeft size={14} />
+
                         </button>
                         <button
                           type="button"
@@ -246,21 +258,27 @@ export default function Marketplace() {
                             const nextIdx = currentIdx === len - 1 ? 0 : currentIdx + 1;
                             setCardActiveIndexes(prev => ({ ...prev, [item.batchId]: nextIdx }));
                           }}
+
                           className="w-7 h-7 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg transition-colors cursor-pointer border border-gray-100"
                         >
                           <ChevronRight size={14} className="text-gray-700" />
+
                         </button>
                       </div>
                     )}
 
                     {/* Dot indicators in card visual area */}
                     {itemImages.length > 1 && (
+
                       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-1 bg-black/35 px-2 py-1 rounded-full backdrop-blur-sm">
+
                         {itemImages.map((_, idx) => (
                           <span 
                             key={idx}
                             className={`w-1.5 h-1.5 rounded-full transition-all ${
+
                               idx === (cardActiveIndexes[item.batchId] || 0) ? "bg-white scale-125" : "bg-white/40"
+
                             }`}
                           />
                         ))}
@@ -268,18 +286,18 @@ export default function Marketplace() {
                     )}
                 </div>
 
-                {/* Amazon Product Card Text Area (occupies ~45% height) */}
+                {/* Product Card Text Area */}
                 <div className="flex-grow flex flex-col justify-between px-1">
                   <div>
                     {/* Category & Species */}
-                    <span className="text-[10px] text-gray-500 uppercase tracking-widest block font-bold">
+                    <span className="text-[10px] text-[#4F772D]/60 uppercase tracking-widest block font-bold">
                       Category: {item.speciesId} Herb
                     </span>
 
                     {/* Product Title */}
                     <h3 
                       onClick={() => router.push("/marketplace/" + item.batchId)}
-                      className="text-sm font-bold text-gray-900 leading-snug line-clamp-2 h-10 mt-0.5 hover:text-orange-700 transition-colors cursor-pointer"
+                      className="text-sm font-bold text-[#31572C] leading-snug line-clamp-2 h-10 mt-0.5 hover:text-[#4F772D] transition-colors cursor-pointer"
                     >
                       {getHerbName(item.speciesId)} (Traceable Natural Harvest Batch)
                     </h3>
@@ -291,42 +309,44 @@ export default function Marketplace() {
                           <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                         </svg>
                       ))}
-                      <span className="text-xs text-indigo-900 hover:text-[#4F772D] hover:underline font-semibold ml-1.5 cursor-pointer">
+                      <span className="text-xs text-[#31572C] hover:text-[#4F772D] hover:underline font-semibold ml-1.5 cursor-pointer">
                         4.8 ({120 + (item.marketplaceQuantity % 30)} reviews)
                       </span>
                     </div>
 
                     {/* Price block */}
                     <div className="flex items-baseline gap-2 mt-1.5">
-                      <span className="text-2xl font-extrabold text-gray-900">
+                      <span className="text-2xl font-extrabold text-[#31572C]">
                         ₹{item.marketplacePrice}
                       </span>
                       <span className="text-xs text-gray-500 line-through">
                         ₹{Math.round(item.marketplacePrice * 1.25)}
                       </span>
-                      <span className="text-xs text-green-700 font-bold">
+                      <span className="text-xs text-[#4F772D] font-bold">
                         (20% off)
                       </span>
                     </div>
 
                     {/* Delivery & Stock status */}
-                    <span className="text-xs text-green-700 font-bold block mt-1">
+                    <span className="text-xs text-[#4F772D] font-bold block mt-1">
                       In Stock ({item.marketplaceQuantity} left)
                     </span>
                     
-                    <span className="text-[11px] text-gray-500 block">
+                    <span className="text-[11px] text-[#4F772D]/50 block">
                       Size: {item.marketplaceWeightGm}g • Pack of 1
                     </span>
                   </div>
 
-                  {/* Amazon golden button */}
+                  {/* CTA button */}
                   <div className="pt-3">
                     <button
                       onClick={() => router.push("/marketplace/" + item.batchId)}
-                      className="w-full bg-indigo-900 hover:bg-indigo-950 text-white font-bold text-xs py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+                      className="w-full bg-gradient-to-r from-[#4F772D] to-[#31572C] hover:from-[#31572C] hover:to-[#4F772D] text-white font-bold text-xs py-2.5 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-[#4F772D]/20 flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       View Details
+
                       <ArrowRight size={13} className="text-indigo-200" />
+
                     </button>
                   </div>
                 </div>
@@ -335,10 +355,10 @@ export default function Marketplace() {
           })}
           </div>
         ) : (
-          <div className="bg-white max-w-md mx-auto p-10 rounded-3xl border border-gray-100 shadow-md text-center">
+          <div className="bg-white max-w-md mx-auto p-10 rounded-3xl border border-[#90A955]/20 shadow-md text-center">
             <ShoppingBag className="w-12 h-12 text-[#90A955] mx-auto mb-3 opacity-40" />
-            <h4 className="text-lg font-bold text-indigo-950 mb-1">No products found</h4>
-            <p className="text-xs text-gray-500">
+            <h4 className="text-lg font-bold text-[#31572C] mb-1">No products found</h4>
+            <p className="text-xs text-[#4F772D]/60">
               {searchTerm 
                 ? "Try searching for a different keyword or batch ID."
                 : "No manufactured products have been listed on the marketplace yet."}
@@ -352,19 +372,21 @@ export default function Marketplace() {
             <div className="bg-white w-full max-w-6xl max-h-[95vh] overflow-y-auto rounded-2xl shadow-2xl p-6 sm:p-8 relative animate-in fade-in zoom-in-95 duration-250">
               {/* Close Button */}
               <button
-                className="absolute top-4 right-4 bg-gray-150 hover:bg-red-50 hover:text-red-655 text-gray-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer text-sm font-bold shadow-sm z-30"
+                className="absolute top-4 right-4 bg-gray-100 hover:bg-red-50 hover:text-red-600 text-gray-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer text-sm font-bold shadow-sm z-30"
                 onClick={() => setSelectedProduct(null)}
               >
                 ✕
               </button>
 
-              {/* Amazon Product Page Columns */}
+              {/* Product Page Columns */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pt-4">
                 
                 {/* COLUMN 1: Image Gallery (Span 5) */}
                 <div className="md:col-span-5">
                   {/* Big Active Image Box */}
+
                   <div className="w-full aspect-square bg-[#F7F7F7] border border-gray-100 rounded-xl overflow-hidden flex items-center justify-center relative shadow-inner">
+
                     {selectedProduct.marketplaceImages && selectedProduct.marketplaceImages.length > 0 ? (
                       <img 
                         src={selectedProduct.marketplaceImages[modalActiveImageIndex]?.url || selectedProduct.marketplaceImages[0].url} 
@@ -378,7 +400,7 @@ export default function Marketplace() {
                         className="w-full h-full object-contain p-2"
                       />
                     ) : (
-                      <div className="text-gray-400 text-xs">No image available</div>
+                      <div className="text-[#90A955] text-xs">No image available</div>
                     )}
                   </div>
                 </div>
@@ -387,17 +409,17 @@ export default function Marketplace() {
                 <div className="md:col-span-4 space-y-4">
                   {/* Brand Link */}
                   <div>
-                    <span className="text-xs text-blue-650 hover:underline hover:text-orange-705 cursor-pointer font-bold">
+                    <span className="text-xs text-[#4F772D] hover:underline hover:text-[#31572C] cursor-pointer font-bold">
                       Visit the Ayur-Saathi Store
                     </span>
-                    <h2 className="text-xl font-bold text-gray-900 leading-snug mt-1">
+                    <h2 className="text-xl font-bold text-[#31572C] leading-snug mt-1">
                       {getHerbName(selectedProduct.speciesId)} (Pure Traceable Batch)
                     </h2>
-                    <p className="text-xs text-gray-500 font-mono mt-0.5">Batch ID: #{selectedProduct.batchId}</p>
+                    <p className="text-xs text-[#4F772D]/50 font-mono mt-0.5">Batch ID: #{selectedProduct.batchId}</p>
                   </div>
 
                   {/* Ratings */}
-                  <div className="flex items-center gap-1 border-b border-gray-100 pb-3">
+                  <div className="flex items-center gap-1 border-b border-[#ECF39E]/50 pb-3">
                     <div className="flex text-amber-500">
                       {[...Array(5)].map((_, i) => (
                         <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -405,45 +427,45 @@ export default function Marketplace() {
                         </svg>
                       ))}
                     </div>
-                    <span className="text-xs font-semibold text-blue-650 ml-2 hover:underline hover:text-orange-705 cursor-pointer">
+                    <span className="text-xs font-semibold text-[#4F772D] ml-2 hover:underline hover:text-[#31572C] cursor-pointer">
                       4.8 (142 ratings)
                     </span>
                   </div>
 
                   {/* Price Info */}
-                  <div className="border-b border-gray-100 pb-3 space-y-1">
+                  <div className="border-b border-[#ECF39E]/50 pb-3 space-y-1">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-red-700 text-2xl font-light font-sans">-20%</span>
-                      <span className="text-3xl font-extrabold text-gray-900">₹{selectedProduct.marketplacePrice}</span>
+                      <span className="text-[#4F772D] text-2xl font-light font-sans">-20%</span>
+                      <span className="text-3xl font-extrabold text-[#31572C]">₹{selectedProduct.marketplacePrice}</span>
                     </div>
                     <div className="text-xs text-gray-500">
                       M.R.P.: <span className="line-through">₹{Math.round(selectedProduct.marketplacePrice * 1.25)}</span>
                     </div>
-                    <span className="text-xs text-gray-600 block">Inclusive of all taxes</span>
+                    <span className="text-xs text-[#4F772D]/60 block">Inclusive of all taxes</span>
                   </div>
 
                   {/* Product Specification Details */}
-                  <div className="grid grid-cols-2 gap-y-2 text-xs border-b border-gray-100 pb-3">
-                    <span className="font-bold text-gray-500">Herb Species:</span>
-                    <span className="text-gray-800 font-semibold">{selectedProduct.speciesId}</span>
+                  <div className="grid grid-cols-2 gap-y-2 text-xs border-b border-[#ECF39E]/50 pb-3">
+                    <span className="font-bold text-[#4F772D]/60">Herb Species:</span>
+                    <span className="text-[#31572C] font-semibold">{selectedProduct.speciesId}</span>
 
-                    <span className="font-bold text-gray-500">Net Weight:</span>
-                    <span className="text-gray-800 font-semibold">{selectedProduct.marketplaceWeightGm} Grams</span>
+                    <span className="font-bold text-[#4F772D]/60">Net Weight:</span>
+                    <span className="text-[#31572C] font-semibold">{selectedProduct.marketplaceWeightGm} Grams</span>
 
-                    <span className="font-bold text-gray-500">Harvest Date:</span>
-                    <span className="text-gray-800 font-semibold">
+                    <span className="font-bold text-[#4F772D]/60">Harvest Date:</span>
+                    <span className="text-[#31572C] font-semibold">
                       {selectedProduct.timestamp ? new Date(selectedProduct.timestamp).toLocaleDateString() : "N/A"}
                     </span>
 
-                    <span className="font-bold text-gray-500">Expiry Date:</span>
-                    <span className="text-gray-800 font-semibold">
+                    <span className="font-bold text-[#4F772D]/60">Expiry Date:</span>
+                    <span className="text-[#31572C] font-semibold">
                       {selectedProduct.productExpiryDate ? new Date(selectedProduct.productExpiryDate).toLocaleDateString() : "N/A"}
                     </span>
                   </div>
 
                   {/* About This Item Bullet list */}
-                  <div className="text-xs text-gray-700">
-                    <h4 className="font-bold text-gray-900 text-sm mb-1.5">About this item</h4>
+                  <div className="text-xs text-[#31572C]/80">
+                    <h4 className="font-bold text-[#31572C] text-sm mb-1.5">About this item</h4>
                     <ul className="list-disc pl-4 space-y-2 leading-relaxed">
                       <li><strong>Natural Heritage:</strong> Premium quality {getHerbName(selectedProduct.speciesId)} harvested from pesticide-free agricultural sites.</li>
                       <li><strong>Verified Quality Checks:</strong> Fully screened and approved by laboratory checks showing standard moisture, purity, and organic content.</li>
@@ -453,11 +475,11 @@ export default function Marketplace() {
                   </div>
                 </div>
 
-                {/* COLUMN 3: Amazon Buy Box (Span 3) */}
-                <div className="md:col-span-3 bg-white border border-gray-200 rounded-xl p-5 space-y-4 shadow-sm self-start">
+                {/* COLUMN 3: Buy Box (Span 3) */}
+                <div className="md:col-span-3 bg-[#f8fae3]/40 border border-[#90A955]/20 rounded-xl p-5 space-y-4 shadow-sm self-start">
                   <div>
-                    <span className="text-2xl font-extrabold text-gray-900">₹{selectedProduct.marketplacePrice}</span>
-                    <span className="text-xs text-gray-500 block mt-1">
+                    <span className="text-2xl font-extrabold text-[#31572C]">₹{selectedProduct.marketplacePrice}</span>
+                    <span className="text-xs text-[#4F772D]/60 block mt-1">
                       FREE delivery <strong>Wednesday, Oct 15</strong>.
                     </span>
                   </div>
@@ -465,13 +487,13 @@ export default function Marketplace() {
                   {/* Stock Level */}
                   <div>
                     {selectedProduct.marketplaceQuantity > 10 ? (
-                      <span className="text-green-700 font-bold text-sm block">In Stock</span>
+                      <span className="text-[#4F772D] font-bold text-sm block">In Stock</span>
                     ) : (
                       <span className="text-orange-700 font-bold text-sm block">
                         Only {selectedProduct.marketplaceQuantity} left in stock - order soon
                       </span>
                     )}
-                    <span className="text-xs text-gray-500 mt-1 block">Sold by Ayur-Saathi & Fulfilled by Store</span>
+                    <span className="text-xs text-[#4F772D]/50 mt-1 block">Sold by Ayur-Saathi & Fulfilled by Store</span>
                   </div>
 
                   {/* Quantity Selector */}
@@ -507,6 +529,7 @@ export default function Marketplace() {
 
                   {/* Actions buttons */}
                   <div className="space-y-2 pt-2">
+
                     {selectedProduct.marketplaceQuantity > 0 ? (
                       <>
                         <button
@@ -530,6 +553,7 @@ export default function Marketplace() {
                         Out of Stock
                       </button>
                     )}
+
                   </div>
 
                   {cartSuccessMsg && (
@@ -539,23 +563,22 @@ export default function Marketplace() {
                   )}
 
                   {/* Trust Badge */}
-                  <div className="border-t pt-3 flex items-center gap-2.5 text-xs text-gray-500">
-                    <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
+                  <div className="border-t border-[#90A955]/20 pt-3 flex items-center gap-2.5 text-xs text-[#4F772D]/60">
+                    <Shield className="w-5 h-5 text-[#90A955]" />
                     <span>Secure transaction</span>
                   </div>
 
                   {/* QR Box in Right Column */}
                   {selectedProduct.qrCode?.url && (
-                    <div className="border-t pt-4 space-y-2">
-                      <span className="block text-[10px] text-gray-400 font-bold uppercase tracking-wider">
+                    <div className="border-t border-[#90A955]/20 pt-4 space-y-2">
+                      <span className="block text-[10px] text-[#4F772D]/50 font-bold uppercase tracking-wider">
                         Supply Chain Trace QR
                       </span>
-                      <div className="flex items-center gap-3 bg-gray-50 p-2 rounded-xl border border-gray-100">
+                      <div className="flex items-center gap-3 bg-white p-2 rounded-xl border border-[#ECF39E]/60">
                         <img 
                           src={selectedProduct.qrCode.url} 
                           alt="QR code" 
+
                           className="w-12 h-12 border bg-white p-0.5 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
                           onClick={() => setIsQRModalOpen(true)}
                         />
@@ -567,6 +590,7 @@ export default function Marketplace() {
                             View QR Code
                           </button>
                         </div>
+
                       </div>
                     </div>
                   )}
@@ -575,33 +599,33 @@ export default function Marketplace() {
               </div>
 
               {/* End-to-End Blockchain Traceability Separator */}
-              <div className="mt-12 border-t pt-8">
-                <div className="bg-indigo-50/20 p-5 rounded-2xl border border-indigo-50/40 mb-6">
-                  <h4 className="font-extrabold text-[#111] text-lg mb-1">
+              <div className="mt-12 border-t border-[#ECF39E]/50 pt-8">
+                <div className="bg-[#f8fae3]/50 p-5 rounded-2xl border border-[#90A955]/15 mb-6">
+                  <h4 className="font-extrabold text-[#31572C] text-lg mb-1">
                     Trace & Verify Product Authenticity
                   </h4>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-[#4F772D]/60">
                     This product is fully integrated with Ayur-Sathi blockchain logs. Verify the end-to-end supply chain steps below.
                   </p>
                 </div>
 
-                <div className="space-y-8 relative pl-6 border-l-2 border-green-200 ml-3">
+                <div className="space-y-8 relative pl-6 border-l-2 border-[#90A955]/30 ml-3">
                   
                   {/* Step 1: Farm Origin */}
                   <div className="relative">
                     <div className="absolute -left-[31px] top-1.5 bg-[#90A955] w-4 h-4 rounded-full border-4 border-white shadow" />
-                    <div className="bg-green-50/40 p-4 rounded-2xl border border-green-100">
+                    <div className="bg-[#f8fae3]/50 p-4 rounded-2xl border border-[#90A955]/15">
                       <div className="flex justify-between items-center mb-1">
-                        <span className="font-bold text-xs text-green-800 uppercase tracking-wider">Step 1: Farm Cultivation & Upload</span>
-                        <span className="text-[10px] text-gray-400 font-mono">Farmer ID: {selectedProduct.uniqueId}</span>
+                        <span className="font-bold text-xs text-[#4F772D] uppercase tracking-wider">Step 1: Farm Cultivation & Upload</span>
+                        <span className="text-[10px] text-[#4F772D]/40 font-mono">Farmer ID: {selectedProduct.uniqueId}</span>
                       </div>
-                      <div className="text-xs text-gray-600 grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                      <div className="text-xs text-[#31572C]/70 grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
                         <div className="flex items-center gap-1.5">
-                          <MapPin size={14} className="text-gray-400" />
+                          <MapPin size={14} className="text-[#90A955]" />
                           <span>GPS: {selectedProduct.gpsCoordinates?.latitude?.toFixed(4)}°, {selectedProduct.gpsCoordinates?.longitude?.toFixed(4)}°</span>
                         </div>
                         <div>
-                          <span className="font-semibold text-gray-500">Uploaded On: </span>
+                          <span className="font-semibold text-[#4F772D]/50">Uploaded On: </span>
                           {selectedProduct.timestamp ? new Date(selectedProduct.timestamp).toLocaleDateString() : "N/A"}
                         </div>
                       </div>
@@ -610,37 +634,37 @@ export default function Marketplace() {
 
                   {/* Step 2: Quality Lab Assurance */}
                   <div className="relative">
-                    <div className="absolute -left-[31px] top-1.5 bg-blue-500 w-4 h-4 rounded-full border-4 border-white shadow" />
-                    <div className="bg-blue-50/30 p-4 rounded-2xl border border-blue-100">
+                    <div className="absolute -left-[31px] top-1.5 bg-[#4F772D] w-4 h-4 rounded-full border-4 border-white shadow" />
+                    <div className="bg-[#4F772D]/5 p-4 rounded-2xl border border-[#4F772D]/10">
                       <div className="flex justify-between items-center mb-1">
-                        <span className="font-bold text-xs text-blue-800 uppercase tracking-wider">Step 2: Lab Analysis & QA Approved</span>
-                        <span className="text-[10px] text-gray-400 font-mono">Lab ID: {selectedProduct.acceptedBy || "N/A"}</span>
+                        <span className="font-bold text-xs text-[#4F772D] uppercase tracking-wider">Step 2: Lab Analysis & QA Approved</span>
+                        <span className="text-[10px] text-[#4F772D]/40 font-mono">Lab ID: {selectedProduct.acceptedBy || "N/A"}</span>
                       </div>
                       {selectedProduct.tests && Object.keys(selectedProduct.tests).length > 0 && (
                         <div className="mt-2 text-xs flex gap-2 flex-wrap">
                           {Object.entries(selectedProduct.tests).map(([test, val]) => (
-                            <span key={test} className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-mono font-bold text-[10px] border border-blue-100 uppercase">
+                            <span key={test} className="bg-[#ECF39E]/40 text-[#31572C] px-2 py-0.5 rounded font-mono font-bold text-[10px] border border-[#90A955]/20 uppercase">
                               {test}: {String(val)}
                             </span>
                           ))}
                         </div>
                       )}
                       {selectedProduct.certificate?.url && (
-                        <div className="mt-3 flex justify-between items-center bg-white p-2.5 rounded-xl border border-blue-50">
-                          <span className="text-xs text-gray-500 font-semibold flex items-center gap-1.5">
-                            <FileText size={14} className="text-blue-500" /> Quality Certificate (PDF)
+                        <div className="mt-3 flex justify-between items-center bg-white p-2.5 rounded-xl border border-[#ECF39E]/40">
+                          <span className="text-xs text-[#4F772D]/60 font-semibold flex items-center gap-1.5">
+                            <FileText size={14} className="text-[#4F772D]" /> Quality Certificate (PDF)
                           </span>
                           <div className="flex gap-3">
                             <button
                               onClick={() => window.open(selectedProduct.certificate.url, "_blank")}
-                              className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 hover:underline inline-flex items-center gap-1 cursor-pointer"
+                              className="text-[10px] font-bold text-[#4F772D] hover:text-[#31572C] hover:underline inline-flex items-center gap-1 cursor-pointer"
                             >
                               View <ExternalLink size={10} />
                             </button>
                             <span className="text-gray-300">|</span>
                             <button
                               onClick={() => downloadFile(selectedProduct.certificate.url, `${selectedProduct.batchId}_certificate.pdf`)}
-                              className="text-[10px] font-bold text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1 cursor-pointer"
+                              className="text-[10px] font-bold text-[#31572C] hover:text-[#4F772D] hover:underline inline-flex items-center gap-1 cursor-pointer"
                             >
                               Download
                             </button>
@@ -652,40 +676,40 @@ export default function Marketplace() {
 
                   {/* Step 3: Manufacturing & Processing */}
                   <div className="relative">
-                    <div className="absolute -left-[31px] top-1.5 bg-indigo-600 w-4 h-4 rounded-full border-4 border-white shadow" />
-                    <div className="bg-indigo-50/30 p-4 rounded-2xl border border-indigo-100">
+                    <div className="absolute -left-[31px] top-1.5 bg-[#31572C] w-4 h-4 rounded-full border-4 border-white shadow" />
+                    <div className="bg-[#31572C]/5 p-4 rounded-2xl border border-[#31572C]/10">
                       <div className="flex justify-between items-center mb-1">
-                        <span className="font-bold text-xs text-indigo-800 uppercase tracking-wider">Step 3: Manufacturing & QR Generation</span>
-                        <span className="text-[10px] text-gray-400 font-mono">Factory ID: {selectedProduct.acceptedByManu || "N/A"}</span>
+                        <span className="font-bold text-xs text-[#31572C] uppercase tracking-wider">Step 3: Manufacturing & QR Generation</span>
+                        <span className="text-[10px] text-[#4F772D]/40 font-mono">Factory ID: {selectedProduct.acceptedByManu || "N/A"}</span>
                       </div>
-                      <div className="text-xs text-gray-600 mt-2 space-y-1">
+                      <div className="text-xs text-[#31572C]/70 mt-2 space-y-1">
                         <div className="flex items-center gap-1.5">
-                          <User size={14} className="text-gray-400" />
+                          <User size={14} className="text-[#90A955]" />
                           <span>Operator: {selectedProduct.manuOperatorName || "N/A"}</span>
                         </div>
                         <div>
-                          <span className="font-semibold text-gray-500">Manufactured On: </span>
+                          <span className="font-semibold text-[#4F772D]/50">Manufactured On: </span>
                           {selectedProduct.manufacturedAt ? new Date(selectedProduct.manufacturedAt).toLocaleString() : "N/A"}
                         </div>
                       </div>
 
                       {selectedProduct.manufacturingProcesses?.length > 0 && (
-                        <div className="mt-4 pt-3 border-t border-indigo-100 space-y-3">
-                          <span className="block text-xs font-semibold text-indigo-955 uppercase tracking-wider">
+                        <div className="mt-4 pt-3 border-t border-[#31572C]/10 space-y-3">
+                          <span className="block text-xs font-semibold text-[#31572C] uppercase tracking-wider">
                             Processing Timeline Details:
                           </span>
-                          <div className="relative pl-4 border-l border-indigo-200 ml-1.5 space-y-4">
+                          <div className="relative pl-4 border-l border-[#90A955]/30 ml-1.5 space-y-4">
                             {selectedProduct.manufacturingProcesses.map((step, i) => (
                               <div key={i} className="relative">
-                                <div className="absolute -left-[21px] top-1 bg-indigo-400 w-2 h-2 rounded-full border-2 border-white shadow" />
+                                <div className="absolute -left-[21px] top-1 bg-[#90A955] w-2 h-2 rounded-full border-2 border-white shadow" />
                                 <div className="text-xs">
-                                  <div className="flex justify-between font-semibold text-gray-800">
+                                  <div className="flex justify-between font-semibold text-[#31572C]">
                                     <span>{step.processName}</span>
-                                    <span className="text-[10px] text-gray-400 font-mono">
+                                    <span className="text-[10px] text-[#4F772D]/40 font-mono">
                                       {step.date ? new Date(step.date).toLocaleDateString() : ""}
                                     </span>
                                   </div>
-                                  {step.notes && <p className="text-[11px] text-gray-500 italic mt-0.5">"{step.notes}"</p>}
+                                  {step.notes && <p className="text-[11px] text-[#4F772D]/50 italic mt-0.5">"{step.notes}"</p>}
                                 </div>
                               </div>
                             ))}

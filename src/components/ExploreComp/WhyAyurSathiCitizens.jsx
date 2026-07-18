@@ -29,9 +29,9 @@ export default function WhyAyurSathiCitizens() {
         <Image
           src="/citizenComp.png"
           alt="AyurSaathi Citizens"
-          width={200}
-          height={300}
-          className="rounded-lg shadow-lg w-1/2 h-auto object-cover"
+          width={936}
+          height={312}
+          className="rounded-lg shadow-lg  h-auto object-cover"
         />
       </div>
 
