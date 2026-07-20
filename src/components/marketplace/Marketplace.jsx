@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { speciesList } from "@/lib/cropdetails";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "react-toastify";
 
 export default function Marketplace() {
   const router = useRouter();
@@ -59,9 +60,10 @@ export default function Marketplace() {
         const newQty = cart[existingIdx].quantity + qtyToAdd;
         if (selectedProduct.marketplaceQuantity && newQty > selectedProduct.marketplaceQuantity) {
           cart[existingIdx].quantity = selectedProduct.marketplaceQuantity;
-          alert(`Only ${selectedProduct.marketplaceQuantity} units available. Cart updated to maximum available stock.`);
+          toast.warning(`Only ${selectedProduct.marketplaceQuantity} units available. Cart updated to maximum available stock.`, { autoClose: 2000 });
         } else {
           cart[existingIdx].quantity = newQty;
+          toast.success("Added to cart successfully", { autoClose: 1500 });
         }
       } else {
         cart.push({
@@ -75,6 +77,7 @@ export default function Marketplace() {
           image: selectedProduct.marketplaceImage?.url || selectedProduct.marketplaceImages?.[0]?.url || null,
           maxQuantity: selectedProduct.marketplaceQuantity
         });
+        toast.success("Added to cart successfully", { autoClose: 1500 });
       }
       
       localStorage.setItem("userCart", JSON.stringify(cart));
@@ -83,7 +86,7 @@ export default function Marketplace() {
       setTimeout(() => setCartSuccessMsg(""), 3000);
     } catch (e) {
       console.error(e);
-      alert("Failed to add item to cart.");
+      toast.error("Failed to add item to cart", { autoClose: 1500 });
     }
   };
 

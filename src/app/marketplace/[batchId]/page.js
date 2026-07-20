@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { speciesList } from "@/lib/cropdetails";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "react-toastify";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -55,9 +56,10 @@ export default function ProductDetailPage() {
         const newQty = cart[existingIdx].quantity + qtyToAdd;
         if (product.marketplaceQuantity && newQty > product.marketplaceQuantity) {
           cart[existingIdx].quantity = product.marketplaceQuantity;
-          alert(`Only ${product.marketplaceQuantity} units available. Cart updated to maximum available stock.`);
+          toast.warning(`Only ${product.marketplaceQuantity} units available. Cart updated to maximum available stock.`, { autoClose: 2000 });
         } else {
           cart[existingIdx].quantity = newQty;
+          toast.success("Added to cart successfully", { autoClose: 1500 });
         }
       } else {
         cart.push({
@@ -71,6 +73,7 @@ export default function ProductDetailPage() {
           image: product.marketplaceImage?.url || product.marketplaceImages?.[0]?.url || null,
           maxQuantity: product.marketplaceQuantity
         });
+        toast.success("Added to cart successfully", { autoClose: 1500 });
       }
       
       localStorage.setItem("userCart", JSON.stringify(cart));
@@ -79,7 +82,7 @@ export default function ProductDetailPage() {
       setTimeout(() => setCartSuccessMsg(""), 3000);
     } catch (e) {
       console.error(e);
-      alert("Failed to add item to cart.");
+      toast.error("Failed to add item to cart", { autoClose: 1500 });
     }
   };
 

@@ -74,7 +74,7 @@ export async function POST(req, context) {
       // ✅ Remove temp data from Redis
       await redis.del(`pending_user:${uniqueId}`);
       console.log("first");
-      
+
       await sendRegistrationEmail({
         name: account.name,
         email: account.email,
