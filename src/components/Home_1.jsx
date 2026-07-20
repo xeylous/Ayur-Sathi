@@ -24,14 +24,16 @@ const steps = [
     title: "Collection & Geo-Tagging",
     desc: "At the moment of harvest, farmers log geographic coordinates, species identification, and initial moisture levels. This establishes the absolute starting point of the supply chain.",
     highlights: ["GPS coordinates locked", "Moisture verification", "Species verification"],
-    bgImage: "https://images.unsplash.com/photo-1592417817098-8f3d6eb19675?q=80&w=600&auto=format&fit=crop",
+    bgImage: "https://res.cloudinary.com/dperfwbnn/video/upload/v1784565695/farmer_video_cwnchs.mp4",
+    isVideo: true,
   },
   {
     icon: FlaskConical,
     title: "Accredited Lab Certification",
     desc: "Samples are analyzed for heavy metals, moisture, pesticide residue, and DNA barcode profiles. The test reports are signed and cryptographically tied to the batch.",
     highlights: ["Pesticide-free certified", "DNA Barcoding", "Moisture compliance"],
-    bgImage: "https://images.unsplash.com/photo-1576086213369-97a306d36557?q=80&w=600&auto=format&fit=crop",
+    bgImage: "https://res.cloudinary.com/dperfwbnn/video/upload/v1784565111/lab_video_jkwxqy.mp4",
+    isVideo: true,
   },
   {
     icon: Factory,
@@ -120,18 +122,34 @@ export default function Home_1() {
             {/* LEFT COLUMN: Visual Media & Current Image (col-span-5) */}
             <div className="lg:col-span-5 relative h-64 lg:h-auto min-h-[300px] bg-gray-100 overflow-hidden">
               <AnimatePresence mode="wait">
-                <motion.img
-                  key={activeStep}
-                  src={steps[activeStep].bgImage}
-                  alt={steps[activeStep].title}
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.6 }}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
+                {steps[activeStep].isVideo ? (
+                  <motion.video
+                    key={activeStep}
+                    src={steps[activeStep].bgImage}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                ) : (
+                  <motion.img
+                    key={activeStep}
+                    src={steps[activeStep].bgImage}
+                    alt={steps[activeStep].title}
+                    initial={{ opacity: 0, scale: 1.05 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
               </AnimatePresence>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#31572C]/80 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#31572C]/80 via-transparent to-transparent pointer-events-none" />
               
               {/* Image Info Label */}
               <div className="absolute bottom-6 left-6 right-6 text-white z-10">
