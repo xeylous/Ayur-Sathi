@@ -19,6 +19,7 @@ import {
   ChevronRight
 } from "lucide-react";
 import { speciesList } from "@/lib/cropdetails";
+import { toast } from "react-toastify";
 
 const LabMarketplaceControl = ({ 
   selectedListingBatch, 
@@ -124,19 +125,27 @@ const LabMarketplaceControl = ({
     if (listingLoading) return;
 
     if (!price || Number(price) <= 0) {
-      setFormMessage({ type: "error", content: "Price must be greater than zero." });
+      const msg = "Price must be greater than zero.";
+      setFormMessage({ type: "error", content: msg });
+      toast.error(msg, { autoClose: 2000 });
       return;
     }
     if (!quantity || Number(quantity) <= 0) {
-      setFormMessage({ type: "error", content: "Quantity must be greater than zero." });
+      const msg = "Quantity must be greater than zero.";
+      setFormMessage({ type: "error", content: msg });
+      toast.error(msg, { autoClose: 2000 });
       return;
     }
     if (!weightGm || Number(weightGm) <= 0) {
-      setFormMessage({ type: "error", content: "Weight must be greater than zero." });
+      const msg = "Weight must be greater than zero.";
+      setFormMessage({ type: "error", content: msg });
+      toast.error(msg, { autoClose: 2000 });
       return;
     }
     if (!description.trim()) {
-      setFormMessage({ type: "error", content: "Description is required." });
+      const msg = "Description is required.";
+      setFormMessage({ type: "error", content: msg });
+      toast.error(msg, { autoClose: 2000 });
       return;
     }
 
@@ -169,15 +178,20 @@ const LabMarketplaceControl = ({
 
       const data = await res.json();
       if (data.success) {
+        toast.success(data.message || "Listing published successfully", { autoClose: 2000 });
         setFormMessage({ type: "success", content: data.message });
         setSelectedListingBatch(null); // Back to list
         fetchBatches(); // Refresh table
       } else {
-        setFormMessage({ type: "error", content: data.message || "Failed to publish listing." });
+        const errorMsg = data.message || "Failed to publish listing.";
+        toast.error(errorMsg, { autoClose: 2000 });
+        setFormMessage({ type: "error", content: errorMsg });
       }
     } catch (err) {
       console.error(err);
-      setFormMessage({ type: "error", content: "Server connection failed." });
+      const connMsg = "Server connection failed.";
+      toast.error(connMsg, { autoClose: 2000 });
+      setFormMessage({ type: "error", content: connMsg });
     }
     setListingLoading(false);
   };
