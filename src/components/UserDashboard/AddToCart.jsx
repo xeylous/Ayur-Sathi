@@ -49,13 +49,13 @@ export default function AddToCart() {
     const updatedCart = [...cart];
     const item = updatedCart[index];
     const newQty = item.quantity + delta;
-    
+
     if (newQty < 1) return;
     if (item.maxQuantity && newQty > item.maxQuantity) {
       alert(`Only ${item.maxQuantity} units available in stock.`);
       return;
     }
-    
+
     item.quantity = newQty;
     updateCart(updatedCart);
   };
@@ -114,13 +114,13 @@ export default function AddToCart() {
           }),
           batchId: item.batchId
         }));
-        
+
         localStorage.setItem("userOrders", JSON.stringify([...newOrders, ...savedOrders]));
-        
+
         // Clear cart
         localStorage.setItem("userCart", JSON.stringify([]));
         window.dispatchEvent(new Event("cartUpdated"));
-        
+
         setCheckoutSuccess(true);
         setCart([]);
       } else {
@@ -160,7 +160,7 @@ export default function AddToCart() {
   return (
     <div className="max-h-screen py-4">
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
+
         {/* Left Column: Cart items */}
         <div className="lg:col-span-8 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
           <div className="flex justify-between items-center pb-4 border-b border-gray-100 mb-6">
@@ -275,7 +275,7 @@ export default function AddToCart() {
             <h2 className="text-xl font-bold text-indigo-950 pb-3 border-b border-gray-100">
               Order Summary
             </h2>
-            
+
             <div className="space-y-3.5">
               <div className="flex justify-between text-sm text-gray-600">
                 <span>Subtotal</span>
@@ -295,13 +295,13 @@ export default function AddToCart() {
                   )}
                 </span>
               </div>
-              
+
               {delivery > 0 && (
                 <div className="text-[11px] text-[#4F772D] bg-[#ECF39E]/30 p-2.5 rounded-lg border border-[#90A955]/30">
                   💡 Add items worth <strong>₹{500 - subtotal}</strong> more for <strong>FREE Delivery</strong>!
                 </div>
               )}
-              
+
               <div className="border-t border-gray-100 pt-3.5 flex justify-between text-base font-bold text-indigo-950">
                 <span>Total Amount</span>
                 <span className="text-lg text-[#4F772D]">₹{total}</span>
