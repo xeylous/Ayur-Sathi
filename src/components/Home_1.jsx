@@ -40,7 +40,8 @@ const steps = [
     title: "Processing & Refining",
     desc: "Approved raw materials are processed. Drying, cleaning, grinding, and formulation steps log temperature, relative humidity, and facility credentials.",
     highlights: ["Controlled temperature", "Operator credentialing", "Humidity mapping"],
-    bgImage: "https://images.unsplash.com/photo-1530026405186-ed1ea0ac7a63?q=80&w=600&auto=format&fit=crop",
+    bgImage: "https://res.cloudinary.com/dperfwbnn/video/upload/v1784653786/manu_video_rfwxwa.mp4",
+    isVideo: true,
   },
   {
     icon: QrCode,
