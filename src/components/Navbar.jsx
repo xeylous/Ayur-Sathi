@@ -35,6 +35,7 @@ export default function Navbar() {
   const router = useRouter();
   const { user, loading, logout } = useAuth();
   const [cartCount, setCartCount] = useState(0);
+  const [showConfirmLogout, setShowConfirmLogout] = useState(false);
 
   const updateCartCount = () => {
     try {
@@ -68,8 +69,9 @@ export default function Navbar() {
     setOpen(false);
   }, [pathname]);
 
-  const handleLogout = async () => {
-    await logout();
+  const handleLogout = () => {
+    setOpen(false);
+    setShowConfirmLogout(true);
   };
 
   const getDashboardLink = () => {
@@ -114,7 +116,8 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-white backdrop-blur">
+    <>
+      <header className="sticky top-0 z-40 border-b bg-white backdrop-blur">
       <div className="container  mx-auto flex h-16 items-center justify-between px-4 sm:px-6 md:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
@@ -319,5 +322,32 @@ export default function Navbar() {
         )}
       </AnimatePresence>
     </header>
-  );
+
+    {showConfirmLogout && (
+      <div className="fixed inset-0 bg-[#31572C]/20 backdrop-blur-sm flex items-center justify-center z-[9999] p-4 animate-in fade-in duration-200">
+        <div className="bg-white border border-[#90A955]/30 shadow-2xl w-full max-w-sm rounded-2xl p-6 relative animate-in zoom-in-95 duration-200 text-center">
+          <h3 className="text-xl font-bold text-[#31572C] mb-2">Are you sure?</h3>
+          <p className="text-sm text-[#31572C]/90 mb-6 font-semibold">You will be logged out of your session.</p>
+          <div className="flex gap-3 justify-center">
+            <button
+              onClick={() => setShowConfirmLogout(false)}
+              className="px-4 py-2 text-sm bg-white/80 hover:bg-white text-gray-800 border border-gray-200 rounded-xl transition font-medium cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={async () => {
+                await logout();
+                setShowConfirmLogout(false);
+              }}
+              className="px-4 py-2 text-sm bg-[#4F772D] hover:bg-[#31572C] text-white rounded-xl transition font-semibold cursor-pointer"
+            >
+              Yes, Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+  </>
+);
 }
