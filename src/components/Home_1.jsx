@@ -48,7 +48,8 @@ const steps = [
     title: "Consumer Transparency Label",
     desc: "On-chain smart contracts generate a unique public QR code label. Consumers scan this label on store shelves to access the verified farm-to-shelf story.",
     highlights: ["Immutable QR mapping", "Instant scans", "Blockchain provenance"],
-    bgImage: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?q=80&w=600&auto=format&fit=crop",
+    bgImage: "https://res.cloudinary.com/dperfwbnn/video/upload/v1784736578/people_video_c60f1d.mp4",
+    isVideo: true,
   },
 ];
 
