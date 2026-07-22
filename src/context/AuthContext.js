@@ -124,6 +124,8 @@ import {
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import LandingSkeleton from "@/components/LandingSkeleton";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AuthContext = createContext();
 
@@ -295,7 +297,18 @@ export const AuthProvider = ({ children }) => {
   if (loading) return <LandingSkeleton />;
 
   return (
-    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={value}>
+      {children}
+      <ToastContainer
+        position="top-right"
+        hideProgressBar={true}
+        closeOnClick={false}
+        pauseOnHover={true}
+        draggable={false}
+        style={{ marginTop: "100px" }}
+        autoClose={3000}
+      />
+    </AuthContext.Provider>
   );
 };
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthContext"; // import your context
 
 const REDIRECT_PATH = "/admin";
@@ -15,42 +16,35 @@ const AdminLoginPage = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loginStatus, setLoginStatus] = useState({ success: false, message: "" });
-
-  useEffect(() => {
-    if (loginStatus.message) {
-      const timer = setTimeout(() => {
-        setLoginStatus({ success: false, message: "" });
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [loginStatus]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
 
     setIsSubmitting(true);
-    setLoginStatus({ success: false, message: "Verifying credentials..." });
 
-    const result = await adminLogin(email, password, "central");
+    try {
+      const result = await adminLogin(email, password, "central");
 
-    if (result.success) {
-      setLoginStatus({
-        success: true,
-        message: "Login successful! Redirecting...",
-      });
+      if (result.success) {
+        toast.success("Admin login successful!", { toastId: "login-success", autoClose: 3000 });
 
-      // Redirect to /admin after short delay
+        // Redirect to /admin after short delay
+        setTimeout(() => {
+          router.push(REDIRECT_PATH);
+        }, 1500);
+      } else {
+        toast.error("Admin login failed. Please check your credentials.", { toastId: "login-failure", autoClose: 3000 });
+        setTimeout(() => {
+          setIsSubmitting(false);
+        }, 1500);
+      }
+    } catch (err) {
+      console.error("Central Admin login error:", err);
+      toast.error("Something went wrong. Please try again later.", { toastId: "login-error-unexpected", autoClose: 3000 });
       setTimeout(() => {
-        router.push(REDIRECT_PATH);
-      }, 1200);
-    } else {
-      setLoginStatus({
-        success: false,
-        message: result.error || "Invalid Admin Email or Password.",
-      });
-      setIsSubmitting(false);
+        setIsSubmitting(false);
+      }, 1500);
     }
   };
 
@@ -68,16 +62,6 @@ const AdminLoginPage = () => {
           <h1 className="mt-4 text-2xl font-extrabold text-[#4F772D]">Central Admin Login</h1>
           <p className="text-sm text-gray-500 mt-1">Access the Central Control Panel</p>
         </div>
-
-        {loginStatus.message && (
-          <div
-            className={`mb-4 p-3 rounded-lg text-sm font-medium ${
-              loginStatus.success ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-            }`}
-          >
-            {loginStatus.message}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>

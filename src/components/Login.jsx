@@ -63,14 +63,33 @@ export default function LoginPage() {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
+    const roleName =
+      mode === "user"
+        ? "User"
+        : mode === "lab"
+        ? "Lab"
+        : mode === "manu"
+        ? "Manufacturer"
+        : mode === "admin"
+        ? "Store Admin"
+        : mode === "farmer"
+        ? "Farmer"
+        : "User";
+
     // 🧩 Admin Login (API call)
     if (mode === "admin") {
-      const res = await adminLogin(email, password, "store");
-      if (res.success) {
-        toast.success("Admin login successful", { autoClose: 1500 });
-        setTimeout(() => router.push("/admin"), 800);
-      } else {
-        toast.error(res.error || "Invalid admin credentials", { autoClose: 1500 });
+      try {
+        const res = await adminLogin(email, password, "store");
+        if (res.success) {
+          toast.success(`${roleName} login successful!`, { toastId: "login-success", autoClose: 3000 });
+          setTimeout(() => router.push("/admin"), 1500);
+        } else {
+          toast.error(`${roleName} login failed. Please check your credentials.`, { toastId: "login-failure", autoClose: 3000 });
+          setTimeout(() => setIsSubmitting(false), 1500);
+        }
+      } catch (err) {
+        console.error("Admin login error:", err);
+        toast.error("Something went wrong. Please try again later.", { toastId: "login-error-unexpected", autoClose: 3000 });
         setTimeout(() => setIsSubmitting(false), 1500);
       }
       return;
@@ -91,7 +110,7 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "Wrong credentials", { autoClose: 1500 });
+        toast.error(`${roleName} login failed. Please check your credentials.`, { toastId: "login-failure", autoClose: 3000 });
         setTimeout(() => setIsSubmitting(false), 1500);
         return;
       }
@@ -110,18 +129,19 @@ export default function LoginPage() {
 
       // console.log(User);
 
-      toast.success("Login successful", { autoClose: 1500 });
+      toast.success(`${roleName} login successful!`, { toastId: "login-success", autoClose: 3000 });
       setTimeout(() => {
         if (redirectPath === "cart") {
           router.push("/cart");
         } else {
           router.push(data.redirectUrl);
         }
-      }, 500);
+      }, 1500);
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Something went wrong. Please try again", {
-        autoClose: 1500,
+      toast.error("Something went wrong. Please try again later.", {
+        toastId: "login-error-unexpected",
+        autoClose: 3000,
       });
       setTimeout(() => setIsSubmitting(false), 1500);
     }
