@@ -7,6 +7,7 @@ import { FarmerProvider } from "@/context/FarmerContext";
 import { CropProvider } from "@/context/CropContext"; 
 import { Analytics } from '@vercel/analytics/next';
 import SocketInitializer from "./SocketInitializer";
+import ChatbotAssistant from "@/components/ChatbotAssistant";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,6 +49,7 @@ export default function RootLayout({ children }) {
         <Analytics />
         </CropProvider>
         </FarmerProvider>
+        <ChatbotAssistant />
         </AuthProvider>
       </body>
     </html>
