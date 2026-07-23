@@ -180,7 +180,7 @@ export default function Navbar() {
 
               <button
                 onClick={handleLogout}
-                className="text-base font-medium text-black hover:text-white bg-[#90A955] hover:bg-[#4F772D] rounded-2xl px-6 py-1 text-center"
+                className="text-base font-semibold text-white bg-[#90A955] hover:bg-[#4F772D] rounded-2xl px-6 py-1.5 text-center shadow-sm transition-all cursor-pointer"
               >
                 Logout
               </button>
@@ -189,13 +189,13 @@ export default function Navbar() {
             <div className="hidden sm:flex gap-3">
               <Link
                 href="/login"
-                className="text-base font-medium text-black hover:text-white bg-[#90A955] hover:bg-[#4F772D] rounded-2xl px-6 py-1 text-center"
+                className="text-base font-semibold text-white bg-[#90A955] hover:bg-[#4F772D] rounded-2xl px-6 py-1.5 text-center shadow-sm transition-all cursor-pointer"
               >
                 Login
               </Link>
               <Link
                 href="/register"
-                className="text-base font-medium text-black hover:text-white bg-[#90A955] hover:bg-[#4F772D] rounded-2xl px-6 py-1 text-center"
+                className="text-base font-semibold text-white bg-[#90A955] hover:bg-[#4F772D] rounded-2xl px-6 py-1.5 text-center shadow-sm transition-all cursor-pointer"
               >
                 Register
               </Link>
@@ -283,14 +283,14 @@ export default function Navbar() {
                   <>
                      <Link
                       href={getMobileProfileLink()}
-                      className="mt-4 text-lg font-medium text-black bg-[#ECF39E] rounded-lg px-5 py-2.5 text-center"
+                      className="mt-4 text-base font-semibold text-white bg-[#90A955] hover:bg-[#4F772D] rounded-xl px-5 py-2.5 text-center shadow-sm transition-all"
                       onClick={() => setOpen(false)}
                     >
                       {getProfileName()} (Profile)
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="mt-2 cursor-pointer text-lg font-medium text-black bg-[#ECF39E] rounded-lg px-5 py-2.5 text-center"
+                      className="mt-2 cursor-pointer text-base font-semibold text-white bg-[#90A955] hover:bg-[#4F772D] rounded-xl px-5 py-2.5 text-center shadow-sm transition-all"
                     >
                       Logout
                     </button>
@@ -299,14 +299,14 @@ export default function Navbar() {
                   <>
                     <Link
                       href="/login"
-                      className="mt-4 text-lg font-medium text-black bg-[#ECF39E] rounded-lg px-5 py-2.5 text-center"
+                      className="mt-4 text-base font-semibold text-white bg-[#90A955] hover:bg-[#4F772D] rounded-xl px-5 py-2.5 text-center shadow-sm transition-all"
                       onClick={() => setOpen(false)}
                     >
                       Login
                     </Link>
                     <Link
                       href="/register"
-                      className="mt-2 text-lg font-medium text-black bg-[#ECF39E] rounded-lg px-5 py-2.5 text-center"
+                      className="mt-2 text-base font-semibold text-white bg-[#90A955] hover:bg-[#4F772D] rounded-xl px-5 py-2.5 text-center shadow-sm transition-all"
                       onClick={() => setOpen(false)}
                     >
                       Register

@@ -88,16 +88,8 @@ export default function Home_1() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* ── SECTION HEADER ── */}
+        {/* ── SECTION HEADER ──
         <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#90A955]/15 text-[#4F772D] text-xs font-semibold mb-3 border border-[#90A955]/20"
-          >
-            <Sparkles size={13} /> Supply Chain Traceability
-          </motion.div>
 
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -115,10 +107,10 @@ export default function Home_1() {
           >
             Explore our end-to-end provenance architecture that maps every batch securely on the blockchain.
           </motion.p>
-        </div>
+        </div> */}
 
         {/* ── INTERACTIVE JOURNEY HORIZONTAL SLIDER ── */}
-        <div className="bg-white rounded-3xl border border-[#90A955]/20 shadow-xl overflow-hidden mb-20 max-w-5xl mx-auto">
+        <div className="bg-white rounded-3xl border border-[#90A955]/20 shadow-xl overflow-hidden mb-20">
           <div className="grid grid-cols-1 lg:grid-cols-12">
             
             {/* LEFT COLUMN: Visual Media & Current Image (col-span-5) */}
@@ -171,10 +163,10 @@ export default function Home_1() {
                   <button
                     key={idx}
                     onClick={() => setActiveStep(idx)}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex-shrink-0 ${
+                    className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex-shrink-0 ${
                       idx === activeStep
-                        ? "bg-[#31572C] text-white shadow-md"
-                        : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                        ? "bg-[#90A955] text-white shadow-md"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                     }`}
                   >
                     <span>0{idx + 1}</span>
@@ -250,7 +242,7 @@ export default function Home_1() {
         </div>
 
         {/* ── CORE CAPABILITIES SECTION (Neat grid with clean animations) ── */}
-        <div className="max-w-5xl mx-auto">
+        <div>
           <h3 className="text-xl font-bold text-[#31572C] mb-8 text-center sm:text-left">
             Platform Capabilities
           </h3>
@@ -267,7 +259,7 @@ export default function Home_1() {
                   transition={{ duration: 0.4, delay: i * 0.05 }}
                   className="bg-white/60 hover:bg-white border border-[#90A955]/15 rounded-2xl p-5 hover:shadow-md hover:border-[#90A955]/30 transition-all duration-300 group"
                 >
-                  <div className="w-9 h-9 rounded-lg bg-[#4F772D]/10 text-[#4F772D] flex items-center justify-center group-hover:bg-[#4F772D] group-hover:text-white transition-all duration-300 mb-4">
+                  <div className="w-9 h-9 rounded-lg bg-[#90A955]/15 text-[#31572C] flex items-center justify-center group-hover:bg-[#90A955] group-hover:text-white transition-all duration-300 mb-4">
                     <CapIcon size={18} />
                   </div>
                   <h4 className="text-sm font-bold text-[#31572C]">{c.title}</h4>
