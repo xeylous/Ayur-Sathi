@@ -17,12 +17,12 @@ export default function Home_d() {
   return (
     <main 
       ref={containerRef}
-      className="hidden bg-[#ECF39E]/30 md:flex items-center justify-center p-6 pb-20 relative overflow-hidden"
+      className="hidden bg-[#ECF39E]/30 md:flex items-center justify-center py-12 relative overflow-hidden"
     >
       {/* Soft blur visual blobs behind */}
       <div className="absolute top-1/2 left-1/3 w-72 h-72 rounded-full bg-[#90A955]/10 blur-3xl pointer-events-none" />
 
-      <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
         
         {/* LEFT COLUMN: Premium Network Partner Callout */}
         <motion.div
@@ -51,7 +51,7 @@ export default function Home_d() {
           <div className="relative z-10 mt-10 flex flex-wrap gap-4 items-center">
             <button
               onClick={handleRegister}
-              className="inline-flex items-center gap-2 bg-[#ECF39E] hover:bg-[#dce88a] text-[#31572C] text-sm font-extrabold px-6 py-3.5 rounded-xl shadow-md transition-all cursor-pointer group/btn"
+              className="inline-flex items-center gap-2 bg-[#90A955] hover:bg-[#4F772D] text-white text-sm font-extrabold px-6 py-3.5 rounded-xl shadow-md transition-all cursor-pointer group/btn"
               aria-label="Register as Farmer"
             >
               <UserPlus size={16} />
@@ -119,7 +119,7 @@ export default function Home_d() {
                   e.preventDefault();
                   alert("App Store link coming soon!");
                 }}
-                className="inline-flex items-center justify-center gap-2 bg-[#31572C] hover:bg-[#4F772D] text-white text-xs font-bold px-4 py-3 rounded-xl transition cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 bg-[#90A955] hover:bg-[#4F772D] text-white text-xs font-bold px-4 py-3 rounded-xl transition cursor-pointer"
               >
                 <Download size={13} /> App Store
               </a>

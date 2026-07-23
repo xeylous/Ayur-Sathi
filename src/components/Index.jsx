@@ -95,12 +95,12 @@ function IndexContent() {
           <div className="absolute -bottom-10 -right-10 size-[500px] rounded-full blur-3xl bg-brand-400/40" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-3 py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
           {/* grid for text + image */}
           <div className="grid gap-10 md:gap-16 lg:gap-24 xl:gap-32 2xl:gap-40 lg:grid-cols-2 lg:items-center">
             {/* Left: Text content */}
             <div className="mx-auto lg:mx-0 text-center lg:text-left">
-              <span className="inline-block px-3 py-1 rounded-full text-xs bg-[#90A955] font-semibold bg-brand-100 text-brand-900">
+              <span className="inline-block px-3.5 py-1 rounded-full text-xs bg-[#90A955] font-bold text-white shadow-sm mb-2">
                 Blockchain • Geo-Tagging • FHIR-style
               </span>
 
@@ -142,12 +142,12 @@ function IndexContent() {
                 <button
                   onClick={fetchBatchDetails}
                   disabled={loading}
-                  className="h-11 px-4 flex items-center justify-center rounded-md border bg-[#90A955] hover:bg-[#4F772D] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="h-11 px-5 flex items-center justify-center rounded-md border-0 bg-[#90A955] hover:bg-[#4F772D] text-white font-bold transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {loading ? "Loading..." : "View Details"}
                 </button>
 
-                <button className="flex items-center justify-center gap-2 h-11 px-4 rounded-md bg-[#90A955] hover:bg-[#4F772D] hover:text-white border text-black hover:bg-brand-700">
+                <button className="flex items-center justify-center gap-2 h-11 px-5 rounded-md bg-[#90A955] hover:bg-[#4F772D] text-white border-0 font-bold shadow-sm transition-all cursor-pointer">
                   <QrCode className="w-4 h-4" />
                   Scan QR
                 </button>
@@ -191,7 +191,7 @@ function IndexContent() {
 
       {/* PROBLEM & SOLUTION */}
       <section className="py-12 md:py-16">
-        <div className="max-w-7xl mx-auto px-3 grid gap-8 md:gap-12 lg:gap-16 xl:gap-24 2xl:gap-32 md:grid-cols-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-8 md:gap-12 lg:gap-16 xl:gap-24 2xl:gap-32 md:grid-cols-2">
           {/* Background Card */}
           <div className="rounded-xl border bg-card p-6 text-center md:text-left">
             <div className="text-brand-900 font-semibold">Background</div>
