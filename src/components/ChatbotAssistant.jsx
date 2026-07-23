@@ -1,8 +1,11 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { MessageCircle, X, Loader2 } from "lucide-react";
+import { MessageCircle, X, Loader2, Sparkles, CheckCircle2, ShieldAlert, Mail, BookOpen } from "lucide-react";
 import Image from "next/image";
 import CryptoJS from "crypto-js";
+
+// Enterprise AyurGyani API Endpoint Configuration
+const AYURGYANI_API_URL = process.env.NEXT_PUBLIC_AYURGYANI_URL || "https://ayurgyani-api.onrender.com";
 
 export default function ChatbotAssistant() {
   const [open, setOpen] = useState(false);
@@ -11,17 +14,32 @@ export default function ChatbotAssistant() {
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState([]);
   const [batchInput, setBatchInput] = useState("");
+  const [userId, setUserId] = useState("");
+  
   const chatEndRef = useRef(null);
   const chatActive = useRef(false);
 
+  // Initialize or retrieve persistent user session ID
+  useEffect(() => {
+    let storedId = typeof window !== "undefined" ? localStorage.getItem("ayurgyani_user_id") : null;
+    if (!storedId) {
+      storedId = "user_" + Math.random().toString(36).substring(2, 9) + "_" + Date.now();
+      if (typeof window !== "undefined") {
+        localStorage.setItem("ayurgyani_user_id", storedId);
+      }
+    }
+    setUserId(storedId);
+  }, []);
+
+  // Auto-scroll to bottom of chat
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, loading]);
 
+  // Decrypt batch details
   const decrypt = (encryptedText) => {
-    const key = CryptoJS.enc.Utf8.parse(
-      process.env.NEXT_PUBLIC_SECRET.padEnd(32, "0")
-    );
+    const secretKey = process.env.NEXT_PUBLIC_SECRET || "default_ayurvedic_secret_key_32";
+    const key = CryptoJS.enc.Utf8.parse(secretKey.padEnd(32, "0"));
     const [ivBase64, encryptedBase64] = encryptedText.split(":");
 
     const decrypted = CryptoJS.AES.decrypt(encryptedBase64, key, {
@@ -33,6 +51,7 @@ export default function ChatbotAssistant() {
     return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
   };
 
+  // Check Batch Status handler
   const handleBatchCheck = async () => {
     if (!/^ASW-\d{4}-\d{4}$/i.test(batchInput)) {
       alert("❌ Invalid Batch ID Format. Use: ASW-2025-5031");
@@ -54,232 +73,260 @@ export default function ChatbotAssistant() {
         },
       ]);
     } catch {
-      setMessages([{ sender: "bot", text: "⚠️ Could not fetch status." }]);
+      setMessages([{ sender: "bot", text: "⚠️ Could not fetch batch status." }]);
     }
 
     setLoading(false);
   };
 
-const sendMessageToAPI = async (msg) => {
-  if (!msg.trim()) return;
+  // Send message to AyurGyani Enterprise Agent
+  const sendMessageToAPI = async (msg) => {
+    if (!msg.trim()) return;
+    if (!chatActive.current || mode !== "chat") return;
 
-  if (!chatActive.current || mode !== "chat") return; // prevent ghost messages
+    setMessages((prev) => [...prev, { sender: "user", text: msg }]);
+    setMessage("");
+    setLoading(true);
 
-  setMessages((prev) => [...prev, { sender: "user", text: msg }]);
-  setMessage("");
-  setLoading(true);
+    let active = true;
 
-  let active = true;
+    try {
+      const res = await fetch(`${AYURGYANI_API_URL}/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: userId || "guest_user", message: msg }),
+      });
 
-  try {
-    const res = await fetch("https://ayurgyani.onrender.com/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: "test-user", message: msg }),
-    });
+      const data = await res.json();
 
-    const data = await res.json();
+      if (!active || !chatActive.current || mode !== "chat") return;
 
-    if (!active || !chatActive.current || mode !== "chat") return; // 🛑 BLOCK UPDATE
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "bot",
+          text: data.reply || "Namaste 🌿 How else may I support you today?",
+          toolsExecuted: data.toolsExecuted || [],
+          modelUsed: data.modelUsed
+        },
+      ]);
+    } catch (err) {
+      if (!active || !chatActive.current || mode !== "chat") return;
 
-    setMessages((prev) => [...prev, { sender: "bot", text: data.reply }]);
-  } catch {
-    if (!active || !chatActive.current || mode !== "chat") return; // 🛑 BLOCK UPDATE
+      setMessages((prev) => [
+        ...prev,
+        { sender: "bot", text: "⚠️ Network connection error. Please try again." },
+      ]);
+    }
 
-    setMessages((prev) => [
-      ...prev,
-      { sender: "bot", text: "⚠️ Network error." },
-    ]);
-  }
+    if (active && chatActive.current && mode === "chat") {
+      setLoading(false);
+    }
 
-  if (active && chatActive.current && mode === "chat") {
-    setLoading(false);
-  }
-
-  return () => {
-    active = false;
+    return () => {
+      active = false;
+    };
   };
-};
 
+  // Toggle chat window open/close
   const handleToggle = () => {
     if (open) {
+      chatActive.current = false;
       setMessages([]);
       setMode(null);
       setBatchInput("");
     }
     setOpen(!open);
   };
+
+  // Initial Chat Onboarding trigger when user enters chat mode
   useEffect(() => {
-  if (mode !== "chat") return;
+    if (mode !== "chat") return;
 
-  let active = true;
-  chatActive.current = true;
-  setLoading(true);
+    let active = true;
+    chatActive.current = true;
+    setLoading(true);
 
-  fetch("https://ayurgyani.onrender.com/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userId: "test-user", message: "hi" }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (!active) return; // ⛔ Prevent updating if user left
-      if (!chatActive.current) return;
-
-      setMessages([
-        {
-          sender: "bot",
-          text: data.reply || "Hello! How can I assist you today?",
-        },
-      ]);
+    fetch(`${AYURGYANI_API_URL}/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: userId || "guest_user", message: "" }),
     })
-    .catch(() => {
-      if (!active) return;
-      if (!chatActive.current) return;
+      .then((res) => res.json())
+      .then((data) => {
+        if (!active || !chatActive.current) return;
 
-      setMessages([
-        { sender: "bot", text: "⚠️ Unable to connect. Try again later." },
-      ]);
-    })
-    .finally(() => {
-      if (active && chatActive.current) setLoading(false);
-    });
+        setMessages([
+          {
+            sender: "bot",
+            text: data.reply || "Namaste 🙏 Welcome to AyurSathi! What is your good name?",
+            toolsExecuted: data.toolsExecuted || [],
+            modelUsed: data.modelUsed
+          },
+        ]);
+      })
+      .catch(() => {
+        if (!active || !chatActive.current) return;
 
-  return () => {
-    active = false;        // ⛔ Stop updates
-    chatActive.current = false;
+        setMessages([
+          { sender: "bot", text: "⚠️ Unable to connect to AyurGyani engine. Please try again later." },
+        ]);
+      })
+      .finally(() => {
+        if (active && chatActive.current) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+      chatActive.current = false;
+    };
+  }, [mode, userId]);
+
+  // Render Tool Execution Badges
+  const renderToolBadges = (tools) => {
+    if (!tools || tools.length === 0) return null;
+
+    return (
+      <div className="flex flex-wrap gap-1 mt-2 border-t pt-1.5 border-gray-100">
+        {tools.map((t, idx) => {
+          let label = "Tool Executed";
+          let icon = <Sparkles size={12} className="text-amber-500" />;
+
+          if (t.toolName === "find_ayurvedic_remedy") {
+            label = "Ayurvedic Remedy Found";
+            icon = <CheckCircle2 size={12} className="text-green-600" />;
+          } else if (t.toolName === "lookup_herb_details") {
+            label = "Herb Details Lookup";
+            icon = <BookOpen size={12} className="text-emerald-600" />;
+          } else if (t.toolName === "check_safety_contraindications") {
+            label = "Safety Checked";
+            icon = <ShieldAlert size={12} className="text-orange-500" />;
+          } else if (t.toolName === "send_recommendation_email") {
+            label = "Email Digest Sent";
+            icon = <Mail size={12} className="text-blue-500" />;
+          }
+
+          return (
+            <span
+              key={idx}
+              className="inline-flex items-center gap-1 bg-green-50 text-green-800 text-[10px] px-2 py-0.5 rounded-full font-medium border border-green-200"
+            >
+              {icon}
+              {label}
+            </span>
+          );
+        })}
+      </div>
+    );
   };
-}, [mode]);
-
 
   function TypingDots() {
     return (
       <div className="flex items-center gap-1 bg-white border rounded-lg shadow-sm px-3 py-2 w-fit">
-        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></span>
-        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-150"></span>
-        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce delay-300"></span>
+        <span className="w-2 h-2 bg-green-600 rounded-full animate-bounce"></span>
+        <span className="w-2 h-2 bg-green-600 rounded-full animate-bounce delay-150"></span>
+        <span className="w-2 h-2 bg-green-600 rounded-full animate-bounce delay-300"></span>
       </div>
     );
   }
 
   return (
     <>
-      {/* Floating Button */}
+      {/* Floating Action Button */}
       <button
         onClick={handleToggle}
-        className="fixed bottom-5 right-5 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-xl z-[100000]"
+        className="fixed bottom-5 right-5 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-xl z-[100000] transition-all transform hover:scale-105"
       >
         {open ? <X size={28} /> : <MessageCircle size={28} />}
       </button>
 
       {/* Chat Window */}
       {open && (
-        <div className="fixed bottom-20 right-5 w-80 bg-[#ECECEC] rounded-2xl shadow-2xl border flex flex-col overflow-hidden">
+        <div className="fixed bottom-20 right-5 w-80 sm:w-96 bg-[#ECECEC] rounded-2xl shadow-2xl border flex flex-col overflow-hidden z-[100000]">
           {/* Header */}
-          {/* <div className="bg-green-600 text-white flex items-center justify-between p-3">
-            {mode !== null ? (
-              <button
-                className="text-white text-sm flex items-center gap-1 px-2 py-1 rounded hover:bg-white/20 transition"
-                onClick={() => {
-                  setMessages([]);
-                  setBatchInput("");
-                  setMode(null);
-                }}
-              >
-                <span className="text-lg leading-none">←</span>
-                Back
-              </button>
-            ) : (
-              <div className="w-14"></div> // balanced spacing
-            )}
+          <div className="bg-green-600 text-white flex items-center justify-between px-4 py-3">
+            <div className="flex items-center gap-3">
+              {mode !== null && (
+                <button
+                  onClick={() => {
+                    chatActive.current = false;
+                    setMessages([]);
+                    setBatchInput("");
+                    setMode(null);
+                  }}
+                  className="flex items-center justify-center w-7 h-7 rounded-full hover:bg-white/20 transition"
+                  title="Back"
+                >
+                  <span className="text-xl leading-none">←</span>
+                </button>
+              )}
 
-            <div className="flex items-center gap-2">
               <Image
                 src="/saint.jpg"
-                width={40}
-                height={40}
-                alt="logo"
-                className="rounded-full"
+                width={38}
+                height={38}
+                alt="Ayur Gyani Logo"
+                className="rounded-full border border-white/40 shadow-sm"
               />
-              <h1 className="font-semibold text-lg">Ayur Gyani</h1>
-            </div>
 
-            <div className="w-14"></div>
-          </div> */}
-
-          <div className="bg-green-600 text-white flex items-center gap-3 px-3 py-2">
-            {/* Back Button */}
-            {mode !== null && (
-              <button
-                onClick={() => {
-                  chatActive.current = false;
-                  setMessages([]);
-                  setBatchInput("");
-                  setMode(null);
-                }}
-                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/20 transition"
-              >
-                <span className="text-xl leading-none">←</span>
-              </button>
-            )}
-
-            {/* Profile Image */}
-            <Image
-              src="/saint.jpg"
-              width={38}
-              height={38}
-              alt="logo"
-              className="rounded-full border border-white/40"
-            />
-
-            {/* Name + Status */}
-            <div className="flex flex-col leading-tight">
-              <span className="text-[16px] font-semibold">Ayur Gyani</span>
-              {/* <span className="text-[12px] text-white/80">
-      {mode === "chat" ? "Online" : "How can I help you?"}
-    </span> */}
+              <div className="flex flex-col leading-tight">
+                <span className="text-[16px] font-semibold flex items-center gap-1">
+                  Ayur Gyani 🌿
+                </span>
+                <span className="text-[11px] text-white/80">
+                  {mode === "chat" ? "Enterprise AI Assistant" : "Ayurvedic Intelligence Platform"}
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* Main Area */}
-          <div className="flex-1 overflow-y-auto p-3 space-y-3 max-h-80 bg-[#F5F5F5]">
+          {/* Main Content Area */}
+          <div className="flex-1 overflow-y-auto p-3 space-y-3 max-h-96 bg-[#F5F5F5]">
+            {/* Mode Selection Options */}
             {mode === null && (
-              <div className="space-y-3">
+              <div className="space-y-3 py-4">
                 <button
-                  className="bg-green-600 text-white py-2 rounded-lg w-full"
+                  className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-xl w-full flex items-center justify-center gap-2 shadow-md transition"
                   onClick={() => {
                     chatActive.current = true;
                     setMessages([]);
                     setMode("chat");
                   }}
                 >
-                  💬 Talk to Assistant
+                  💬 Talk to AyurSathi AI Assistant
                 </button>
+
                 <button
-                  className="bg-green-500 text-white py-2 rounded-lg w-full"
+                  className="bg-emerald-700 hover:bg-emerald-800 text-white font-medium py-3 px-4 rounded-xl w-full flex items-center justify-center gap-2 shadow-md transition"
                   onClick={() => setMode("batch")}
                 >
-                  🔍 Check Batch Status
+                  🔍 Check Herb Batch Traceability
                 </button>
               </div>
             )}
 
+            {/* Render Chat Messages */}
             {messages.map((m, i) => (
               <div
                 key={i}
-                className={`p-2 rounded-lg max-w-[75%] ${
+                className={`p-3 rounded-xl max-w-[85%] text-sm ${
                   m.sender === "bot"
-                    ? "bg-white border shadow-sm"
-                    : "bg-green-600 text-white ml-auto"
+                    ? "bg-white border shadow-sm text-gray-800"
+                    : "bg-green-600 text-white ml-auto shadow-sm"
                 }`}
               >
-                {/* Regular bot text */}
-                {m.type !== "batch" && <p>{m.text}</p>}
+                {/* Regular Bot / User Text */}
+                {m.type !== "batch" && (
+                  <div>
+                    <p className="whitespace-pre-wrap leading-relaxed">{m.text}</p>
+                    {m.sender === "bot" && renderToolBadges(m.toolsExecuted)}
+                  </div>
+                )}
 
-                {/* Batch Card */}
+                {/* Batch Status Card */}
                 {m.type === "batch" && (
                   <>
-                    <div className="text-sm leading-relaxed whitespace-pre-wrap font-medium">
+                    <div className="text-xs leading-relaxed whitespace-pre-wrap font-mono bg-gray-50 p-2 rounded border border-gray-200">
                       {`📦 Batch Status
 
 🆔 ${m.batch.batchId}
@@ -296,11 +343,11 @@ const sendMessageToAPI = async (msg) => {
                           setTimeout(() => {
                             window.open(m.batch.certificateUrl, "_blank");
                             setLoading(false);
-                          }, 1000);
+                          }, 800);
                         }}
-                        className="mt-3 w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg transition text-sm"
+                        className="mt-3 w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg transition text-xs font-medium"
                       >
-                        {loading ? "⏳ Opening..." : "📄 View Certificate"}
+                        {loading ? "⏳ Opening..." : "📄 View Blockchain Certificate"}
                       </button>
                     )}
                   </>
@@ -317,43 +364,43 @@ const sendMessageToAPI = async (msg) => {
             <div ref={chatEndRef}></div>
           </div>
 
-          {/* WhatsApp Style Input */}
+          {/* Chat Mode Input Bar */}
           {mode === "chat" && (
             <div className="flex items-center gap-2 p-2 bg-white border-t">
               <input
                 type="text"
-                placeholder="Type message..."
-                className="flex-1 px-3 py-2 rounded-full border outline-none text-sm"
+                placeholder="Ask about herbs, remedies, health..."
+                className="flex-1 px-4 py-2 rounded-full border border-gray-300 outline-none text-xs sm:text-sm focus:border-green-600 transition"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                onKeyDown={(e) =>
-                  e.key === "Enter" && sendMessageToAPI(message)
-                }
+                onKeyDown={(e) => e.key === "Enter" && sendMessageToAPI(message)}
               />
               <button
                 onClick={() => sendMessageToAPI(message)}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full"
+                disabled={loading || !message.trim()}
+                className="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition"
               >
                 Send
               </button>
             </div>
           )}
 
-          {/* Batch Input */}
+          {/* Batch Status Input Form */}
           {mode === "batch" && (
-            <div className="p-3 space-y-2">
+            <div className="p-3 space-y-2 bg-white border-t">
               <input
-                className="border px-3 py-2 w-full rounded-md"
-                placeholder="ASW-2025-5031"
+                className="border px-3 py-2 w-full rounded-lg text-sm outline-none focus:border-green-600"
+                placeholder="Enter Batch ID (e.g. ASW-2025-5031)"
                 value={batchInput}
                 onChange={(e) => setBatchInput(e.target.value)}
               />
 
               <button
                 onClick={handleBatchCheck}
-                className="bg-green-600 text-white py-2 rounded-lg w-full"
+                disabled={loading || !batchInput.trim()}
+                className="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white py-2.5 rounded-lg w-full text-sm font-medium transition"
               >
-                {loading ? "Checking..." : "Submit"}
+                {loading ? "Checking..." : "Submit Batch Query"}
               </button>
             </div>
           )}
