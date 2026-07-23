@@ -136,11 +136,11 @@ export default function AddToCart() {
 
   if (checkoutSuccess) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 px-4 bg-white rounded-2xl shadow-xl border border-green-100 max-w-lg mx-auto text-center animate-fade-in mt-10">
-        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-6">
+      <div className="flex flex-col items-center justify-center py-16 px-4 bg-white/95 border border-[#90A955]/20 shadow-xl rounded-2xl max-w-lg mx-auto text-center animate-fade-in mt-10">
+        <div className="w-20 h-20 bg-[#ECF39E]/30 rounded-full flex items-center justify-center text-[#31572C] mb-6">
           <CheckCircle className="w-12 h-12" />
         </div>
-        <h2 className="text-3xl font-extrabold text-indigo-950 mb-3">Order Placed Successfully!</h2>
+        <h2 className="text-3xl font-extrabold text-[#31572C] mb-3">Order Placed Successfully!</h2>
         <p className="text-gray-600 mb-8 max-w-sm">
           Your payment was processed and your order has been registered in the supply chain ledger.
         </p>
@@ -148,7 +148,7 @@ export default function AddToCart() {
           onClick={() => {
             window.location.href = window.location.pathname + "?tab=orders";
           }}
-          className="flex items-center gap-2 px-6 py-3 bg-[#90A955] text-white font-bold rounded-xl hover:bg-[#4F772D] transition shadow-md hover:shadow-lg"
+          className="flex items-center gap-2 px-6 py-3 bg-[#31572C] hover:bg-[#4F772D] text-white font-bold rounded-xl transition shadow-md hover:shadow-lg cursor-pointer"
         >
           View My Orders
           <ArrowRight className="w-4 h-4" />
@@ -158,20 +158,20 @@ export default function AddToCart() {
   }
 
   return (
-    <div className="max-h-screen py-4">
+    <div className="min-h-screen w-full py-4 px-2 sm:px-4">
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
         {/* Left Column: Cart items */}
-        <div className="lg:col-span-8 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <div className="lg:col-span-8 bg-white/95 border border-[#90A955]/20 shadow-xl rounded-2xl p-6">
           <div className="flex justify-between items-center pb-4 border-b border-gray-100 mb-6">
-            <h1 className="text-2xl font-bold text-indigo-950 flex items-center gap-2">
-              <ShoppingBag className="w-6 h-6 text-[#90A955]" />
+            <h1 className="text-2xl font-bold text-[#31572C] flex items-center gap-2">
+              <ShoppingBag className="w-6 h-6 text-[#31572C]" />
               My Shopping Cart
             </h1>
             {cart.length > 0 && (
               <button
                 onClick={clearCart}
-                className="text-sm font-semibold text-red-500 hover:text-red-700 transition flex items-center gap-1.5"
+                className="text-sm font-semibold text-red-600 hover:text-red-800 transition flex items-center gap-1.5 cursor-pointer"
               >
                 <Trash2 className="w-4 h-4" />
                 Clear All
@@ -198,7 +198,7 @@ export default function AddToCart() {
               <p className="text-gray-400 text-sm mt-1 mb-6">Explore the marketplace to add items to your cart.</p>
               <a
                 href="/marketplace"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#90A955] text-white font-bold rounded-xl hover:bg-[#4F772D] transition shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#31572C] hover:bg-[#4F772D] text-white font-bold rounded-xl transition shadow-sm"
               >
                 Go to Marketplace
                 <ArrowRight className="w-4 h-4" />
@@ -209,20 +209,20 @@ export default function AddToCart() {
               {cart.map((item, index) => (
                 <div
                   key={`${item.batchId}-${index}`}
-                  className="border border-gray-100 p-4 rounded-xl bg-gray-50/50 hover:bg-gray-50 transition flex flex-col sm:flex-row gap-4 items-center justify-between"
+                  className="border border-[#90A955]/20 p-4 rounded-xl bg-[#ECF39E]/10 hover:bg-[#ECF39E]/20 transition flex flex-col sm:flex-row gap-4 items-center justify-between"
                 >
                   <div className="flex items-center gap-4 w-full sm:w-auto">
-                    <div className="w-16 h-16 bg-white border border-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center p-1 shadow-sm overflow-hidden">
+                    <div className="w-16 h-16 bg-white border border-[#90A955]/20 rounded-lg flex-shrink-0 flex items-center justify-center p-1 shadow-sm overflow-hidden">
                       {item.image ? (
                         <img src={item.image} alt={item.cropName} className="object-cover w-full h-full rounded" />
                       ) : (
-                        <div className="w-full h-full bg-[#ECF39E]/20 text-[#4F772D] font-bold text-xs flex items-center justify-center">
+                        <div className="w-full h-full bg-[#ECF39E]/20 text-[#31572C] font-bold text-xs flex items-center justify-center">
                           {item.cropName?.substring(0, 2).toUpperCase()}
                         </div>
                       )}
                     </div>
                     <div>
-                      <h3 className="font-bold text-indigo-950 text-base">{item.cropName}</h3>
+                      <h3 className="font-bold text-[#31572C] text-base">{item.cropName}</h3>
                       <p className="text-xs text-gray-500 mt-0.5">Batch: {item.batchId}</p>
                       <p className="text-xs text-gray-500">Weight: {item.weightGm}g per unit</p>
                     </div>
@@ -230,17 +230,17 @@ export default function AddToCart() {
 
                   <div className="flex items-center justify-between w-full sm:w-auto sm:gap-8">
                     {/* Stepper */}
-                    <div className="flex items-center border border-gray-200 bg-white rounded-lg p-1 shadow-sm">
+                    <div className="flex items-center border border-[#90A955]/20 bg-white rounded-lg p-1 shadow-sm">
                       <button
                         onClick={() => handleQuantityChange(index, -1)}
-                        className="p-1 hover:bg-gray-100 rounded text-gray-500 transition"
+                        className="p-1 hover:bg-[#ECF39E]/30 rounded text-gray-500 transition cursor-pointer"
                       >
                         <Minus className="w-4 h-4" />
                       </button>
                       <span className="px-3 font-semibold text-gray-800 text-sm">{item.quantity}</span>
                       <button
                         onClick={() => handleQuantityChange(index, 1)}
-                        className="p-1 hover:bg-gray-100 rounded text-gray-500 transition"
+                        className="p-1 hover:bg-[#ECF39E]/30 rounded text-gray-500 transition cursor-pointer"
                         disabled={item.maxQuantity && item.quantity >= item.maxQuantity}
                         title={item.maxQuantity && item.quantity >= item.maxQuantity ? "Max stock reached" : ""}
                       >
@@ -251,12 +251,12 @@ export default function AddToCart() {
                     {/* Price and Action */}
                     <div className="flex items-center gap-4">
                       <div className="text-right">
-                        <p className="font-bold text-[#4F772D] text-base">₹{item.price * item.quantity}</p>
+                        <p className="font-bold text-[#31572C] text-base">₹{item.price * item.quantity}</p>
                         <p className="text-[10px] text-gray-400">₹{item.price} each</p>
                       </div>
                       <button
                         onClick={() => removeFromCart(index)}
-                        className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition"
+                        className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition cursor-pointer"
                         title="Remove Item"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -271,8 +271,8 @@ export default function AddToCart() {
 
         {/* Right Column: Pricing details */}
         {cart.length > 0 && (
-          <div className="lg:col-span-4 bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-6">
-            <h2 className="text-xl font-bold text-indigo-950 pb-3 border-b border-gray-100">
+          <div className="lg:col-span-4 bg-white/95 border border-[#90A955]/20 shadow-xl rounded-2xl p-6 space-y-6">
+            <h2 className="text-xl font-bold text-[#31572C] pb-3 border-b border-gray-100">
               Order Summary
             </h2>
 
@@ -297,21 +297,21 @@ export default function AddToCart() {
               </div>
 
               {delivery > 0 && (
-                <div className="text-[11px] text-[#4F772D] bg-[#ECF39E]/30 p-2.5 rounded-lg border border-[#90A955]/30">
+                <div className="text-[11px] text-[#31572C] bg-[#ECF39E]/20 p-2.5 rounded-lg border border-[#90A955]/20">
                   💡 Add items worth <strong>₹{500 - subtotal}</strong> more for <strong>FREE Delivery</strong>!
                 </div>
               )}
 
-              <div className="border-t border-gray-100 pt-3.5 flex justify-between text-base font-bold text-indigo-950">
+              <div className="border-t border-gray-100 pt-3.5 flex justify-between text-base font-bold text-[#31572C]">
                 <span>Total Amount</span>
-                <span className="text-lg text-[#4F772D]">₹{total}</span>
+                <span className="text-lg text-[#31572C]">₹{total}</span>
               </div>
             </div>
 
             <button
               onClick={handleCheckout}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-[#90A955] hover:bg-[#4F772D] disabled:bg-gray-300 text-white font-extrabold rounded-xl transition shadow-md hover:shadow-lg cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-3 bg-[#31572C] hover:bg-[#4F772D] disabled:bg-gray-300 text-white font-extrabold rounded-xl transition shadow-md hover:shadow-lg cursor-pointer"
             >
               {loading ? (
                 <>

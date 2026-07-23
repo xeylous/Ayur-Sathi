@@ -6,7 +6,7 @@ import AddToCart from "@/components/UserDashboard/AddToCart";
 
 export default function CartPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50/50">
+    <div className="flex flex-col min-h-screen bg-[#ECF39E]/30">
       {/* Navbar */}
       <Navbar />
 

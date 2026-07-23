@@ -51,9 +51,9 @@ export default function UserProfile() {
   };
 
   return (
-    <div className="max-h-screen flex items-center justify-center py-6 m-3">
-      <div className="w-full max-w-4xl bg-white shadow-xl rounded-2xl p-6 sm:p-10">
-        <h1 className="text-3xl font-bold text-center mb-8 text-green-700">
+    <div className="min-h-screen w-full flex items-center justify-center py-6 px-2 sm:px-4">
+      <div className="w-full max-w-4xl bg-white/95 border border-[#90A955]/20 shadow-xl rounded-2xl p-6 sm:p-10">
+        <h1 className="text-3xl font-extrabold text-center mb-8 text-[#31572C]">
           User Profile
         </h1>
 
@@ -68,7 +68,7 @@ export default function UserProfile() {
               name="fullName"
               value={user.fullName}
               onChange={handleChange}
-              className="mt-1 w-full border-b-2 border-gray-300 focus:border-green-600 focus:outline-none p-2 bg-transparent"
+              className="mt-1 w-full border-b-2 border-gray-300 focus:border-[#31572C] focus:outline-none p-2 bg-transparent transition-colors"
               placeholder="Enter full name"
             />
           </div>
@@ -83,7 +83,7 @@ export default function UserProfile() {
               name="phone"
               value={user.phone}
               onChange={handleChange}
-              className="mt-1 w-full border-b-2 border-gray-300 focus:border-green-600 focus:outline-none p-2 bg-transparent"
+              className="mt-1 w-full border-b-2 border-gray-300 focus:border-[#31572C] focus:outline-none p-2 bg-transparent transition-colors"
               placeholder="Enter phone number"
             />
           </div>
@@ -98,7 +98,7 @@ export default function UserProfile() {
               name="email"
               value={user.email}
               onChange={handleChange}
-              className="mt-1 w-full border-b-2 border-gray-300 focus:border-green-600 focus:outline-none p-2 bg-transparent"
+              className="mt-1 w-full border-b-2 border-gray-300 focus:border-[#31572C] focus:outline-none p-2 bg-transparent transition-colors"
               placeholder="Enter email"
             />
           </div>
@@ -113,7 +113,7 @@ export default function UserProfile() {
               name="pinCode"
               value={user.pinCode}
               onChange={handleChange}
-              className="mt-1 w-full border-b-2 border-gray-300 focus:border-green-600 focus:outline-none p-2 bg-transparent"
+              className="mt-1 w-full border-b-2 border-gray-300 focus:border-[#31572C] focus:outline-none p-2 bg-transparent transition-colors"
               placeholder="Enter pin code"
             />
           </div>
@@ -128,19 +128,19 @@ export default function UserProfile() {
               value={user.address}
               onChange={handleChange}
               rows={3}
-              className="mt-1 w-full border-b-2 border-gray-300 focus:border-green-600 focus:outline-none p-2 bg-transparent resize-none"
+              className="mt-1 w-full border-b-2 border-gray-300 focus:border-[#31572C] focus:outline-none p-2 bg-transparent resize-none transition-colors"
               placeholder="Enter address"
             />
           </div>
 
           {/* Buttons */}
-          <div className="sm:col-span-2 flex gap-4">
+          <div className="sm:col-span-2 flex flex-col sm:flex-row gap-4 mt-4">
             <button
               type="button"
               onClick={handleSave}
-              className="flex-1 text-base font-medium text-black hover:text-white bg-[#90A955] hover:bg-[#4F772D] py-3 rounded-lg text-center transition"
+              className="flex-1 text-base font-bold text-white bg-[#31572C] hover:bg-[#4F772D] py-3.5 rounded-xl text-center shadow-md hover:shadow-lg transition cursor-pointer"
             >
-              Save
+              Save Details
             </button>
 
             <button
@@ -159,9 +159,9 @@ export default function UserProfile() {
                   autoClose: 3000,
                 });
               }}
-              className="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-500 hover:text-white transition"
+              className="flex-1 bg-[#ECF39E]/30 text-[#31572C] border border-[#90A955]/20 hover:bg-[#90A955]/20 py-3.5 rounded-xl font-bold transition cursor-pointer"
             >
-              Clear
+              Clear Data
             </button>
           </div>
         </form>

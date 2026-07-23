@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { User, ShoppingCart, History, Bell } from "lucide-react";
+import { User, ShoppingCart, History, Bell, Leaf } from "lucide-react";
 import Profile from "./Profile";
 import UserOrder from "./User_Order";
 import AddToCart from "./AddToCart";
@@ -68,40 +68,67 @@ export default function UserDashboard() {
   };
 
   return (
-    <div className="flex flex-col md:flex-row max-h-screen bg-[#ECF39E] overflow-auto hide-scrollbar">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[#f8fae3]/50">
       {/* Sidebar */}
-      <aside className="md:w-64 w-full border-r shadow-md flex flex-col bg-[#ECF39E]/30">
-        <div className="p-4 text-lg font-bold text-green-700">🌿 User Dashboard</div>
+      <aside className="md:w-64 w-full border-r border-[#90A955]/20 shadow-lg flex flex-col bg-[#31572C]">
+        {/* Brand header */}
+        <div className="p-5 border-b border-[#4F772D]/40">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-[#4F772D] flex items-center justify-center">
+              <Leaf className="w-4 h-4 text-[#ECF39E]" />
+            </div>
+            <span className="text-lg font-bold text-white tracking-tight">
+              User Dashboard
+            </span>
+          </div>
+        </div>
 
+        {/* Scrollable nav + content */}
         <div className="flex-1 overflow-y-auto">
-          <nav className="flex flex-col">
-            {menuItems.map((item) => (
-              <div key={item.key} className="border-b">
-                {/* Sidebar Button */}
-                <button
-                  onClick={() => setActive(active === item.key ? "" : item.key)}
-                  className={`flex items-center gap-3 w-full px-4 py-3 text-left transition ${
-                    active === item.key
-                      ? "bg-[#90A955] text-white font-semibold"
-                      : "text-gray-700 hover:bg-gray-100"
-                  }`}
-                >
-                  {item.icon}
-                  {item.label}
-                </button>
+          <nav className="flex flex-col py-2">
+            {menuItems.map((item) => {
+              const isActive = active === item.key;
+              return (
+                <div key={item.key} className="relative">
+                  {/* Button */}
+                  <button
+                    onClick={() => {
+                      if (window.innerWidth < 768) {
+                        setActive(isActive ? "" : item.key);
+                      } else {
+                        setActive(item.key);
+                      }
+                    }}
+                    className={`flex items-center gap-3 w-full px-5 py-3.5 text-left transition-all duration-200 cursor-pointer ${
+                      isActive
+                        ? "bg-[#4F772D] text-white font-semibold border-r-[3px] border-[#ECF39E]"
+                        : "text-white/70 hover:bg-[#4F772D]/40 hover:text-white"
+                    }`}
+                  >
+                    <span className={isActive ? "text-[#ECF39E]" : "text-white/50"}>{item.icon}</span>
+                    <span className="flex-1 text-sm">{item.label}</span>
+                  </button>
 
-                {/* Inline Content (for mobile only) */}
-                <div className="md:hidden">
-                  {active === item.key && <div>{renderContent(item.key)}</div>}
+                  {/* Inline content → only for phone */}
+                  <div className="md:hidden">
+                    {isActive && <div className="bg-[#f8fae3]/50">{renderContent(item.key)}</div>}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </nav>
+        </div>
+
+        {/* Sidebar footer */}
+        <div className="p-4 border-t border-[#4F772D]/40">
+          <p className="text-[10px] text-white/30 text-center uppercase tracking-wider">Ayurसाथी Platform</p>
         </div>
       </aside>
 
       {/* Desktop / Tablet Content */}
-      <main className="hidden md:block flex-1 p-6">{renderContent(active)}</main>
+      <main className="hidden md:block flex-1 p-6 overflow-y-auto bg-[#f8fae3]/30">
+        {renderContent(active)}
+      </main>
     </div>
   );
 }
