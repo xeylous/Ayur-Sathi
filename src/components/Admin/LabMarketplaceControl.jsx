@@ -14,7 +14,6 @@ import {
   Tag,
   Search,
   Sparkles,
-  Info,
   ChevronLeft,
   ChevronRight
 } from "lucide-react";
@@ -654,10 +653,6 @@ const LabMarketplaceControl = ({
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
             />
-          </div>
-          <div className="text-xs text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100/50 flex items-center gap-1.5">
-            <Info size={14} />
-            <span>Select a completed batch below to manage its marketplace listing.</span>
           </div>
         </div>
 
