@@ -150,6 +150,7 @@ export const AuthProvider = ({ children }) => {
     "/admin-login",
     "/google-callback",
     "/cart",
+    "/consultation"
   ];
 
   const isPublicRoute =

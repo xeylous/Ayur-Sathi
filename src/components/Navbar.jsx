@@ -137,6 +137,7 @@ export default function Navbar() {
           <NavItem to="/" label="Home" />
           <NavItem to="/explore" label="Explore" />
           <NavItem to="/marketplace" label="Marketplace" />
+          <NavItem to="/consultation" label="Consultation" />
           {user && (
             <NavItem
               to={getDashboardLink()}
@@ -254,6 +255,11 @@ export default function Navbar() {
                 <NavItem
                   to="/marketplace"
                   label="Marketplace"
+                  closeMenu={() => setOpen(false)}
+                />
+                <NavItem
+                  to="/consultation"
+                  label="Consultation"
                   closeMenu={() => setOpen(false)}
                 />
                  {user && (
