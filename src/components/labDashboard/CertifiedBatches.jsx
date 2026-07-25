@@ -137,13 +137,12 @@ const CertifiedBatches = () => {
               <th className="py-3 px-4">Certified Date</th>
               <th className="py-3 px-4">Status</th>
               <th className="py-3 px-4">Certificate</th>
-              <th className="py-3 px-4">Blockchain Hash</th>
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan="7" className="text-center py-6 text-gray-500">
+                <td colSpan="6" className="text-center py-6 text-gray-500">
                   No certified batches found.
                 </td>
               </tr>
@@ -196,10 +195,6 @@ const CertifiedBatches = () => {
                     ) : (
                       "—"
                     )}
-                  </td>
-
-                  <td className="py-3 px-4 text-gray-600">
-                    {batch.blockchainHash || "—"}
                   </td>
                 </tr>
               ))
