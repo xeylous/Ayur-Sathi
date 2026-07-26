@@ -77,10 +77,10 @@ export async function GET(req) {
       speciesId: batch.cropData.speciesId,
       speciesName: batch.cropData.speciesId,
       acceptedAt: batch.acceptedAt
-        ? new Date(batch.acceptedAt).toLocaleDateString()
+        ? new Date(batch.acceptedAt).toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' })
         : null,
       harvestDate: batch.cropData?.timestamp
-        ? new Date(batch.cropData.timestamp).toLocaleDateString()
+        ? new Date(batch.cropData.timestamp).toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' })
         : null,
     }));
 

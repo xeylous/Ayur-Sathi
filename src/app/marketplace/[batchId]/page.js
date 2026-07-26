@@ -289,12 +289,12 @@ export default function ProductDetailPage() {
 
                   <span className="font-bold text-[#4F772D]/60">Harvest Date:</span>
                   <span className="text-[#31572C] font-semibold">
-                    {product.timestamp ? new Date(product.timestamp).toLocaleDateString() : "N/A"}
+                    {product.timestamp ? new Date(product.timestamp).toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' }) : "N/A"}
                   </span>
 
                   <span className="font-bold text-[#4F772D]/60">Expiry Date:</span>
                   <span className="text-[#31572C] font-semibold">
-                    {product.productExpiryDate ? new Date(product.productExpiryDate).toLocaleDateString() : "N/A"}
+                    {product.productExpiryDate ? new Date(product.productExpiryDate).toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' }) : "N/A"}
                   </span>
                 </div>
 
@@ -460,7 +460,7 @@ export default function ProductDetailPage() {
                       </div>
                       <div>
                         <span className="font-semibold text-[#4F772D]/50">Uploaded On: </span>
-                        {product.timestamp ? new Date(product.timestamp).toLocaleDateString() : "N/A"}
+                        {product.timestamp ? new Date(product.timestamp).toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' }) : "N/A"}
                       </div>
                     </div>
                   </div>
@@ -523,7 +523,7 @@ export default function ProductDetailPage() {
                       </div>
                       <div>
                         <span className="font-semibold text-[#4F772D]/50">Manufactured On: </span>
-                        {product.manufacturedAt ? new Date(product.manufacturedAt).toLocaleString() : "N/A"}
+                        {product.manufacturedAt ? new Date(product.manufacturedAt).toLocaleString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true }) : "N/A"}
                       </div>
                     </div>
 
@@ -540,7 +540,7 @@ export default function ProductDetailPage() {
                                 <div className="flex justify-between font-semibold text-[#31572C]">
                                   <span>{step.processName}</span>
                                   <span className="text-[10px] text-[#4F772D]/40 font-mono">
-                                    {step.date ? new Date(step.date).toLocaleDateString() : ""}
+                                    {step.date ? new Date(step.date).toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' }) : ""}
                                   </span>
                                 </div>
                                 {step.notes && <p className="text-[11px] text-[#4F772D]/50 italic mt-0.5">"{step.notes}"</p>}

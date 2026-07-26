@@ -107,10 +107,10 @@ export default function AddToCart() {
           cropName: item.cropName,
           quantity: item.quantity,
           price: item.price * item.quantity,
-          date: new Date().toLocaleDateString("en-IN", {
-            year: "numeric",
-            month: "long",
-            day: "numeric"
+          date: new Date().toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
           }),
           batchId: item.batchId
         }));

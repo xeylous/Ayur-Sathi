@@ -94,7 +94,7 @@ export default function BatchTracePage({ params }) {
           <p>
             <strong>Manufactured Date:</strong>{" "}
             {data.manufacturedAt
-              ? new Date(data.manufacturedAt).toLocaleDateString()
+              ? new Date(data.manufacturedAt).toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' })
               : "N/A"}
           </p>
         </div>
@@ -153,7 +153,7 @@ export default function BatchTracePage({ params }) {
                 </span>
                 <span className="text-sm text-gray-500">
                   <Clock className="w-4 h-4 inline mr-1" />
-                  {new Date(step.date).toLocaleDateString()}
+                  {new Date(step.date).toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' })}
                   {" · Operator: "}
                   {step.operator}
                 </span>

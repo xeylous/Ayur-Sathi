@@ -162,7 +162,7 @@ export default function AdminLabApplications() {
                       <div className="text-sm text-gray-500">{app.ownerEmail}</div>
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-500">
-                      {new Date(app.submittedAt).toLocaleString()}
+                      {new Date(app.submittedAt).toLocaleString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true })}
                     </td>
                     <td className="px-4 py-3">
                       <span
@@ -226,7 +226,7 @@ export default function AdminLabApplications() {
                 <div className="text-sm text-gray-500 mt-2">{selected.address}</div>
               </div>
               <div className="text-sm text-gray-500">
-                Submitted: {new Date(selected.submittedAt).toLocaleString()}
+                Submitted: {new Date(selected.submittedAt).toLocaleString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true })}
               </div>
             </div>
 

@@ -128,7 +128,7 @@ export default function CropHistory() {
                       <div>
                         <p className="font-semibold text-[#31572C]">{cropName}</p>
                         <p className="text-xs text-[#4F772D]/50">
-                          {item.quantity} unit • {new Date(item.createdAt).toLocaleDateString("en-IN")}
+                          {item.quantity} unit • {new Date(item.createdAt).toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' })}
                         </p>
                       </div>
                     </div>
@@ -159,7 +159,7 @@ export default function CropHistory() {
                         <div className="space-y-1.5 text-[#31572C]/80">
                           <p><strong className="text-[#31572C]">Batch ID:</strong> <span className="font-mono text-xs">{item.batchId}</span></p>
                           <p><strong className="text-[#31572C]">Species ID:</strong> {item.speciesId}</p>
-                          <p><strong className="text-[#31572C]">Created At:</strong> {new Date(item.createdAt).toLocaleString("en-IN")}</p>
+                          <p><strong className="text-[#31572C]">Created At:</strong> {new Date(item.createdAt).toLocaleString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true })}</p>
                         </div>
 
                         <div className="flex flex-col items-center gap-2">
