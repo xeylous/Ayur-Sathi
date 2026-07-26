@@ -165,7 +165,7 @@ export default function AdminManufactureApplications() {
                       <div className="text-sm text-gray-500">{app.ownerEmail}</div>
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-500">
-                      {new Date(app.createdAt).toLocaleString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true })}
+                      {app.submittedAt ? new Date(app.submittedAt).toLocaleString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true }) : "N/A"}
                     </td>
                     <td className="px-4 py-3">
                       <span
@@ -231,7 +231,7 @@ export default function AdminManufactureApplications() {
                 </div>
               </div>
               <div className="text-sm text-gray-500">
-                Submitted: {new Date(selected.createdAt).toLocaleString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true })}
+                Submitted: {selected.submittedAt ? new Date(selected.submittedAt).toLocaleString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true }) : "N/A"}
               </div>
             </div>
 
