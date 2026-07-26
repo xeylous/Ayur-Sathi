@@ -74,10 +74,10 @@ export default function ManufacturingLogs({ onAddToListing }) {
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return new Date(dateString).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
       year: "numeric",
-      month: "short",
-      day: "numeric",
     });
   };
 
@@ -270,7 +270,7 @@ export default function ManufacturingLogs({ onAddToListing }) {
                     <span className="block text-xs font-semibold text-gray-400 uppercase">Manufactured Date</span>
                     <span>
                       {selectedBatch.manufacturedAt
-                        ? new Date(selectedBatch.manufacturedAt).toLocaleString()
+                        ? new Date(selectedBatch.manufacturedAt).toLocaleString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true })
                         : "N/A"}
                     </span>
                   </div>
@@ -278,7 +278,7 @@ export default function ManufacturingLogs({ onAddToListing }) {
                     <span className="block text-xs font-semibold text-gray-400 uppercase">Record Logged At</span>
                     <span>
                       {selectedBatch.createdAt
-                        ? new Date(selectedBatch.createdAt).toLocaleString()
+                        ? new Date(selectedBatch.createdAt).toLocaleString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true })
                         : "N/A"}
                     </span>
                   </div>
@@ -355,11 +355,13 @@ export default function ManufacturingLogs({ onAddToListing }) {
                                 {step.processName}
                               </span>
                               <span className="text-xs text-gray-500 font-mono">
-                                {step.date ? new Date(step.date).toLocaleString("en-US", {
-                                  month: "short",
-                                  day: "numeric",
+                                {step.date ? new Date(step.date).toLocaleString("en-GB", {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
                                   hour: "2-digit",
-                                  minute: "2-digit"
+                                  minute: "2-digit",
+                                  hour12: true
                                 }) : "N/A"}
                               </span>
                             </div>

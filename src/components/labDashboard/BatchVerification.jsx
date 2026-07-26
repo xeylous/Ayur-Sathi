@@ -92,7 +92,7 @@ const BatchVerification = ({ navigateToTab }) => {
         setFarmerId(details.uniqueId || "");
         setHarvestDate(
           details.timestamp
-            ? new Date(details.timestamp).toLocaleDateString()
+            ? new Date(details.timestamp).toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' })
             : ""
         );
         setQuantity(details.quantity || "");

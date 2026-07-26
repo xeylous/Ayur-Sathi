@@ -79,10 +79,10 @@ export default function ManufacturedBatches({ showToast }) {
   // 📄 Date Formatter
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return new Date(dateString).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
       year: "numeric",
-      month: "short",
-      day: "numeric",
     });
   };
 
@@ -227,7 +227,7 @@ export default function ManufacturedBatches({ showToast }) {
                   <strong>Unit Weight:</strong> {selectedBatch.unitWeight || "N/A"}
                 </p>
                 <p>
-                  <strong>Expiry Date:</strong> {selectedBatch.productExpiryDate ? new Date(selectedBatch.productExpiryDate).toLocaleDateString() : "N/A"}
+                  <strong>Expiry Date:</strong> {selectedBatch.productExpiryDate ? new Date(selectedBatch.productExpiryDate).toLocaleDateString("en-IN") : "N/A"}
                 </p>
                 <p>
                   <strong>Status:</strong>{" "}
@@ -246,11 +246,11 @@ export default function ManufacturedBatches({ showToast }) {
                 </p>
                 <p>
                   <strong>Manufactured Date:</strong>{" "}
-                  {new Date(selectedBatch.manufacturedAt).toLocaleString()}
+                  {new Date(selectedBatch.manufacturedAt).toLocaleString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true })}
                 </p>
                 <p>
                   <strong>Uploaded At:</strong>{" "}
-                  {new Date(selectedBatch.createdAt).toLocaleString()}
+                  {new Date(selectedBatch.createdAt).toLocaleString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true })}
                 </p>
                 {selectedBatch.productKnowledge && (
                   <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 mt-2">
@@ -335,11 +335,13 @@ export default function ManufacturedBatches({ showToast }) {
                                 {step.processName}
                               </span>
                               <span className="text-xs text-gray-500 font-mono">
-                                {step.date ? new Date(step.date).toLocaleString("en-US", {
-                                  month: "short",
-                                  day: "numeric",
+                                {step.date ? new Date(step.date).toLocaleString("en-GB", {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
                                   hour: "2-digit",
-                                  minute: "2-digit"
+                                  minute: "2-digit",
+                                  hour12: true
                                 }) : "N/A"}
                               </span>
                             </div>

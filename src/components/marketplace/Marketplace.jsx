@@ -457,12 +457,12 @@ export default function Marketplace() {
 
                     <span className="font-bold text-[#4F772D]/60">Harvest Date:</span>
                     <span className="text-[#31572C] font-semibold">
-                      {selectedProduct.timestamp ? new Date(selectedProduct.timestamp).toLocaleDateString() : "N/A"}
+                      {selectedProduct.timestamp ? new Date(selectedProduct.timestamp).toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' }) : "N/A"}
                     </span>
 
                     <span className="font-bold text-[#4F772D]/60">Expiry Date:</span>
                     <span className="text-[#31572C] font-semibold">
-                      {selectedProduct.productExpiryDate ? new Date(selectedProduct.productExpiryDate).toLocaleDateString() : "N/A"}
+                      {selectedProduct.productExpiryDate ? new Date(selectedProduct.productExpiryDate).toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' }) : "N/A"}
                     </span>
                   </div>
 
@@ -629,7 +629,7 @@ export default function Marketplace() {
                         </div>
                         <div>
                           <span className="font-semibold text-[#4F772D]/50">Uploaded On: </span>
-                          {selectedProduct.timestamp ? new Date(selectedProduct.timestamp).toLocaleDateString() : "N/A"}
+                          {selectedProduct.timestamp ? new Date(selectedProduct.timestamp).toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' }) : "N/A"}
                         </div>
                       </div>
                     </div>
@@ -692,7 +692,7 @@ export default function Marketplace() {
                         </div>
                         <div>
                           <span className="font-semibold text-[#4F772D]/50">Manufactured On: </span>
-                          {selectedProduct.manufacturedAt ? new Date(selectedProduct.manufacturedAt).toLocaleString() : "N/A"}
+                          {selectedProduct.manufacturedAt ? new Date(selectedProduct.manufacturedAt).toLocaleString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true }) : "N/A"}
                         </div>
                       </div>
 
@@ -709,7 +709,7 @@ export default function Marketplace() {
                                   <div className="flex justify-between font-semibold text-[#31572C]">
                                     <span>{step.processName}</span>
                                     <span className="text-[10px] text-[#4F772D]/40 font-mono">
-                                      {step.date ? new Date(step.date).toLocaleDateString() : ""}
+                                      {step.date ? new Date(step.date).toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' }) : ""}
                                     </span>
                                   </div>
                                   {step.notes && <p className="text-[11px] text-[#4F772D]/50 italic mt-0.5">"{step.notes}"</p>}

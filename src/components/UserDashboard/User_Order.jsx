@@ -61,10 +61,10 @@ export default function UserOrder() {
       }
       if (!isNaN(d.getTime())) {
         d.setDate(d.getDate() + 4);
-        return d.toLocaleDateString("en-IN", {
-          year: "numeric",
-          month: "long",
-          day: "numeric"
+        return d.toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric"
         });
       }
       return "Calculated soon";

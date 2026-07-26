@@ -14,7 +14,7 @@ export default function FarmerNotifications({ notifications = [], onRemove }) {
             <div>
               <strong>{n.type}</strong> — {n.message}
               <div className="text-xs text-gray-500">
-                {n.timestamp ? new Date(n.timestamp).toLocaleString() : ""}
+                {n.timestamp ? new Date(n.timestamp).toLocaleString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true }) : ""}
               </div>
             </div>
             <button

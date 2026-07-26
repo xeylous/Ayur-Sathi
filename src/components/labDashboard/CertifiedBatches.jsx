@@ -162,7 +162,7 @@ const CertifiedBatches = () => {
 
                   <td className="py-3 px-4 text-gray-600">
                     {batch.updatedAt
-                      ? new Date(batch.updatedAt).toLocaleDateString()
+                      ? new Date(batch.updatedAt).toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' })
                       : "—"}
                   </td>
 
