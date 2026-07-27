@@ -115,6 +115,9 @@ export default function LoginPage() {
         return;
       }
 
+      // Mark this tab as having an active session (per-tab isolation)
+      sessionStorage.setItem("tab_session", "true");
+
       setUser({
         name: data.account.name,
         labId: data.account.labId || null,
@@ -124,7 +127,6 @@ export default function LoginPage() {
         uniqueId: data.account.uniqueId || null,
         type: data.account.type,
       });
-      console.log("hello");
       // console.log("Apurv",User);
 
       // console.log(User);

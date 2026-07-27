@@ -168,6 +168,16 @@ export const AuthProvider = ({ children }) => {
     if (hydrated.current) return; // prevents duplicate calls
     hydrated.current = true;
 
+    // Only verify if this tab has an active session
+    // sessionStorage is per-tab, so new tabs won't auto-login
+    const hasTabSession = typeof window !== "undefined" && sessionStorage.getItem("tab_session");
+
+    if (!hasTabSession) {
+      setUser(null);
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/verify-token", {
         credentials: "include",
@@ -175,9 +185,15 @@ export const AuthProvider = ({ children }) => {
 
       if (res.ok) {
         const data = await res.json();
-        setUser(data.user);
+        if (data.user) {
+          setUser(data.user);
+        } else {
+          setUser(null);
+          sessionStorage.removeItem("tab_session");
+        }
       } else {
         setUser(null);
+        sessionStorage.removeItem("tab_session");
       }
     } catch (err) {
       setUser(null);
@@ -230,18 +246,24 @@ export const AuthProvider = ({ children }) => {
 
       if (res.ok) {
         const data = await res.json();
-        setUser(data.user);
+        if (data.user) {
+          setUser(data.user);
+          // Mark this tab as having an active session
+          sessionStorage.setItem("tab_session", "true");
+        }
       }
     } catch {}
   };
 
   // ----------------------------
-  //  LOGOUT HANDLER
+  //  LOGOUT HANDLER (per-tab only)
   // ----------------------------
   const logout = async () => {
     const isCentralAdmin = user?.role === "admin" || user?.type === "admin";
-    await fetch("/api/logout", { method: "POST" });
+    // Only clear this tab's session — don't clear the shared cookie
+    // so other tabs remain logged in
     setUser(null);
+    sessionStorage.removeItem("tab_session");
     if (isCentralAdmin) {
       router.replace("/admin-login");
     } else {
@@ -265,6 +287,8 @@ export const AuthProvider = ({ children }) => {
 
       if (res.ok) {
         setUser(data.user);
+        // Mark this tab as having an active session
+        sessionStorage.setItem("tab_session", "true");
         return { success: true };
       } else {
         return { success: false, error: data.error || "Login failed" };
