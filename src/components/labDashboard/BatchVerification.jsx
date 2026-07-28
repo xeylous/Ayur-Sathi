@@ -46,9 +46,10 @@ const BatchVerification = ({ navigateToTab }) => {
   const fetchFarmerUploads = async () => {
     setFarmerUploadsLoading(true);
     try {
-      const res = await fetch("/api/labverification/pending", {
+      const res = await fetch(`/api/labverification/pending?t=${Date.now()}`, {
         method: "GET",
         credentials: "include",
+        cache: "no-store",
       });
       const data = await res.json();
 
@@ -77,9 +78,10 @@ const BatchVerification = ({ navigateToTab }) => {
   const fetchAcceptedBatches = async () => {
     setBatchLoading(true);
     try {
-      const res = await fetch("/api/accepted-batch?status=Pending", {
+      const res = await fetch(`/api/accepted-batch?status=Pending&t=${Date.now()}`, {
         method: "GET",
         credentials: "include",
+        cache: "no-store",
       });
       const data = await res.json();
 

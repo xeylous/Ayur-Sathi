@@ -136,14 +136,16 @@ export default function CropHistory() {
                     <div className="flex items-center gap-2">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-bold ${
-                          item.status === "Approved"
+                          item.status === "Approved" || item.status === "Accepted"
                             ? "bg-[#90A955]/15 text-[#4F772D] border border-[#90A955]/25"
                             : item.status === "Rejected"
                             ? "bg-red-50 text-red-600 border border-red-100"
                             : "bg-[#ECF39E]/40 text-[#4F772D] border border-[#ECF39E]/50"
                         }`}
                       >
-                        {item.status}
+                        {item.status === "Approved" || item.status === "Accepted"
+                          ? "Accepted"
+                          : item.status}
                       </span>
                       {expandedId === item._id ? (
                         <ChevronUp className="text-[#4F772D] w-5 h-5" />

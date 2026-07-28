@@ -39,6 +39,7 @@ export async function GET(req) {
     // ✅ Fetch paginated crops
     const verifiedCrops = await CropUpload.find({
       status: { $in: ["Approved", "Rejected"] },
+      "certificate.url": { $exists: true, $ne: null }
     })
       .sort({ updatedAt: -1 })
       .skip(skip)
@@ -47,6 +48,7 @@ export async function GET(req) {
     // ✅ Count total for frontend pagination control
     const totalCount = await CropUpload.countDocuments({
       status: { $in: ["Approved", "Rejected"] },
+      "certificate.url": { $exists: true, $ne: null }
     });
 
     // ✅ Respond with paginated data
