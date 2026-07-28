@@ -103,9 +103,9 @@ export async function POST(req) {
         { status: 404 }
       );
     }
-    if (batch.status === "Approved" && action === "accept") {
+    if ((batch.status === "Approved" || batch.status === "Accepted") && action === "accept") {
       return NextResponse.json(
-        { success: false, message: "Batch is already verified" },
+        { success: false, message: "Batch is already accepted/verified" },
         { status: 400 }
       );
     }
@@ -129,8 +129,8 @@ export async function POST(req) {
 
       await acceptedBatch.save();
 
-      // Update CropUpload status to "Approved" so it no longer appears in pending farmer uploads
-      batch.status = "Approved";
+      // Update CropUpload status to "Accepted" (accepted for testing, not yet fully approved)
+      batch.status = "Accepted";
       batch.acceptedBy = labId;
       await batch.save();
 

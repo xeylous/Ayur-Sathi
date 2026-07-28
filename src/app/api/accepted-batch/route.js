@@ -31,6 +31,8 @@ const uploadToCloudinary = (fileBuffer, fileName, folder = "labUpload") => {
   });
 };
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req) {
   await connectDB();
 
@@ -59,13 +61,14 @@ export async function GET(req) {
 
   try {
     const { searchParams } = new URL(req.url);
-    const status = searchParams.get("status") || "pending";
-    console.log(status, decoded.labId);
+    const status = searchParams.get("status") || "Pending";
+    const labId = decoded.labId || decoded.id;
+    console.log(status, labId);
 
     // Filter by both status and labId (from decoded token)
     const batches = await AcceptedBatch.find({
       status,
-      acceptedBy: decoded.labId,
+      acceptedBy: labId,
     }).lean();
 
     // console.log("Fetched batches:", batches);
