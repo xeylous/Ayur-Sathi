@@ -58,20 +58,13 @@ export async function POST(req) {
       }
     }
 
-    // 2. If NO account found, create a new user
+    // 2. If NO account found, do not auto-create the user. Instead, return error.
     if (!user) {
-      console.log("No existing account found, creating new user with Google OAuth");
-
-      const newUser = await User.create({
-        name,
-        email: normalizedEmail,
-        type: "user",
-        isVerified: true,
-        password: null, // No password for OAuth users
-      });
-
-      user = newUser;
-      userType = "user";
+      console.log("No existing account found for Google OAuth");
+      return NextResponse.json(
+        { error: "Register first", notRegistered: true },
+        { status: 404 }
+      );
     }
 
     // 3. Create Custom Token Payload

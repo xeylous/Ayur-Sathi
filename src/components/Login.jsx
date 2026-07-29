@@ -110,7 +110,12 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(`${roleName} login failed. Please check your credentials.`, { toastId: "login-failure", autoClose: 3000 });
+        if (res.status === 404) {
+          toast.error("Account doesn't exist, register first", { toastId: "login-not-found", autoClose: 5000 });
+          setTimeout(() => router.push("/register"), 5000);
+        } else {
+          toast.error(`${roleName} login failed. Please check your credentials.`, { toastId: "login-failure", autoClose: 3000 });
+        }
         setTimeout(() => setIsSubmitting(false), 1500);
         return;
       }

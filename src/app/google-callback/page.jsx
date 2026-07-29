@@ -34,8 +34,13 @@ export default function GoogleCallbackPage() {
             router.push(data.redirectUrl);
         } else {
           console.error("Sync failed:", data.error);
-          toast.error(data.error || "Failed to sync Google account.");
-          setTimeout(() => router.push("/login"), 1500);
+          if (data.notRegistered) {
+            toast.error("Register first");
+            setTimeout(() => router.push("/register"), 5000);
+          } else {
+            toast.error(data.error || "Failed to sync Google account.");
+            setTimeout(() => router.push("/login"), 1500);
+          }
         }
       } catch (err) {
         console.error("Sync error:", err);

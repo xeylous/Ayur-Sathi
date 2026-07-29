@@ -1,4 +1,14 @@
 import mongoose from "mongoose";
+import dns from "dns";
+
+// Set DNS servers to Google and Cloudflare public DNS to bypass local router/ISP SRV/TXT record resolution failures
+if (dns && typeof dns.setServers === "function") {
+  try {
+    dns.setServers(["8.8.8.8", "1.1.1.1"]);
+  } catch (error) {
+    console.warn("⚠️ Failed to set DNS servers:", error);
+  }
+}
 
 export const connectDB = async () => {
   // Check if already connected using Mongoose's connection state
