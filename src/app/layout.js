@@ -4,8 +4,28 @@ import { AuthProvider } from "@/context/AuthContext";
 import { FarmerProvider } from "@/context/FarmerContext";
 import { CropProvider } from "@/context/CropContext"; 
 import { Analytics } from '@vercel/analytics/next';
-import SocketInitializer from "./SocketInitializer";
+// import SocketInitializer from "./SocketInitializer";
 import ChatbotAssistant from "@/components/ChatbotAssistant";
+
+const callBotServer = () => {
+
+  const timer = setInterval(()=>{
+
+    fetch("https://ayurgyani-api.onrender.com/ping",{
+    method: "GET",
+    cache: "no-store"
+  })
+  .then(res => {
+    console.log("Ping")
+  })
+  .catch(err => {
+    console.log("Error!")
+  })  
+
+  }, 50000)
+}
+
+callBotServer();
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
