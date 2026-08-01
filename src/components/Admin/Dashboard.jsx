@@ -58,49 +58,49 @@ const Dashboard = ({ batches, users, manufacturer = [], setActiveTab }) => {
         </h3>
 
         <ul className="space-y-3">
-          <li className="p-3 bg-red-50 rounded-lg flex justify-between items-center text-red-800">
+          <li className="p-3 bg-red-50 rounded-lg flex flex-col sm:flex-row justify-between sm:items-center text-red-800 gap-2">
             <span className="font-medium">
               {pendingLabs} Laboratory registration(s) require approval.
             </span>
             <button
               onClick={() => setActiveTab("user")}
-              className="text-indigo-600 hover:text-indigo-800 font-semibold text-sm"
+              className="text-indigo-600 hover:text-indigo-800 font-semibold text-sm self-start sm:self-auto whitespace-nowrap"
             >
               Review Labs &rarr;
             </button>
           </li>
 
-          <li className="p-3 bg-amber-50 rounded-lg flex justify-between items-center text-amber-800">
+          <li className="p-3 bg-amber-50 rounded-lg flex flex-col sm:flex-row justify-between sm:items-center text-amber-800 gap-2">
             <span className="font-medium">
               {pendingPayments} Batches ready for Farmer Payment disbursement.
             </span>
             <button
               onClick={() => setActiveTab("farmerPayment")}
-              className="text-indigo-600 hover:text-indigo-800 font-semibold text-sm"
+              className="text-indigo-600 hover:text-indigo-800 font-semibold text-sm self-start sm:self-auto whitespace-nowrap"
             >
               Pay Farmers &rarr;
             </button>
           </li>
 
-          <li className="p-3 bg-blue-50 rounded-lg flex justify-between items-center text-blue-800">
+          <li className="p-3 bg-blue-50 rounded-lg flex flex-col sm:flex-row justify-between sm:items-center text-blue-800 gap-2">
             <span className="font-medium">
               {pendingListings} Batches ready for final Marketplace listing.
             </span>
             <button
               onClick={() => setActiveTab("laboratory")}
-              className="text-indigo-600 hover:text-indigo-800 font-semibold text-sm"
+              className="text-indigo-600 hover:text-indigo-800 font-semibold text-sm self-start sm:self-auto whitespace-nowrap"
             >
               List Herbs &rarr;
             </button>
           </li>
 
-          <li className="p-3 bg-purple-50 rounded-lg flex justify-between items-center text-purple-800">
+          <li className="p-3 bg-purple-50 rounded-lg flex flex-col sm:flex-row justify-between sm:items-center text-purple-800 gap-2">
             <span className="font-medium">
               {pendingManufacturers} Manufacturer registration(s) require approval.
             </span>
             <button
               onClick={() => setActiveTab("manufacturer")}
-              className="text-indigo-600 hover:text-indigo-800 font-semibold text-sm"
+              className="text-indigo-600 hover:text-indigo-800 font-semibold text-sm self-start sm:self-auto whitespace-nowrap"
             >
               Review Manufacturers &rarr;
             </button>
