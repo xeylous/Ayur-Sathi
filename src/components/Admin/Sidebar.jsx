@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
-import { LayoutDashboard, Users, DollarSign, FlaskConical, LogOut, FileText } from "lucide-react";
+import { LayoutDashboard, Users, DollarSign, FlaskConical, LogOut, FileText, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
-const Sidebar = ({ activeTab, setActiveTab }) => {
+const Sidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen }) => {
   const { logout, user } = useAuth();
   const [showConfirmLogout, setShowConfirmLogout] = useState(false);
 
@@ -22,10 +22,22 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
 
   return (
     <>
-      <aside className="w-64 bg-indigo-900 text-white p-6 shadow-2xl h-full fixed top-0 left-0 flex flex-col justify-between">
+      <aside 
+        className={`w-64 bg-indigo-900 text-white p-6 shadow-2xl h-full fixed top-0 left-0 flex flex-col justify-between z-50 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
       <div>
-        <div className="text-2xl font-bold mb-8 text-teal-300 flex items-center gap-2">
-          <LayoutDashboard size={24} /> AyurSaathi Admin
+        <div className="flex items-center justify-between mb-8">
+          <div className="text-2xl font-bold text-teal-300 flex items-center gap-2">
+            <LayoutDashboard size={24} /> Admin Panel
+          </div>
+          <button 
+            className="lg:hidden text-gray-300 hover:text-white"
+            onClick={() => setIsOpen(false)}
+          >
+            <X size={24} />
+          </button>
         </div>
         <nav className="space-y-3">
           {allowedTabs.map(({ id, icon: Icon, label }) => (
