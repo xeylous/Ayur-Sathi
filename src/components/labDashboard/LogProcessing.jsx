@@ -130,7 +130,7 @@ const LogProcessing = ({ initialBatchId = "" }) => {
             <FlaskConical size={16} className="inline mr-2" /> Test Details
           </label>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block mb-1 text-sm">Moisture</label>
               <input
@@ -177,23 +177,24 @@ const LogProcessing = ({ initialBatchId = "" }) => {
           ></textarea>
         </div>
 
-        {/* QA Result */}
-        <select
-          id="qaResult"
-          className="p-3 border border-gray-300 rounded-lg w-1/3"
-          required
-        >
-          <option value="Pending">Select...</option>
-          <option value="Approved">Approved</option>
-          <option value="Rejected">Rejected</option>
-        </select>
+        <div className="flex flex-col sm:flex-row gap-4 mt-4">
+          <select
+            id="qaResult"
+            className="p-3 border border-gray-300 rounded-lg w-full sm:w-1/3"
+            required
+          >
+            <option value="Pending">Select...</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
 
-        <button
-          type="submit"
-          className="ml-4 bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 cursor-pointer"
-        >
-          <CheckCheck size={18} className="inline mr-2" /> Submit
-        </button>
+          <button
+            type="submit"
+            className="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 cursor-pointer w-full sm:w-auto flex justify-center items-center"
+          >
+            <CheckCheck size={18} className="mr-2" /> Submit
+          </button>
+        </div>
       </form>
 
       {/* Toast Container */}

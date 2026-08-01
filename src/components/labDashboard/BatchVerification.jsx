@@ -352,7 +352,7 @@ const BatchVerification = ({ navigateToTab }) => {
                              transition-all duration-300"
                 >
                   {/* Top row: Data (left) + Image (right) */}
-                  <div className="flex">
+                  <div className="flex flex-col sm:flex-row">
                     {/* LEFT — Crop Data */}
                     <div className="flex-1 p-5">
                       {/* Pending badge + Batch ID */}
@@ -409,7 +409,7 @@ const BatchVerification = ({ navigateToTab }) => {
                     </div>
 
                     {/* RIGHT — Crop Image */}
-                    <div className="w-48 min-h-[180px] flex-shrink-0 border-l border-amber-100">
+                    <div className="w-full sm:w-48 h-48 sm:h-auto sm:min-h-[180px] flex-shrink-0 sm:border-l border-t sm:border-t-0 border-amber-100">
                       {crop.cropImage ? (
                         <img
                           src={crop.cropImage}
