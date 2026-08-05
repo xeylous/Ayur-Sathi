@@ -17,13 +17,14 @@ import {
   ChevronLeft,
   ChevronRight
 } from "lucide-react";
-import { speciesList } from "@/lib/cropdetails";
+import { useCropCache } from "@/context/CropContext";
 import { toast } from "react-toastify";
 
 const LabMarketplaceControl = ({ 
   selectedListingBatch, 
   setSelectedListingBatch 
 }) => {
+  const { speciesList } = useCropCache();
   const [batches, setBatches] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");

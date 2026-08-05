@@ -1,10 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { speciesList } from "@/lib/cropdetails";
+import { useCropCache } from "@/context/CropContext";
 import { Search, CheckCircle, XCircle, QrCode, Filter } from "lucide-react";
 import StatusDisplay from "./StatusDisplay";
 
 const CertifiedBatches = () => {
+  const { speciesList } = useCropCache();
   const [certifiedBatches, setCertifiedBatches] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -85,10 +86,10 @@ const CertifiedBatches = () => {
       filterStatus === "all"
         ? true
         : filterStatus === "approved"
-        ? batch.status === "Approved"
-        : filterStatus === "rejected"
-        ? batch.status === "Rejected"
-        : true;
+          ? batch.status === "Approved"
+          : filterStatus === "rejected"
+            ? batch.status === "Rejected"
+            : true;
 
     return matchesSearch && matchesFilter;
   });

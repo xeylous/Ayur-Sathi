@@ -19,11 +19,12 @@ import {
   Plus,
   Minus
 } from "lucide-react";
-import { speciesList } from "@/lib/cropdetails";
+import { useCropCache } from "@/context/CropContext";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 
 export default function ProductDetailPage() {
+  const { speciesList } = useCropCache();
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
