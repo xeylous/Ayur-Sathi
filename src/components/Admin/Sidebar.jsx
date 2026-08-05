@@ -13,11 +13,13 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen }) => {
     { id: "farmerPayment", icon: DollarSign, label: "Farmer Payments" },
     { id: "laboratory", icon: FlaskConical, label: "Marketplace Listing" },
     { id: "manufacturer", icon: FlaskConical, label: "Manufacturer Approvals" },
-    { id: "manufacturingLogs", icon: FileText, label: "Manufacturing Logs" }
+    { id: "manufacturingLogs", icon: FileText, label: "Manufacturing Logs" },
+    { id: "manageSpecies", icon: FileText, label: "Manage Crop Species" },
+    { id: "manageCropInfo", icon: FileText, label: "Manage Crop Info" }
   ];
 
   const allowedTabs = user?.role === "store_admin" || user?.type === "store_admin"
-    ? allTabs.filter(tab => tab.id === "laboratory" || tab.id === "manufacturingLogs")
+    ? allTabs.filter(tab => tab.id === "laboratory" || tab.id === "manufacturingLogs" || tab.id === "manageSpecies" || tab.id === "manageCropInfo")
     : allTabs;
 
   return (
