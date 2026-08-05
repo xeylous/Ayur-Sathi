@@ -9,37 +9,38 @@ export function CropProvider({ children }) {
   const [infoList, setInfoList] = useState([]);
   const [isCropsLoading, setIsCropsLoading] = useState(true);
 
-  useEffect(() => {
-    async function loadData() {
-      try {
-        setIsCropsLoading(true);
-        const [resSpecies, resInfo] = await Promise.all([
-          fetch("/api/crop-species"),
-          fetch("/api/crop-info")
-        ]);
-        
-        const dataSpecies = await resSpecies.json();
-        const dataInfo = await resInfo.json();
+  const refreshCrops = async () => {
+    try {
+      setIsCropsLoading(true);
+      const [resSpecies, resInfo] = await Promise.all([
+        fetch("/api/crop-species"),
+        fetch("/api/crop-info")
+      ]);
+      
+      const dataSpecies = await resSpecies.json();
+      const dataInfo = await resInfo.json();
 
-        if (dataSpecies.success) {
-          setSpeciesList(dataSpecies.data);
-        }
-        if (dataInfo.success) {
-          setInfoList(dataInfo.data);
-        }
-      } catch (err) {
-        console.error("Failed to fetch crop data from database", err);
-      } finally {
-        setIsCropsLoading(false);
+      if (dataSpecies.success) {
+        setSpeciesList(dataSpecies.data);
       }
+      if (dataInfo.success) {
+        setInfoList(dataInfo.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch crop data from database", err);
+    } finally {
+      setIsCropsLoading(false);
     }
-    loadData();
+  };
+
+  useEffect(() => {
+    refreshCrops();
   }, []);
 
   return (
     <CropContext.Provider value={{ 
       cachedCrops, setCachedCrops, 
-      speciesList, infoList, isCropsLoading 
+      speciesList, infoList, isCropsLoading, refreshCrops
     }}>
       {children}
     </CropContext.Provider>

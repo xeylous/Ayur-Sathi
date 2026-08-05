@@ -11,6 +11,8 @@ import AdminLabApplications from "@/components/Admin/AdminLabApplications";
 import AdminManufactureApplications from "@/components/Admin/AdminManufactureApplications";
 import { useAuth } from "@/context/AuthContext";
 import ManufacturingLogs from "@/components/Admin/ManufacturingLogs";
+import ManageSpecies from "@/components/Admin/ManageSpecies";
+import ManageCropInfo from "@/components/Admin/ManageCropInfo";
 import { Menu } from "lucide-react";
 
 const AdminPage = () => {
@@ -99,6 +101,8 @@ const AdminPage = () => {
               }}
             />
           )}
+          {activeTab === "manageSpecies" && <ManageSpecies />}
+          {activeTab === "manageCropInfo" && <ManageCropInfo />}
         </div>
 
         <StatusDisplay statusMessage={statusMessage} />
