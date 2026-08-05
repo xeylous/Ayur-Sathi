@@ -14,9 +14,10 @@ import {
   ImageIcon,
 } from "lucide-react";
 import StatusDisplay from "./StatusDisplay";
-import { speciesList } from "@/lib/cropdetails";
+import { useCropCache } from "@/context/CropContext";
 
 const BatchVerification = ({ navigateToTab }) => {
+  const { speciesList } = useCropCache();
   const [currentBatchId, setCurrentBatchId] = useState("");
   const [batchDetails, setBatchDetails] = useState(null);
   const [verificationStatus, setVerificationStatus] = useState(null);

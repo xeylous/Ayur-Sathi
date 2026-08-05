@@ -1,18 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { 
-  ShoppingBag, 
-  Search, 
-  Loader2, 
-  MapPin, 
-  FileText, 
-  QrCode, 
-  Calendar, 
-  DollarSign, 
-  Package, 
-  Scale, 
-  Tag, 
+import {
+  ShoppingBag,
+  Search,
+  Loader2,
+  MapPin,
+  FileText,
+  QrCode,
+  Calendar,
+  DollarSign,
+  Package,
+  Scale,
+  Tag,
   ArrowRight,
   User,
   ExternalLink,
@@ -21,13 +21,14 @@ import {
   Plus,
   Minus
 } from "lucide-react";
-import { speciesList } from "@/lib/cropdetails";
+import { useCropCache } from "@/context/CropContext";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 
 export default function Marketplace() {
   const router = useRouter();
   const { user } = useAuth();
+  const { speciesList } = useCropCache();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,9 +54,9 @@ export default function Marketplace() {
     try {
       const savedCart = localStorage.getItem("userCart");
       let cart = savedCart ? JSON.parse(savedCart) : [];
-      
+
       const existingIdx = cart.findIndex(item => item.batchId === selectedProduct.batchId);
-      
+
       if (existingIdx > -1) {
         const newQty = cart[existingIdx].quantity + qtyToAdd;
         if (selectedProduct.marketplaceQuantity && newQty > selectedProduct.marketplaceQuantity) {
@@ -79,7 +80,7 @@ export default function Marketplace() {
         });
         toast.success("Added to cart successfully", { autoClose: 1500 });
       }
-      
+
       localStorage.setItem("userCart", JSON.stringify(cart));
       window.dispatchEvent(new Event("cartUpdated"));
       setCartSuccessMsg("Added to cart successfully!");
@@ -146,7 +147,7 @@ export default function Marketplace() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#4F772D]/5 rounded-full blur-3xl -z-10"></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        
+
         {/* Header Block */}
         <div className="text-center max-w-2xl mx-auto mb-10">
           <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-[#90A955]/15 text-[#4F772D] font-bold text-xs uppercase tracking-wider mb-4 border border-[#90A955]/30">
@@ -190,27 +191,27 @@ export default function Marketplace() {
                   ? [item.marketplaceImage]
                   : [];
               return (
-                <div 
+                <div
                   key={item.batchId}
 
                   className="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-lg transition-all h-[490px] p-4 bg-white"
                 >
                   {/* Product Image Area (occupies ~55% height) */}
-                  <div 
+                  <div
                     onClick={() => router.push("/marketplace/" + item.batchId)}
                     className="relative h-[220px] bg-gray-50/50 rounded-xl overflow-hidden flex items-center justify-center border border-gray-100/60 mb-3 group/card cursor-pointer"
 
                   >
                     {itemImages.length > 0 ? (
                       <div className="w-full h-full relative flex items-center justify-center overflow-hidden">
-                        <img 
-                          src={itemImages[cardActiveIndexes[item.batchId] || 0]?.url} 
-                          alt="Backdrop" 
+                        <img
+                          src={itemImages[cardActiveIndexes[item.batchId] || 0]?.url}
+                          alt="Backdrop"
                           className="absolute inset-0 w-full h-full object-cover blur-sm opacity-20 scale-110"
                         />
-                        <img 
-                          src={itemImages[cardActiveIndexes[item.batchId] || 0]?.url} 
-                          alt="Product" 
+                        <img
+                          src={itemImages[cardActiveIndexes[item.batchId] || 0]?.url}
+                          alt="Product"
                           className="relative z-10 max-w-full max-h-full object-contain p-1 transition-all duration-500 group-hover/card:scale-103"
                         />
                       </div>
@@ -276,93 +277,91 @@ export default function Marketplace() {
                       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-1 bg-black/35 px-2 py-1 rounded-full backdrop-blur-sm">
 
                         {itemImages.map((_, idx) => (
-                          <span 
+                          <span
                             key={idx}
-                            className={`w-1.5 h-1.5 rounded-full transition-all ${
+                            className={`w-1.5 h-1.5 rounded-full transition-all ${idx === (cardActiveIndexes[item.batchId] || 0) ? "bg-white scale-125" : "bg-white/40"
 
-                              idx === (cardActiveIndexes[item.batchId] || 0) ? "bg-white scale-125" : "bg-white/40"
-
-                            }`}
+                              }`}
                           />
                         ))}
                       </div>
                     )}
-                </div>
+                  </div>
 
-                {/* Product Card Text Area */}
-                <div className="flex-grow flex flex-col justify-between px-1">
-                  <div>
-                    {/* Category & Species */}
-                    <span className="text-[10px] text-[#4F772D]/60 uppercase tracking-widest block font-bold">
-                      Category: {item.speciesId} Herb
-                    </span>
+                  {/* Product Card Text Area */}
+                  <div className="flex-grow flex flex-col justify-between px-1">
+                    <div>
+                      {/* Category & Species */}
+                      <span className="text-[10px] text-[#4F772D]/60 uppercase tracking-widest block font-bold">
+                        Category: {item.speciesId} Herb
+                      </span>
 
-                    {/* Product Title */}
-                    <h3 
-                      onClick={() => router.push("/marketplace/" + item.batchId)}
-                      className="text-sm font-bold text-[#31572C] leading-snug line-clamp-2 h-10 mt-0.5 hover:text-[#4F772D] transition-colors cursor-pointer"
-                    >
-                      {getHerbName(item.speciesId)} (Traceable Natural Harvest Batch)
-                    </h3>
+                      {/* Product Title */}
+                      <h3
+                        onClick={() => router.push("/marketplace/" + item.batchId)}
+                        className="text-sm font-bold text-[#31572C] leading-snug line-clamp-2 h-10 mt-0.5 hover:text-[#4F772D] transition-colors cursor-pointer"
+                      >
+                        {getHerbName(item.speciesId)} (Traceable Natural Harvest Batch)
+                      </h3>
 
-                    {/* Ratings */}
-                    <div className="flex items-center gap-0.5 text-amber-500 mt-1">
-                      {[...Array(5)].map((_, i) => (
-                        <svg key={i} className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                        </svg>
-                      ))}
-                      <span className="text-xs text-[#31572C] hover:text-[#4F772D] hover:underline font-semibold ml-1.5 cursor-pointer">
-                        4.8 ({120 + (item.marketplaceQuantity % 30)} reviews)
+                      {/* Ratings */}
+                      <div className="flex items-center gap-0.5 text-amber-500 mt-1">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                          </svg>
+                        ))}
+                        <span className="text-xs text-[#31572C] hover:text-[#4F772D] hover:underline font-semibold ml-1.5 cursor-pointer">
+                          4.8 ({120 + (item.marketplaceQuantity % 30)} reviews)
+                        </span>
+                      </div>
+
+                      {/* Price block */}
+                      <div className="flex items-baseline gap-2 mt-1.5">
+                        <span className="text-2xl font-extrabold text-[#31572C]">
+                          ₹{item.marketplacePrice}
+                        </span>
+                        <span className="text-xs text-gray-500 line-through">
+                          ₹{Math.round(item.marketplacePrice * 1.25)}
+                        </span>
+                        <span className="text-xs text-[#4F772D] font-bold">
+                          (20% off)
+                        </span>
+                      </div>
+
+                      {/* Delivery & Stock status */}
+                      <span className="text-xs text-[#4F772D] font-bold block mt-1">
+                        In Stock ({item.marketplaceQuantity} left)
+                      </span>
+
+                      <span className="text-[11px] text-[#4F772D]/50 block">
+                        Size: {item.marketplaceWeightGm}g • Pack of 1
                       </span>
                     </div>
 
-                    {/* Price block */}
-                    <div className="flex items-baseline gap-2 mt-1.5">
-                      <span className="text-2xl font-extrabold text-[#31572C]">
-                        ₹{item.marketplacePrice}
-                      </span>
-                      <span className="text-xs text-gray-500 line-through">
-                        ₹{Math.round(item.marketplacePrice * 1.25)}
-                      </span>
-                      <span className="text-xs text-[#4F772D] font-bold">
-                        (20% off)
-                      </span>
+                    {/* CTA button */}
+                    <div className="pt-3">
+                      <button
+                        onClick={() => router.push("/marketplace/" + item.batchId)}
+                        className="w-full bg-gradient-to-r from-[#4F772D] to-[#31572C] hover:from-[#31572C] hover:to-[#4F772D] text-white font-bold text-xs py-2.5 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-[#4F772D]/20 flex items-center justify-center gap-1.5 cursor-pointer"
+                      >
+                        View Details
+
+                        <ArrowRight size={13} className="text-indigo-200" />
+
+                      </button>
                     </div>
-
-                    {/* Delivery & Stock status */}
-                    <span className="text-xs text-[#4F772D] font-bold block mt-1">
-                      In Stock ({item.marketplaceQuantity} left)
-                    </span>
-                    
-                    <span className="text-[11px] text-[#4F772D]/50 block">
-                      Size: {item.marketplaceWeightGm}g • Pack of 1
-                    </span>
-                  </div>
-
-                  {/* CTA button */}
-                  <div className="pt-3">
-                    <button
-                      onClick={() => router.push("/marketplace/" + item.batchId)}
-                      className="w-full bg-gradient-to-r from-[#4F772D] to-[#31572C] hover:from-[#31572C] hover:to-[#4F772D] text-white font-bold text-xs py-2.5 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-[#4F772D]/20 flex items-center justify-center gap-1.5 cursor-pointer"
-                    >
-                      View Details
-
-                      <ArrowRight size={13} className="text-indigo-200" />
-
-                    </button>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
           </div>
         ) : (
           <div className="bg-white max-w-md mx-auto p-10 rounded-3xl border border-[#90A955]/20 shadow-md text-center">
             <ShoppingBag className="w-12 h-12 text-[#90A955] mx-auto mb-3 opacity-40" />
             <h4 className="text-lg font-bold text-[#31572C] mb-1">No products found</h4>
             <p className="text-xs text-[#4F772D]/60">
-              {searchTerm 
+              {searchTerm
                 ? "Try searching for a different keyword or batch ID."
                 : "No manufactured products have been listed on the marketplace yet."}
             </p>
@@ -383,7 +382,7 @@ export default function Marketplace() {
 
               {/* Product Page Columns */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pt-4">
-                
+
                 {/* COLUMN 1: Image Gallery (Span 5) */}
                 <div className="md:col-span-5">
                   {/* Big Active Image Box */}
@@ -391,15 +390,15 @@ export default function Marketplace() {
                   <div className="w-full aspect-square bg-[#F7F7F7] border border-gray-100 rounded-xl overflow-hidden flex items-center justify-center relative shadow-inner">
 
                     {selectedProduct.marketplaceImages && selectedProduct.marketplaceImages.length > 0 ? (
-                      <img 
-                        src={selectedProduct.marketplaceImages[modalActiveImageIndex]?.url || selectedProduct.marketplaceImages[0].url} 
-                        alt="Product Primary" 
+                      <img
+                        src={selectedProduct.marketplaceImages[modalActiveImageIndex]?.url || selectedProduct.marketplaceImages[0].url}
+                        alt="Product Primary"
                         className="w-full h-full object-contain p-2"
                       />
                     ) : selectedProduct.marketplaceImage?.url ? (
-                      <img 
-                        src={selectedProduct.marketplaceImage.url} 
-                        alt="Product Primary" 
+                      <img
+                        src={selectedProduct.marketplaceImage.url}
+                        alt="Product Primary"
                         className="w-full h-full object-contain p-2"
                       />
                     ) : (
@@ -578,9 +577,9 @@ export default function Marketplace() {
                         Supply Chain Trace QR
                       </span>
                       <div className="flex items-center gap-3 bg-white p-2 rounded-xl border border-[#ECF39E]/60">
-                        <img 
-                          src={selectedProduct.qrCode.url} 
-                          alt="QR code" 
+                        <img
+                          src={selectedProduct.qrCode.url}
+                          alt="QR code"
 
                           className="w-12 h-12 border bg-white p-0.5 rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
                           onClick={() => setIsQRModalOpen(true)}
@@ -613,7 +612,7 @@ export default function Marketplace() {
                 </div>
 
                 <div className="space-y-8 relative pl-6 border-l-2 border-[#90A955]/30 ml-3">
-                  
+
                   {/* Step 1: Farm Origin */}
                   <div className="relative">
                     <div className="absolute -left-[31px] top-1.5 bg-[#90A955] w-4 h-4 rounded-full border-4 border-white shadow" />
@@ -749,16 +748,16 @@ export default function Marketplace() {
 
               {/* QR Image */}
               <div className="flex justify-center bg-gray-50 p-4 rounded-xl border border-gray-100 mb-4 max-w-[200px] mx-auto shadow-inner">
-                <img 
-                  src={selectedProduct.qrCode.url} 
-                  alt="QR Code" 
+                <img
+                  src={selectedProduct.qrCode.url}
+                  alt="QR Code"
                   className="w-40 h-40 bg-white p-1 rounded-lg border border-gray-200 shadow-sm"
                 />
               </div>
 
               {/* Action Links */}
               <div className="space-y-2">
-                <a 
+                <a
                   href={`/batchid/${selectedProduct.batchId}`}
                   target="_blank"
                   rel="noopener noreferrer"

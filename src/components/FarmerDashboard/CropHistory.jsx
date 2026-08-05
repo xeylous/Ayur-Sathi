@@ -3,14 +3,13 @@
 import { useEffect, useState } from "react";
 import { Clock, ChevronDown, ChevronUp, Image as ImageIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { speciesList } from "@/lib/cropdetails";
 import { useCropCache } from "@/context/CropContext";
 
 export default function CropHistory() {
   const pathname = usePathname();
   const uniqueId = pathname.split("/").pop();
 
-  const { cachedCrops, setCachedCrops } = useCropCache();
+  const { cachedCrops, setCachedCrops, speciesList } = useCropCache();
 
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);

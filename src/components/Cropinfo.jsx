@@ -12,28 +12,30 @@ import {
   ChevronRight,
   Info
 } from "lucide-react";
-import { speciesList } from "../lib/cropdetails";
-import { infoList } from "../lib/cropinfo";
-
-const uniqueInfoList = Array.from(
-  new Map(infoList.map((item) => [item.speciesId, item])).values()
-);
+import { useCropCache } from "@/context/CropContext";
 
 export default function CropDetails() {
+  const { infoList, speciesList, isCropsLoading } = useCropCache();
+  const uniqueInfoList = useMemo(() => {
+    if (!infoList) return [];
+    return Array.from(new Map(infoList.map((item) => [item.speciesId, item])).values());
+  }, [infoList]);
   const [selected, setSelected] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredSpecies = useMemo(() => {
+    if (!speciesList) return [];
     if (!searchQuery.trim()) return speciesList;
     return speciesList.filter((item) => 
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.speciesId.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [searchQuery]);
+  }, [searchQuery, speciesList]);
 
   const selectedData = useMemo(() => {
+    if (!uniqueInfoList) return null;
     return uniqueInfoList.find((item) => item.speciesId === selected) || null;
-  }, [selected]);
+  }, [selected, uniqueInfoList]);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-[#FDFDF7] via-[#F4F9D8]/30 to-[#FDFDF7] p-4 md:p-8 overflow-hidden font-sans">
@@ -57,7 +59,12 @@ export default function CropDetails() {
           </p>
         </div>
 
-        {/* Main Content Area */}
+        {/* Loading State */}
+        {isCropsLoading ? (
+          <div className="flex justify-center items-center py-20 text-[#4F772D]">
+             <span className="font-semibold text-lg animate-pulse">Loading herb directory...</span>
+          </div>
+        ) : (
         <div className="flex flex-col lg:flex-row gap-8 items-start">
           
           {/* LEFT PANEL: Species Sidebar */}
@@ -275,6 +282,7 @@ export default function CropDetails() {
           </div>
           
         </div>
+        )}
       </div>
     </div>
   );

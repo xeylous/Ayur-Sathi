@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { speciesList } from "@/lib/cropdetails";
+import { useCropCache } from "@/context/CropContext";
 import { usePathname } from "next/navigation";
 import {
   Upload,
@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 
 export default function UploadCrop() {
+  const { speciesList } = useCropCache();
   // ---------- STATE ----------
   const [formData, setFormData] = useState({
     cropName: "",
