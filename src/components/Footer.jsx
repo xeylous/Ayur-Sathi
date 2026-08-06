@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import {
   Mail,
   Phone,
@@ -79,12 +80,12 @@ export default function Fooer() {
             <ul className="mt-4 space-y-2 text-sm">
               {quickLinks.map((l) => (
                 <li key={l.href}>
-                  <a
+                  <Link
                     href={l.href}
                     className="hover:underline focus:outline-none focus:ring-2 focus:ring-[#90A955] rounded"
                   >
                     {l.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -171,9 +172,9 @@ export default function Fooer() {
               <ul className="flex gap-4 text-sm">
                 {legalLinks.map((l) => (
                   <li key={l.href}>
-                    <a href={l.href} className="hover:underline">
+                    <Link href={l.href} className="hover:underline">
                       {l.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
