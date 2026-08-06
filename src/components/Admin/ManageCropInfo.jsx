@@ -11,6 +11,7 @@ export default function ManageCropInfo() {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
   
   const [formData, setFormData] = useState({
     _id: "", name: "", speciesId: "", image: "", uses: "", benefits: "", disadvantages: ""
@@ -101,9 +102,13 @@ export default function ManageCropInfo() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this crop info?")) return;
+    setItemToDelete(id);
+  };
+
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
     try {
-      const res = await fetch(`/api/crop-info?id=${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/crop-info?id=${itemToDelete}`, { method: "DELETE" });
       const data = await res.json();
       if (data.success) {
         toast.success("Crop info deleted!");
@@ -113,6 +118,8 @@ export default function ManageCropInfo() {
       }
     } catch (err) {
       toast.error("Failed to delete crop info.");
+    } finally {
+      setItemToDelete(null);
     }
   };
 
@@ -234,6 +241,30 @@ export default function ManageCropInfo() {
           </div>
         </div>
       )}
+
+      {itemToDelete && (
+        <div className="fixed inset-0 bg-[#31572C]/20 backdrop-blur-sm flex items-center justify-center z-[9999] p-4 animate-in fade-in duration-200">
+          <div className="bg-white border border-[#90A955]/30 shadow-2xl w-full max-w-sm rounded-2xl p-6 relative animate-in zoom-in-95 duration-200 text-center">
+            <h3 className="text-xl font-bold text-[#31572C] mb-2">Are you sure?</h3>
+            <p className="text-sm text-[#31572C]/90 mb-6 font-semibold">You will permanently delete this crop info.</p>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => setItemToDelete(null)}
+                className="px-4 py-2 text-sm bg-white/80 hover:bg-white text-gray-800 border border-gray-200 rounded-xl transition font-medium cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 text-sm bg-[#4F772D] hover:bg-[#31572C] text-white rounded-xl transition font-semibold cursor-pointer"
+              >
+                Yes, Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <ToastContainer position="bottom-right" />
     </div>
   );
